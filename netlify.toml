@@ -1,7 +1,0 @@
-[build]
-  base = "BP_HTML_09TWND-main"
-  command = "npm run build"
-  publish = "."
-
-[build.environment]
-  NODE_VERSION = "18"
