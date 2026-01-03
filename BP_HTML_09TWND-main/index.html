@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- ✅ naast je favicon in de tab -->
   <title>Homepage</title>
 
   <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
@@ -27,17 +26,16 @@
       display:grid;
       grid-gap:26px;
       grid-template-columns:330px minmax(0,1fr);
-      align-items:start; /* ✅ FIX: nav-panel niet meer uitrekken zoals op je foto */
+      align-items:start;
     }
     .panel{
       background:#fff;
       border-radius:14px;
       padding:32px;
       box-shadow:0 5px 18px rgba(0,0,0,0.07);
-      height: fit-content; /* ✅ FIX: nav blijft compact (zoals de rest) */
+      height: fit-content;
     }
 
-    /* HEADER */
     .site-header h1{
       font-size:40px;
       font-weight:900;
@@ -50,7 +48,6 @@
       gap:16px;
     }
 
-    /* TAALKEUZE */
     .lang-area{
       display:flex;
       flex-direction:column;
@@ -97,14 +94,13 @@
       background:transparent;
     }
 
-    /* NAV + DROPDOWN FIX */
     .panel.panel-nav,
     nav.panel.panel-nav,
     .panel-nav{
       overflow: visible !important;
       max-height: none !important;
-      height: fit-content !important; /* ✅ FIX: nav neemt alleen contenthoogte */
-      align-self: start;              /* ✅ FIX: nav blijft bovenaan */
+      height: fit-content !important;
+      align-self: start;
     }
     .panel-nav ul,
     .panel-nav li{
@@ -130,7 +126,6 @@
       text-decoration:none;
     }
 
-    /* ✅ ACTIEVE PAGINA (Homepage) */
     nav strong{
       display:inline-block;
       padding:4px 6px;
@@ -162,11 +157,9 @@
     }
     .dropdown.open .dropdown-content{display:block;}
 
-    /* INTRO */
     .page-title{font-size:32px;margin-bottom:10px;}
     .intro-text{max-width:820px;margin-bottom:26px;}
 
-    /* BOEK */
     .book-wrapper{position:relative;overflow:hidden;padding:10px 4px 4px;margin-top:10px;}
     .book-title{font-size:24px;font-weight:900;margin-bottom:6px;letter-spacing:-0.2px;}
     .book-subtitle{font-size:14px;color:#6b6b6b;margin-bottom:18px;}
@@ -199,7 +192,6 @@
     .book-nav-btn:disabled{opacity:0.4;cursor:default;}
     .book-counter{font-size:14px;color:#6b6b6b;}
 
-    /* PROJECTLINKS (GEEN in-/uitklappen meer) */
     .links-section{margin-top:32px;padding-top:18px;border-top:1px solid #f2f2f2;}
 
     .links-header{
@@ -227,7 +219,6 @@
       margin-bottom:14px;
     }
 
-    /* ✅ altijd zichtbaar */
     .links-collapsible{
       display:block;
       margin-top:8px;
@@ -288,11 +279,9 @@
 <body>
   <div class="box">
 
-    <!-- HEADER -->
     <header class="panel site-header">
       <div class="header-top">
         <div>
-          <!-- ✅ header (taalkunst kader) = Homepage -->
           <h1 data-i18n="siteTitle">Homepage</h1>
           <p class="subtitle">Daniëlla Ezigbo</p>
         </div>
@@ -308,7 +297,6 @@
       </div>
     </header>
 
-    <!-- NAV -->
     <nav class="panel panel-nav" aria-label="Navigatie">
       <ul>
         <li><strong data-i18n="navHome">Homepage</strong></li>
@@ -318,22 +306,22 @@
         <li class="dropdown">
           <button class="dropdown-btn" type="button" aria-expanded="false" data-i18n="navWeeks">Weken</button>
           <ul class="dropdown-content" aria-label="Weekpagina’s">
-            <li><a data-page-link href="Week 1.html" data-i18n="navWeek1">Week 1</a></li>
-            <li><a data-page-link href="Week 2.html" data-i18n="navWeek2">Week 2</a></li>
-            <li><a data-page-link href="Week 3.html" data-i18n="navWeek3">Week 3</a></li>
-            <li><a data-page-link href="Week 4.html" data-i18n="navWeek4">Week 4</a></li>
-            <li><a data-page-link href="Week 5.html" data-i18n="navWeek5">Week 5</a></li>
-            <li><a data-page-link href="Week 6.html" data-i18n="navWeek6">Week 6</a></li>
-            <li><a data-page-link href="Week 7.html" data-i18n="navWeek7">Week 7</a></li>
-            <li><a data-page-link href="Week 8.html" data-i18n="navWeek8">Week 8</a></li>
-            <li><a data-page-link href="Week 9.html" data-i18n="navWeek9">Week 9</a></li>
-            <li><a data-page-link href="Week 10.html" data-i18n="navWeek10">Week 10</a></li>
+            <!-- ✅ FIX: zonder spaties in bestandsnaam -->
+            <li><a data-page-link href="Week1.html" data-i18n="navWeek1">Week 1</a></li>
+            <li><a data-page-link href="Week2.html" data-i18n="navWeek2">Week 2</a></li>
+            <li><a data-page-link href="Week3.html" data-i18n="navWeek3">Week 3</a></li>
+            <li><a data-page-link href="Week4.html" data-i18n="navWeek4">Week 4</a></li>
+            <li><a data-page-link href="Week5.html" data-i18n="navWeek5">Week 5</a></li>
+            <li><a data-page-link href="Week6.html" data-i18n="navWeek6">Week 6</a></li>
+            <li><a data-page-link href="Week7.html" data-i18n="navWeek7">Week 7</a></li>
+            <li><a data-page-link href="Week8.html" data-i18n="navWeek8">Week 8</a></li>
+            <li><a data-page-link href="Week9.html" data-i18n="navWeek9">Week 9</a></li>
+            <li><a data-page-link href="Week10.html" data-i18n="navWeek10">Week 10</a></li>
           </ul>
         </li>
       </ul>
     </nav>
 
-    <!-- MAIN -->
     <main class="panel">
 
       <h2 class="page-title" data-i18n="welcomeTitle">Welkom</h2>
@@ -345,7 +333,6 @@
         op de <strong>afzonderlijke weekpagina’s</strong>.
       </p>
 
-      <!-- BOEK -->
       <div class="book-wrapper" id="week-book">
         <h2 id="book-week-title" class="book-title"></h2>
         <p id="book-week-subtitle" class="book-subtitle"></p>
@@ -358,7 +345,6 @@
         </div>
       </div>
 
-      <!-- PROJECTLINKS (GEEN dropdown meer) -->
       <section class="links-section" id="project-links">
         <div class="links-header" id="project-links-header">
           <div class="links-title" data-i18n="linksTitle">Projectlinks</div>
@@ -371,14 +357,12 @@
         <div class="links-collapsible">
           <div class="links-grid">
 
-            <!-- ✅ FIGMA: naar (present/preview) -->
             <a class="link-item"
                href="https://www.figma.com/proto/Gw32TgEv8p1lAIb4Knwd4l/Mobile-web?node-id=156-17&scaling=scale-down&page-id=0%3A1&starting-point-node-id=156%3A17"
                target="_blank" rel="noopener"
                aria-label="Open Figma – preview">
               <div class="link-icon-wrapper">
-                <img src="assets/imgs/figma.png" class="link-icon"
-                     alt="Figma" title="Figma – preview" />
+                <img src="assets/imgs/figma.png" class="link-icon" alt="Figma" title="Figma – preview" />
               </div>
               <div>
                 <div class="link-title">Figma</div>
@@ -387,14 +371,12 @@
               </div>
             </a>
 
-            <!-- ✅ GITHUB: jouw repo -->
             <a class="link-item"
                href="https://github.com/Dani05X/Dani-lla-Dani-lla_Ezigbo"
                target="_blank" rel="noopener"
                aria-label="Open GitHub – repository">
               <div class="link-icon-wrapper">
-                <img src="assets/imgs/github.png" class="link-icon icon-github"
-                     alt="GitHub" title="GitHub – repository" />
+                <img src="assets/imgs/github.png" class="link-icon icon-github" alt="GitHub" title="GitHub – repository" />
               </div>
               <div>
                 <div class="link-title">GitHub</div>
@@ -403,14 +385,12 @@
               </div>
             </a>
 
-            <!-- ✅ PDF: download -->
             <a class="link-item"
                href="pdf/Mobile%20web.pdf"
                download="Mobile web.pdf"
                aria-label="Download PDF – Mobile web">
               <div class="link-icon-wrapper">
-                <img src="assets/imgs/pdf.png" class="link-icon"
-                     alt="PDF" title="PDF – download" />
+                <img src="assets/imgs/pdf.png" class="link-icon" alt="PDF" title="PDF – download" />
               </div>
               <div>
                 <div class="link-title">PDF</div>
@@ -431,31 +411,31 @@
 
   </div>
 
-  <!-- NAV dropdown -->
   <script>
     const dropdown = document.querySelector(".dropdown");
-    const dropdownBtn = dropdown.querySelector(".dropdown-btn");
+    const dropdownBtn = dropdown?.querySelector(".dropdown-btn");
 
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isOpen = dropdown.classList.toggle("open");
-      dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
-    });
+    if (dropdown && dropdownBtn) {
+      dropdownBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.toggle("open");
+        dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
 
-    document.addEventListener("click", () => {
-      dropdown.classList.remove("open");
-      dropdownBtn.setAttribute("aria-expanded", "false");
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
+      document.addEventListener("click", () => {
         dropdown.classList.remove("open");
         dropdownBtn.setAttribute("aria-expanded", "false");
-      }
-    });
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
   </script>
 
-  <!-- i18n + boek per taal + links taal doorgeven -->
   <script>
     const i18n = {
       nl: {
@@ -607,8 +587,14 @@
 
     function setInternalLinksLang(lang){
       document.querySelectorAll("a[data-page-link]").forEach(a => {
+        const href = a.getAttribute("href");
+        if (!href) return;
+
+        // externe links overslaan
+        if (href.startsWith("http://") || href.startsWith("https://")) return;
+
         try{
-          const url = new URL(a.getAttribute("href"), window.location.href);
+          const url = new URL(href, window.location.href);
           url.searchParams.set("lang", lang);
           a.setAttribute("href", url.pathname + "?" + url.searchParams.toString());
         }catch(e){}
