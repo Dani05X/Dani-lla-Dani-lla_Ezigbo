@@ -1,0 +1,40 @@
+.two-columns {
+    display: flex;
+    gap: 20px; /* spacing between columns */
+}
+
+.column {
+    flex: 1; /* each column takes equal space */
+}
+
+.two-columns{
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+  flex-wrap:wrap;            /* ✅ laat kolommen netjes “wrappen” als het krap wordt */
+}
+
+.column{
+  flex:1 1 320px;            /* ✅ grow + shrink + basisbreedte (dus responsief) */
+  min-width:0;               /* ✅ voorkomt dat tekst/beelden overflowen */
+}
+
+/* ✅ Nice responsive flow: vanaf tablet/phone onder elkaar */
+@media (max-width: 900px){
+  .two-columns{
+    flex-direction:column;   /* ✅ 1 kolom layout */
+  }
+  .column{
+    flex:1 1 auto;
+    width:100%;
+  }
+}
+
+/* ✅ Extra safety: images/video’s blijven binnen de kolom */
+.column img,
+.column video,
+.column iframe{
+  max-width:100%;
+  height:auto;
+  display:block;
+}

@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 1 – Lo-fi prototype</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <style>
+    body { font-family: "Inter", Arial, sans-serif; color:#000; line-height:1.75; font-size:17px; }
+    h1,h2,h3 { font-weight:700; color:#000; letter-spacing:-0.2px; }
+    h2 { font-size:28px; margin-bottom:6px; }
+    h3 { font-size:21px; margin:26px 0 8px; }
+    .subtitle{ color:#6b6b6b; font-size:14px; margin-top:6px; }
+
+    /* GRID */
+    .box{
+      max-width:1250px; margin:50px auto; display:grid; grid-gap:40px;
+      grid-template-columns:330px minmax(0,1fr); align-items:flex-start;
+    }
+    .panel{ background:#fff; border-radius:14px; padding:48px 56px; box-shadow:0 5px 18px rgba(0,0,0,0.07); }
+    .panel-nav{ padding:28px 32px; align-self:flex-start; }
+
+    /* HEADER */
+    .site-header h1{ font-size:40px; font-weight:900; margin:0; letter-spacing:-0.5px; }
+    .header-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
+    .header-left{ min-width:0; }
+
+    /* TAAL */
+    .lang-area{
+      display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding-top:2px;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+    .lang-label{ font-size:12px; letter-spacing:0.3px; font-weight:800; color:#6b6b6b; text-transform:uppercase; }
+    .lang-switch{ display:flex; gap:8px; padding:0; background:transparent; border:none; }
+    .lang-switch button{
+      background:none; border:none; cursor:pointer; font-weight:900; font-size:13px; color:#6b6b6b;
+      padding:4px 6px; border-radius:8px; transition:0.2s ease;
+    }
+    .lang-switch button:hover{ color:#F79A6A; background:rgba(247,154,106,0.10); }
+    .lang-switch button.active{ color:#F79A6A; text-decoration:underline; background:transparent; }
+
+    /* NAV (zoals page.html) */
+    nav ul{ list-style:none; padding-left:0; margin:0; }
+    nav ul li{ margin-bottom:8px; }
+
+    nav a{
+      color:#000 !important;
+      font-weight:600;
+      text-decoration:none;
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+    }
+    nav a:hover{
+      color:#F79A6A !important;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* actieve pagina */
+    nav strong{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      font-weight:800;
+    }
+
+    /* NAV + DROPDOWN FIX */
+    .panel.panel-nav,
+    nav.panel.panel-nav,
+    .panel-nav{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .panel-nav ul,
+    .panel-nav li{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    /* dropdown */
+    nav.panel{ overflow:visible !important; }
+    .dropdown{ position:relative; }
+    .dropdown-btn{
+      color:#000;
+      font-weight:700;
+      background:none;
+      border:none;
+      padding:4px 6px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .dropdown-btn:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+
+    .dropdown-content{
+      display:none;
+      margin-top:8px;
+      padding-left:12px;
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .dropdown.open .dropdown-content{ display:block; }
+
+    .dropdown-content a{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+      text-decoration:none;
+    }
+    .dropdown-content a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* META */
+    .page-breadcrumb{ font-size:13px; color:#777; margin:-2px 0 8px; }
+    .week-meta{ font-size:14px; color:#555; margin-bottom:20px; }
+    .pill{
+      display:inline-flex; padding:4px 10px; border-radius:999px;
+      background:#fff7f1; color:#b0602f; font-size:12px; font-weight:600; margin-right:8px;
+    }
+
+    .section{ margin-bottom:28px; }
+
+    /* WEEK-SAMENVATTING */
+    .week-summary-card{
+      border-radius:16px; background:#fffaf6; padding:18px 22px;
+      border:1px solid #ffe0c5; margin-bottom:28px;
+    }
+    .week-summary-title{ font-size:16px; font-weight:600; margin-bottom:4px; }
+    .week-summary-sub{ font-size:13px; color:#777; margin-bottom:8px; }
+    .week-summary-list{ list-style:none; padding-left:0; margin:0; font-size:14px; color:#555; }
+    .week-summary-list li::before{ content:"• "; color:#b0602f; }
+
+    /* =========================
+       TREIN UI
+    ========================= */
+    .train-wrap{
+      margin-top:14px;
+      padding:14px;
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.90));
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .train{
+      display:grid;
+      grid-template-columns:220px 32px 1fr 32px 1fr 32px 1fr;
+      align-items:stretch;
+    }
+
+    .engine{
+      position:relative;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,0.06);
+      padding:14px 14px 12px;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      overflow:hidden;
+    }
+    .engine-top{ position:absolute; inset:0 0 auto 0; height:18px; background:#ffe6d6; }
+    .engine-window{
+      width:48px; height:34px; border-radius:10px;
+      background: rgba(0,0,0,0.06);
+      margin:12px 0 10px;
+    }
+    .engine-label{ display:grid; gap:2px; }
+    .engine-title{ font-weight:800; font-size:14px; }
+    .engine-sub{ font-size:12px; color:#777; }
+
+    .coupler{
+      align-self:center;
+      height:10px;
+      background: rgba(0,0,0,0.08);
+      border-radius:999px;
+      margin:0 10px;
+      position:relative;
+    }
+    .coupler::after{
+      content:"";
+      position:absolute;
+      right:-10px; top:50%;
+      width:14px; height:14px;
+      transform: translateY(-50%);
+      border-radius:50%;
+      background: rgba(0,0,0,0.10);
+    }
+
+    .wagon{
+      position:relative;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,0.06);
+      padding:14px 14px 12px;
+      text-align:left;
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      overflow:hidden;
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .wagon::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:18px;
+      background:#fff7f1;
+    }
+    .wagon-tag{
+      display:inline-flex;
+      font-size:11px;
+      font-weight:700;
+      color:#b0602f;
+      background: rgba(255,185,143,0.25);
+      padding:4px 9px;
+      border-radius:999px;
+      margin-top:6px;
+    }
+    .wagon-title{
+      display:block;
+      margin-top:10px;
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:-0.3px;
+    }
+    .wagon-hint{
+      display:block;
+      margin-top:4px;
+      font-size:12px;
+      color:#777;
+    }
+
+    .wagon-badge{
+      position:absolute;
+      right:14px;
+      top:46px;
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      background: rgba(0,0,0,0.06);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.75);
+    }
+    .wagon-badge::before{
+      content:"";
+      width:14px; height:14px;
+      border-radius:6px;
+      background: rgba(255,185,143,0.95);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+    }
+    .wagon-badge.badge-2::before{ border-radius:999px; }
+    .wagon-badge.badge-3::before{ border-radius:4px; transform: rotate(10deg); }
+
+    .wheel-row{ display:flex; gap:10px; margin-top:12px; align-items:center; }
+    .wheel{
+      width:14px; height:14px; border-radius:999px;
+      background: rgba(0,0,0,0.18);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.65);
+    }
+
+    .wagon:hover{
+      transform: translateY(-4px);
+      border-color:#ffb98f;
+      background:#fff7f1;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.14);
+    }
+
+    @media (max-width:1050px){
+      .train{ grid-template-columns:1fr; gap:12px; }
+      .coupler{ display:none; }
+    }
+
+    /* INSPIRATIE */
+    .wagon--wide{ grid-column: 3 / 8; cursor: default; }
+    .inspo-collage{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,0.06);
+      background: rgba(255,255,255,0.65);
+    }
+    .inspo-item{
+      position:relative;
+      margin:0;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,0.10);
+      background:#fff;
+      box-shadow:0 6px 16px rgba(0,0,0,0.06);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      cursor:pointer;
+    }
+    .inspo-item:hover{
+      transform: translateY(-2px);
+      border-color:#ffb98f;
+      box-shadow:0 10px 24px rgba(0,0,0,0.12);
+    }
+    .inspo-item img{
+      display:block;
+      width:100%;
+      height:160px;
+      object-fit:cover;
+      transition: transform .2s ease;
+    }
+    .inspo-item:hover img{ transform: scale(1.05); }
+    .inspo-zoom-icon{
+      position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:999px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(255,255,255,0.92); box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+      opacity:0; transform: translateY(-4px); transition:0.18s ease;
+      pointer-events:none; font-weight:900; color:#b0602f; border:1px solid rgba(0,0,0,0.06);
+    }
+    .inspo-item:hover .inspo-zoom-icon{ opacity:1; transform: translateY(0); }
+    .inspo-cap{
+      padding:10px 12px;
+      font-size:14px;
+      color:#111;
+      font-weight:900;
+      line-height:1.15;
+      border-top:1px solid rgba(0,0,0,0.06);
+      background:#fff;
+    }
+
+    @media (max-width:1050px){
+      .wagon--wide{ grid-column:auto; }
+      .inspo-collage{ grid-template-columns:1fr; }
+      .inspo-item img{ height:220px; }
+    }
+
+    /* MODAL */
+    .image-modal{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      z-index: 9999;
+    }
+    .image-modal.open{ display:block; }
+    .image-modal-bg{ position:absolute; inset:0; }
+
+    .image-modal-close{
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: none;
+      background: #fff;
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 10000;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    }
+
+    .image-modal-arrow{
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: none;
+      background: #fff;
+      font-size: 26px;
+      cursor: pointer;
+      z-index: 10000;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    }
+    .image-modal-arrow.left{ left: 22px; }
+    .image-modal-arrow.right{ right: 22px; }
+
+    .zoom-controls{
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      display:flex;
+      gap:10px;
+      z-index: 10000;
+    }
+    .zoom-btn{
+      width:44px;
+      height:44px;
+      border-radius:999px;
+      border:none;
+      background:#fff;
+      cursor:pointer;
+      font-size:22px;
+      font-weight:900;
+      color:#b0602f;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      transition:0.18s ease;
+    }
+    .zoom-btn:hover{ transform: translateY(-1px); }
+    .zoom-btn:disabled{
+      opacity:0.45;
+      cursor:default;
+      transform:none;
+    }
+
+    .image-modal-content{
+      position: relative;
+      height: 100vh;
+      padding: 72px 24px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: auto;
+      overscroll-behavior: contain;
+      gap: 12px;
+    }
+
+    .image-modal-img{
+      display:block;
+      width:auto;
+      height:auto;
+      max-width: 92vw;
+      max-height: 74vh;
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      background: #fff;
+
+      image-rendering: auto;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      transition: width .16s ease;
+    }
+
+    .image-modal-caption{
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      opacity: 0.95;
+      text-align:center;
+      max-width:92vw;
+      line-height: 1.35;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+      padding-bottom: 8px;
+    }
+
+    .week-nav-bar{
+      border-top:1px solid #eee;
+      margin-top:26px;
+      padding-top:16px;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .week-nav-link{
+      padding:6px 12px;
+      background:#fff7f1;
+      border-radius:999px;
+      border:1px solid #ffb98f33;
+      text-decoration:none;
+      font-weight:600;
+      color:#000;
+      transition:0.18s ease;
+      display:inline-block;
+      white-space:nowrap;
+    }
+    .week-nav-link:hover{
+      background:#ffb98f;
+      color:#fff;
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 980px){
+      .box{ grid-template-columns:1fr; }
+      .lang-area{ align-items:flex-start; }
+      .panel{ padding:32px; }
+      .panel-nav{ padding:28px 32px; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="box">
+
+  <!-- HEADER -->
+  <header class="panel site-header">
+    <div class="header-top">
+      <div class="header-left">
+        <h1 data-i18n="siteTitle">Week 1</h1>
+        <p class="subtitle">Daniëlla Ezigbo</p>
+      </div>
+
+      <div class="lang-area" aria-label="Taalkeuze">
+        <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+        <div class="lang-switch">
+          <button type="button" data-lang="nl" aria-label="Nederlands">NL</button>
+          <button type="button" data-lang="fr" aria-label="Français">FR</button>
+          <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="panel panel-nav" aria-label="Navigatie">
+    <ul>
+      <li><a data-page-link href="index.html" data-i18n="navHome">Homepage</a></li>
+      <li><a data-page-link href="page.html" data-i18n="navAbout">Over deze website</a></li>
+      <li><a data-page-link href="contact.html" data-i18n="navContact">Contact</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-btn" type="button" aria-expanded="false" data-i18n="navWeeks">Weken</button>
+        <ul class="dropdown-content" aria-label="Weekpagina’s">
+          <li><strong data-i18n="week1">Week 1</strong></li>
+          <li><a data-page-link href="Week 2.html" data-i18n="week2">Week 2</a></li>
+          <li><a data-page-link href="Week 3.html" data-i18n="week3">Week 3</a></li>
+          <li><a data-page-link href="Week 4.html" data-i18n="week4">Week 4</a></li>
+          <li><a data-page-link href="Week 5.html" data-i18n="week5">Week 5</a></li>
+          <li><a data-page-link href="Week 6.html" data-i18n="week6">Week 6</a></li>
+          <li><a data-page-link href="Week 7.html" data-i18n="week7">Week 7</a></li>
+          <li><a data-page-link href="Week 8.html" data-i18n="week8">Week 8</a></li>
+          <li><a data-page-link href="Week 9.html" data-i18n="week9">Week 9</a></li>
+          <li><a data-page-link href="Week 10.html" data-i18n="week10">Week 10</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="panel">
+
+    <h2 data-i18n="pageTitle">Week 1 – Lo-fi prototype</h2>
+    <p class="page-breadcrumb" data-i18n="breadcrumb">Ontwerp &gt; Prototyping &gt; Week 1</p>
+    <p class="week-meta">
+      <span class="pill" data-i18n="pill">Lo-fi prototype</span>
+      <span data-i18n="metaText">Start met de basisstructuur en eerste schermen.</span>
+    </p>
+
+    <!-- ✅ AANPASSING: titel in oranje kader -->
+    <section class="section week-summary-card">
+      <div class="week-summary-title" data-i18n="summaryTitle">Kernpunten van deze week</div>
+      <div class="week-summary-sub" data-i18n="summarySub">Fase 1–3 uit het traject</div>
+      <ul class="week-summary-list">
+        <li data-i18n="sum1">Basis uitleg over het project en de opdracht.</li>
+        <li data-i18n="sum2">Figma leren kennen en de belangrijkste tools ontdekken.</li>
+        <li data-i18n="sum3">Eerste lo-fi schermen maken in Figma (zonder styling, puur structuur).</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="goalTitle">Doel van de lo-fi fase</h3>
+      <p data-i18n-html="goalText">
+        In deze eerste fase lag de nadruk niet op kleuren of styling, maar op <strong>de logica van de interface</strong>:
+        <strong>welke informatie moet onmiddellijk opvallen</strong> en <strong>hoe blijven details beschikbaar</strong> zonder het scherm druk te maken.
+        De lo-fi versie helpt om de basisstructuur snel te controleren vóór de uitwerking in mid-fi en hi-fi.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="motivationTitle">Aanpak</h3>
+      <p data-i18n-html="motivationText">
+        In week 1 is het concept verkend en is een eerste <strong>lo-fi structuur</strong> uitgewerkt met focus op <strong>logica</strong> en <strong>informatiehiërarchie</strong>.
+        De prioriteit lag bij het snel toetsen van de opbouw: wat moet meteen opvallen en welke informatie blijft ondersteunend, zonder visuele afwerking als uitgangspunt te nemen.
+        <br><br>
+        Als startpunt zijn inspiratiebronnen rond treinschermen geanalyseerd op <strong>leesbaarheid</strong>, <strong>structuur</strong> en <strong>visuele prioriteit</strong>.
+        De <strong>roze beeldreferenties</strong> dienden hierbij als vroege lo-fi leidraad om richting en samenhang te bepalen.
+        Deze inzichten zijn toegepast in drie lo-fi kernschermen (overzicht, perron en wagon), zodat de interface per onderdeel helder getest en onderbouwd kon worden.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="lofiTitle">Lo-fi schermen</h3>
+      <p data-i18n="lofiHint">Klik op een wagon om het scherm groter te bekijken.</p>
+
+      <div class="train-wrap" aria-label="Trein met drie kernschermen">
+        <div class="train">
+
+          <div class="engine" title="Lost in Tra(i)nslation">
+            <div class="engine-top"></div>
+            <div class="engine-window"></div>
+            <div class="engine-label">
+              <span class="engine-title">Lost in Tra(i)nslation</span>
+              <span class="engine-sub" data-i18n="engineSubLofi">Week 1 · Lo-fi</span>
+            </div>
+            <div class="wheel-row">
+              <span class="wheel"></span><span class="wheel"></span><span class="wheel"></span>
+            </div>
+          </div>
+
+          <div class="coupler"></div>
+
+          <button class="wagon modal-item"
+            data-group="lofi"
+            data-full="assets/imgs/overzichtscherm.jpeg"
+            data-hires2="assets/imgs/overzichtscherm@2x.jpeg"
+            data-hires3="assets/imgs/overzichtscherm@3x.jpeg"
+            data-caption=""
+            data-caption-nl="Overzichtscherm (lo-fi)"
+            data-caption-fr="Écran d’aperçu (lo-fi)"
+            data-caption-de="Übersichtsbildschirm (lo-fi)"
+            type="button">
+            <span class="wagon-tag" data-i18n="core1">Kernscherm 1</span>
+            <span class="wagon-title" data-i18n="wOverzicht">Overzicht</span>
+            <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+            <span class="wagon-badge badge-1" aria-hidden="true"></span>
+            <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+          </button>
+
+          <div class="coupler"></div>
+
+          <button class="wagon modal-item"
+            data-group="lofi"
+            data-full="assets/imgs/perronscherm.jpeg"
+            data-hires2="assets/imgs/perronscherm@2x.jpeg"
+            data-hires3="assets/imgs/perronscherm@3x.jpeg"
+            data-caption=""
+            data-caption-nl="Perronscherm (lo-fi)"
+            data-caption-fr="Écran de quai (lo-fi)"
+            data-caption-de="Bahnsteigbildschirm (lo-fi)"
+            type="button">
+            <span class="wagon-tag" data-i18n="core2">Kernscherm 2</span>
+            <span class="wagon-title" data-i18n="wPerron">Perron</span>
+            <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+            <span class="wagon-badge badge-2" aria-hidden="true"></span>
+            <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+          </button>
+
+          <div class="coupler"></div>
+
+          <button class="wagon modal-item"
+            data-group="lofi"
+            data-full="assets/imgs/wagonscherm.jpeg"
+            data-hires2="assets/imgs/wagonscherm@2x.jpeg"
+            data-hires3="assets/imgs/wagonscherm@3x.jpeg"
+            data-caption=""
+            data-caption-nl="Wagonscherm (lo-fi)"
+            data-caption-fr="Écran wagon (lo-fi)"
+            data-caption-de="Wagenbildschirm (lo-fi)"
+            type="button">
+            <span class="wagon-tag" data-i18n="core3">Kernscherm 3</span>
+            <span class="wagon-title" data-i18n="wWagon">Wagon</span>
+            <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+            <span class="wagon-badge badge-3" aria-hidden="true"></span>
+            <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="inspTitle">Inspiratie – voorbeeldschermen</h3>
+      <p data-i18n-html="inspText">
+        Als referentie heb ik ook enkele <strong>realistische voorbeeldschermen</strong> verzameld.
+        Hover over een afbeelding en klik om ze fullscreen te openen.
+      </p>
+
+      <div class="train-wrap" aria-label="Inspiratietrein met voorbeeldschermen">
+        <div class="train">
+
+          <div class="engine" title="Inspiratie">
+            <div class="engine-top"></div>
+            <div class="engine-window"></div>
+            <div class="engine-label">
+              <span class="engine-title" data-i18n="inspEngineTitle">Inspiratie</span>
+              <span class="engine-sub" data-i18n="inspEngineSub">Voorbeeldschermen</span>
+            </div>
+            <div class="wheel-row">
+              <span class="wheel"></span><span class="wheel"></span><span class="wheel"></span>
+            </div>
+          </div>
+
+          <div class="coupler"></div>
+
+          <div class="wagon wagon--wide" aria-label="Voorbeeldschermen">
+            <span class="wagon-tag" data-i18n="inspTag">Inspiratie</span>
+            <span class="wagon-title" data-i18n="inspWagonTitle">Voorbeeldschermen</span>
+            <span class="wagon-hint" data-i18n="inspWagonHint">Klik op een afbeelding om te openen</span>
+            <span class="wagon-badge badge-1" aria-hidden="true"></span>
+
+            <div class="inspo-collage">
+              <figure class="inspo-item modal-item"
+                data-group="voorbeeld"
+                data-full="assets/imgs/overzicht%20scherm%20voorbeeld.jpg"
+                data-hires2="assets/imgs/overzicht%20scherm%20voorbeeld@2x.jpg"
+                data-hires3="assets/imgs/overzicht%20scherm%20voorbeeld@3x.jpg"
+                data-caption=""
+                data-caption-nl="Overzichtscherm (voorbeeld)"
+                data-caption-fr="Écran d’aperçu (exemple)"
+                data-caption-de="Übersichtsbildschirm (Beispiel)">
+                <div class="inspo-zoom-icon" aria-hidden="true">+</div>
+                <img src="assets/imgs/overzicht%20scherm%20voorbeeld.jpg" alt="Overzichtscherm voorbeeld" />
+                <figcaption class="inspo-cap" data-i18n="capOverzicht">Overzichtscherm</figcaption>
+              </figure>
+
+              <figure class="inspo-item modal-item"
+                data-group="voorbeeld"
+                data-full="assets/imgs/perronscherm%20voorbeeld.jpg"
+                data-hires2="assets/imgs/perronscherm%20voorbeeld@2x.jpg"
+                data-hires3="assets/imgs/perronscherm%20voorbeeld@3x.jpg"
+                data-caption=""
+                data-caption-nl="Perronscherm (voorbeeld)"
+                data-caption-fr="Écran de quai (exemple)"
+                data-caption-de="Bahnsteigbildschirm (Beispiel)">
+                <div class="inspo-zoom-icon" aria-hidden="true">+</div>
+                <img src="assets/imgs/perronscherm%20voorbeeld.jpg" alt="Perronscherm voorbeeld" />
+                <figcaption class="inspo-cap" data-i18n="capPerron">Perronscherm</figcaption>
+              </figure>
+
+              <figure class="inspo-item modal-item"
+                data-group="voorbeeld"
+                data-full="assets/imgs/wagonscherm%20voorbeeld.jpg"
+                data-hires2="assets/imgs/wagonscherm%20voorbeeld@2x.jpg"
+                data-hires3="assets/imgs/wagonscherm%20voorbeeld@3x.jpg"
+                data-caption=""
+                data-caption-nl="Wagonscherm (voorbeeld)"
+                data-caption-fr="Écran wagon (exemple)"
+                data-caption-de="Wagenbildschirm (Beispiel)">
+                <div class="inspo-zoom-icon" aria-hidden="true">+</div>
+                <img src="assets/imgs/wagonscherm%20voorbeeld.jpg" alt="Wagonscherm voorbeeld" />
+                <figcaption class="inspo-cap" data-i18n="capWagon">Wagonscherm</figcaption>
+              </figure>
+            </div>
+
+            <div class="wheel-row">
+              <span class="wheel"></span><span class="wheel"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="nextTitle">Volgende stap</h3>
+      <p data-i18n="nextText">In week 2 werk je verder naar een mid-fi prototype, met meer detail en typografie.</p>
+      <div class="week-nav-bar">
+        <a href="Week 2.html" class="week-nav-link" data-i18n="nextLink">Ga verder naar Week 2 →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="panel">
+    <span data-i18n="footer">© 2025 Daniëlla Ezigbo – Mijn website</span>
+  </footer>
+
+</div>
+
+<!-- Dropdown gedrag (exact als page.html) -->
+<script>
+  const dropdown = document.querySelector(".dropdown");
+  const dropdownBtn = dropdown?.querySelector(".dropdown-btn");
+
+  if (dropdown && dropdownBtn) {
+    dropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle("open");
+      dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", () => {
+      dropdown.classList.remove("open");
+      dropdownBtn.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        dropdown.classList.remove("open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+</script>
+
+<!-- ✅ Taal switch + links lang param -->
+<script>
+  const I18N = {
+    nl: {
+      langLabel:"Taalkeuze",
+      siteTitle:"Week 1",
+
+      navHome:"Homepage",
+      navAbout:"Over deze website",
+      navContact:"Contact",
+      navWeeks:"Weken",
+      week1:"Week 1", week2:"Week 2", week3:"Week 3", week4:"Week 4", week5:"Week 5",
+      week6:"Week 6", week7:"Week 7", week8:"Week 8", week9:"Week 9", week10:"Week 10",
+
+      pageTitle: "Week 1 – Lo-fi prototype",
+      breadcrumb: "Ontwerp > Prototyping > Week 1",
+      pill: "Lo-fi prototype",
+      metaText: "Start met de basisstructuur en eerste schermen.",
+
+      /* ✅ AANPASSING: tekst in oranje kader */
+      summaryTitle: "Kernpunten van deze week",
+      summarySub: "Fase 1–3 uit het traject",
+      sum1: "Basis uitleg over het project en de opdracht.",
+      sum2: "Figma leren kennen en de belangrijkste tools ontdekken.",
+      sum3: "Eerste lo-fi schermen maken in Figma (zonder styling, puur structuur).",
+
+      goalTitle: "Doel van de lo-fi fase",
+      goalText: `In deze eerste fase lag de nadruk niet op kleuren of styling, maar op <strong>de logica van de interface</strong>:
+                <strong>welke informatie moet onmiddellijk opvallen</strong> en <strong>hoe blijven details beschikbaar</strong> zonder het scherm druk te maken.
+                De lo-fi versie helpt om de basisstructuur snel te controleren vóór de uitwerking in mid-fi en hi-fi.`,
+
+      motivationTitle: "Aanpak",
+      motivationText: `In week 1 is het concept verkend en is een eerste <strong>lo-fi structuur</strong> uitgewerkt met focus op <strong>logica</strong> en <strong>informatiehiërarchie</strong>.
+                De prioriteit lag bij het snel toetsen van de opbouw: wat moet meteen opvallen en welke informatie blijft ondersteunend, zonder visuele afwerking als uitgangspunt te nemen.
+                <br><br>
+                Als startpunt zijn inspiratiebronnen rond treinschermen geanalyseerd op <strong>leesbaarheid</strong>, <strong>structuur</strong> en <strong>visuele prioriteit</strong>.
+                De <strong>roze beeldreferenties</strong> dienden hierbij als vroege lo-fi leidraad om richting en samenhang te bepalen.
+                Deze inzichten zijn toegepast in drie lo-fi kernschermen (overzicht, perron en wagon), zodat de interface per onderdeel helder getest en onderbouwd kon worden.`,
+
+      lofiTitle: "Lo-fi schermen",
+      lofiHint: "Klik op een wagon om het scherm groter te bekijken.",
+      engineSubLofi: "Week 1 · Lo-fi",
+
+      core1: "Kernscherm 1",
+      core2: "Kernscherm 2",
+      core3: "Kernscherm 3",
+      wOverzicht: "Overzicht",
+      wPerron: "Perron",
+      wWagon: "Wagon",
+      openHint: "Klik om te openen",
+
+      inspTitle: "Inspiratie – voorbeeldschermen",
+      inspText: `Als referentie heb ik ook enkele <strong>realistische voorbeeldschermen</strong> verzameld.
+                Hover over een afbeelding en klik om ze fullscreen te openen.`,
+      inspEngineTitle: "Inspiratie",
+      inspEngineSub: "Voorbeeldschermen",
+      inspTag: "Inspiratie",
+      inspWagonTitle: "Voorbeeldschermen",
+      inspWagonHint: "Klik op een afbeelding om te openen",
+
+      capOverzicht: "Overzichtscherm",
+      capPerron: "Perronscherm",
+      capWagon: "Wagonscherm",
+
+      nextTitle: "Volgende stap",
+      nextText: "In week 2 werk je verder naar een mid-fi prototype, met meer detail en typografie.",
+      nextLink: "Ga verder naar Week 2 →",
+
+      footer:"© 2025 Daniëlla Ezigbo – Mijn website"
+    },
+
+    fr: {
+      langLabel:"Langue",
+      siteTitle:"Semaine 1",
+
+      navHome:"Accueil",
+      navAbout:"À propos de ce site",
+      navContact:"Contact",
+      navWeeks:"Semaines",
+      week1:"Semaine 1", week2:"Semaine 2", week3:"Semaine 3", week4:"Semaine 4", week5:"Semaine 5",
+      week6:"Semaine 6", week7:"Semaine 7", week8:"Semaine 8", week9:"Semaine 9", week10:"Semaine 10",
+
+      pageTitle: "Semaine 1 – Prototype lo-fi",
+      breadcrumb: "Conception > Prototypage > Semaine 1",
+      pill: "Prototype lo-fi",
+      metaText: "Mise en place de la structure de base et des premiers écrans.",
+
+      /* ✅ AANPASSING */
+      summaryTitle: "Points clés de la semaine",
+      summarySub: "Étapes 1–3 du parcours",
+      sum1: "Présentation du projet et des attentes.",
+      sum2: "Découverte de Figma et des outils essentiels.",
+      sum3: "Premiers écrans lo-fi dans Figma (sans style, structure uniquement).",
+
+      goalTitle: "Objectif de la phase lo-fi",
+      goalText: `Dans cette première phase, l’accent n’est pas mis sur les couleurs ou le style, mais sur <strong>la logique de l’interface</strong> :
+                <strong>quelles informations doivent ressortir immédiatement</strong> et <strong>comment garder les détails accessibles</strong> sans surcharger l’écran.
+                La version lo-fi permet de valider rapidement la structure avant le mid-fi et le hi-fi.`,
+
+      motivationTitle: "Démarche",
+      motivationText: `Durant la semaine 1, le concept a été exploré et une première <strong>structure lo-fi</strong> a été mise en place, avec un focus sur la <strong>logique</strong> et la <strong>hiérarchie de l’information</strong>.
+                L’objectif était de valider rapidement l’organisation du prototype, sans se concentrer prématurément sur l’aspect visuel.
+                <br><br>
+                Des références d’écrans ferroviaires ont ensuite été analysées (lisibilité, structure, priorité visuelle).
+                Les <strong>références visuelles roses</strong> ont servi de repère initial dans la phase lo-fi pour clarifier une direction.
+                Ces constats ont été appliqués à trois écrans lo-fi principaux (aperçu, quai et wagon) afin de tester l’interface par sections distinctes et cohérentes.`,
+
+      lofiTitle: "Écrans lo-fi",
+      lofiHint: "Cliquez sur un wagon pour agrandir l’écran.",
+      engineSubLofi: "Semaine 1 · Lo-fi",
+
+      core1: "Écran clé 1",
+      core2: "Écran clé 2",
+      core3: "Écran clé 3",
+      wOverzicht: "Aperçu",
+      wPerron: "Quai",
+      wWagon: "Wagon",
+      openHint: "Cliquer pour ouvrir",
+
+      inspTitle: "Inspiration – écrans de référence",
+      inspText: `En référence, j’ai également rassemblé quelques <strong>écrans réalistes</strong>.
+                Survolez une image et cliquez pour l’ouvrir en plein écran.`,
+      inspEngineTitle: "Inspiration",
+      inspEngineSub: "Écrans de référence",
+      inspTag: "Inspiration",
+      inspWagonTitle: "Écrans de référence",
+      inspWagonHint: "Cliquez sur une image pour l’ouvrir",
+
+      capOverzicht: "Écran d’aperçu",
+      capPerron: "Écran de quai",
+      capWagon: "Écran wagon",
+
+      nextTitle: "Étape suivante",
+      nextText: "En semaine 2, vous avancez vers un prototype mid-fi, avec plus de détails et de typographie.",
+      nextLink: "Continuer vers la semaine 2 →",
+
+      footer:"© 2025 Daniëlla Ezigbo – Mon site"
+    },
+
+    de: {
+      langLabel:"Sprache",
+      siteTitle:"Woche 1",
+
+      navHome:"Startseite",
+      navAbout:"Über diese Website",
+      navContact:"Kontakt",
+      navWeeks:"Wochen",
+      week1:"Woche 1", week2:"Woche 2", week3:"Woche 3", week4:"Woche 4", week5:"Woche 5",
+      week6:"Woche 6", week7:"Woche 7", week8:"Woche 8", week9:"Woche 9", week10:"Woche 10",
+
+      pageTitle: "Woche 1 – Lo-fi Prototyp",
+      breadcrumb: "Design > Prototyping > Woche 1",
+      pill: "Lo-fi Prototyp",
+      metaText: "Start mit Grundstruktur und den ersten Screens.",
+
+      /* ✅ AANPASSING */
+      summaryTitle: "Kernpunkte dieser Woche",
+      summarySub: "Phase 1–3 im Verlauf",
+      sum1: "Einführung in Projekt und Aufgabenstellung.",
+      sum2: "Figma kennenlernen und wichtigste Tools entdecken.",
+      sum3: "Erste lo-fi Screens in Figma (ohne Styling, reine Struktur).",
+
+      goalTitle: "Ziel der Lo-fi Phase",
+      goalText: `In dieser ersten Phase liegt der Fokus nicht auf Farben oder Styling, sondern auf <strong>der Logik der Oberfläche</strong>:
+                <strong>welche Informationen sofort auffallen müssen</strong> und <strong>wie Details zugänglich bleiben</strong>, ohne den Screen zu überladen.
+                Die lo-fi Version hilft, die Struktur schnell zu prüfen, bevor mid-fi und hi-fi umgesetzt werden.`,
+
+      motivationTitle: "Vorgehen",
+      motivationText: `In Woche 1 wurde das Konzept erkundet und eine erste <strong>lo-fi Struktur</strong> aufgebaut, mit Fokus auf <strong>Logik</strong> und <strong>Informationshierarchie</strong>.
+                Ziel war es, die Anordnung des Prototyps zügig zu prüfen, ohne frühzeitig visuelle Details in den Vordergrund zu stellen.
+                <br><br>
+                Anschließend wurden Referenzen zu Zuganzeigen im Hinblick auf <strong>Lesbarkeit</strong>, <strong>Struktur</strong> und <strong>visuelle Priorität</strong> analysiert.
+                Die <strong>rosafarbenen Bildreferenzen</strong> dienten als frühe Orientierung innerhalb der lo-fi Phase.
+                Diese Erkenntnisse wurden in drei zentrale lo-fi Screens (Übersicht, Bahnsteig und Wagen) übertragen, um die Interface-Struktur pro Abschnitt klar testen und begründen zu können.`,
+
+      lofiTitle: "Lo-fi Screens",
+      lofiHint: "Klicke auf einen Wagen, um den Screen größer zu sehen.",
+      engineSubLofi: "Woche 1 · Lo-fi",
+
+      core1: "Kernscreen 1",
+      core2: "Kernscreen 2",
+      core3: "Kernscreen 3",
+      wOverzicht: "Übersicht",
+      wPerron: "Bahnsteig",
+      wWagon: "Wagen",
+      openHint: "Zum Öffnen klicken",
+
+      inspTitle: "Inspiration – Beispielscreens",
+      inspText: `Als Referenz habe ich einige <strong>realistische Beispielscreens</strong> gesammelt.
+                Fahre mit der Maus über ein Bild und klicke, um es fullscreen te öffnen.`,
+      inspEngineTitle: "Inspiration",
+      inspEngineSub: "Beispielscreens",
+      inspTag: "Inspiration",
+      inspWagonTitle: "Beispielscreens",
+      inspWagonHint: "Klicke auf ein Bild zum Öffnen",
+
+      capOverzicht: "Übersichtsscreen",
+      capPerron: "Bahnsteigscreeen",
+      capWagon: "Wagenscreen",
+
+      nextTitle: "Nächster Schritt",
+      nextText: "In Woche 2 geht es weiter zum mid-fi Prototyp – mit mehr Detail und Typografie.",
+      nextLink: "Weiter zu Woche 2 →",
+
+      footer:"© 2025 Daniëlla Ezigbo – Meine Website"
+    }
+  };
+
+  const langButtons = document.querySelectorAll(".lang-switch button");
+
+  function setInternalLinksLang(lang){
+    document.querySelectorAll("a[data-page-link]").forEach(a => {
+      try{
+        const url = new URL(a.getAttribute("href"), window.location.href);
+        url.searchParams.set("lang", lang);
+        a.setAttribute("href", url.pathname + "?" + url.searchParams.toString());
+      }catch(e){}
+    });
+  }
+
+  function getLang(){
+    const urlLang = new URLSearchParams(window.location.search).get("lang");
+    const saved = localStorage.getItem("siteLang");
+    if (urlLang && I18N[urlLang]) return urlLang;
+    if (saved && I18N[saved]) return saved;
+    return "nl";
+  }
+
+  function applyLang(lang){
+    const dict = I18N[lang] || I18N.nl;
+
+    document.documentElement.lang = lang;
+    langButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.lang === lang));
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.dataset.i18n;
+      if (dict[key] != null) el.textContent = dict[key];
+    });
+
+    document.querySelectorAll("[data-i18n-html]").forEach(el => {
+      const key = el.getAttribute("data-i18n-html");
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+
+    document.querySelectorAll(".modal-item").forEach(item => {
+      const cap = item.getAttribute(`data-caption-${lang}`) || item.getAttribute("data-caption-nl") || "";
+      item.dataset.caption = cap;
+    });
+
+    setInternalLinksLang(lang);
+    localStorage.setItem("siteLang", lang);
+  }
+
+  applyLang(getLang());
+  langButtons.forEach(btn => btn.addEventListener("click", () => applyLang(btn.dataset.lang)));
+</script>
+
+<script>
+  /* MODAL script (jouw originele) */
+  const allItems = [...document.querySelectorAll(".modal-item")];
+  let currentIndex = 0;
+  let currentGroup = "lofi";
+  let groupItems = [];
+
+  const zoomLevels = [1, 1.15, 1.3, 1.45, 1.6, 1.75];
+  let zoomIndex = 0;
+
+  let baseRectW = 0;
+  let maxZoomAllowed = 1.6;
+
+  const modal = document.createElement("div");
+  modal.className = "image-modal";
+  modal.innerHTML = `
+    <div class="image-modal-bg"></div>
+
+    <button class="image-modal-close" aria-label="Sluiten">×</button>
+    <button class="image-modal-arrow left" aria-label="Vorige">‹</button>
+    <button class="image-modal-arrow right" aria-label="Volgende">›</button>
+
+    <div class="zoom-controls" aria-label="Zoom">
+      <button class="zoom-btn zoom-out" type="button" aria-label="Uitzoomen">−</button>
+      <button class="zoom-btn zoom-in" type="button" aria-label="Inzoomen">+</button>
+    </div>
+
+    <div class="image-modal-content">
+      <img class="image-modal-img" alt="">
+      <div class="image-modal-caption"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const modalImg = modal.querySelector(".image-modal-img");
+  const modalCaption = modal.querySelector(".image-modal-caption");
+  const zoomInBtn = modal.querySelector(".zoom-in");
+  const zoomOutBtn = modal.querySelector(".zoom-out");
+  const modalContent = modal.querySelector(".image-modal-content");
+
+  function trySwapHiRes(card){
+    const z = zoomLevels[zoomIndex];
+    if (z < 1.3) return;
+
+    const hires3 = card.dataset.hires3;
+    const hires2 = card.dataset.hires2;
+    const current = modalImg.getAttribute("data-active") || "";
+
+    const tryLoad = (src) => new Promise((resolve) => {
+      if (!src) return resolve(false);
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src + (src.includes("?") ? "&" : "?") + "v=" + Date.now();
+    });
+
+    (async () => {
+      if (hires3 && current !== hires3 && await tryLoad(hires3)) {
+        modalImg.src = hires3;
+        modalImg.setAttribute("data-active", hires3);
+        return;
+      }
+      if (hires2 && current !== hires2 && await tryLoad(hires2)) {
+        modalImg.src = hires2;
+        modalImg.setAttribute("data-active", hires2);
+        return;
+      }
+    })();
+  }
+
+  function updateZoomButtons(){
+    const nextIndex = Math.min(zoomLevels.length - 1, zoomIndex + 1);
+    const nextZ = zoomLevels[nextIndex];
+    zoomInBtn.disabled = nextZ > maxZoomAllowed + 0.0001;
+    zoomOutBtn.disabled = zoomIndex === 0;
+  }
+
+  function clampZoomIndexToMax(){
+    let best = 0;
+    for (let i = 0; i < zoomLevels.length; i++) {
+      if (zoomLevels[i] <= maxZoomAllowed + 0.0001) best = i;
+    }
+    zoomIndex = best;
+  }
+
+  function applyZoom(card){
+    if (!baseRectW) return;
+
+    if (zoomLevels[zoomIndex] > maxZoomAllowed + 0.0001) clampZoomIndexToMax();
+    const z = Math.min(zoomLevels[zoomIndex], maxZoomAllowed);
+
+    modalImg.style.maxWidth = "none";
+    modalImg.style.maxHeight = "none";
+    modalImg.style.width = Math.round(baseRectW * z) + "px";
+    modalImg.style.height = "auto";
+
+    requestAnimationFrame(() => {
+      const x = (modalContent.scrollWidth - modalContent.clientWidth) / 2;
+      if (x > 0) modalContent.scrollLeft = x;
+    });
+
+    trySwapHiRes(card);
+    updateZoomButtons();
+  }
+
+  function resetZoom(){
+    zoomIndex = 0;
+    baseRectW = 0;
+    maxZoomAllowed = 1.6;
+
+    modalImg.style.width = "auto";
+    modalImg.style.maxWidth = "92vw";
+    modalImg.style.maxHeight = "74vh";
+
+    modalContent.scrollTop = 0;
+    modalContent.scrollLeft = 0;
+
+    zoomInBtn.disabled = false;
+    zoomOutBtn.disabled = true;
+  }
+
+  function computeMaxZoomAllowed(){
+    const ar = (modalImg.naturalHeight || 1) / (modalImg.naturalWidth || 1);
+    maxZoomAllowed = ar > 1.15 ? 1.6 : 1.75;
+    if (baseRectW > 900) maxZoomAllowed = Math.min(maxZoomAllowed, 1.6);
+  }
+
+  function setGroupFromItem(item){
+    currentGroup = item.dataset.group || "lofi";
+    groupItems = allItems.filter(el => (el.dataset.group || "lofi") === currentGroup);
+  }
+
+  function showItemByGroupIndex(groupIndex){
+    if (groupIndex < 0) groupIndex = groupItems.length - 1;
+    if (groupIndex >= groupItems.length) groupIndex = 0;
+
+    currentIndex = groupIndex;
+    const card = groupItems[currentIndex];
+
+    resetZoom();
+    modalImg.setAttribute("data-active", "");
+
+    modalImg.onload = () => {
+      requestAnimationFrame(() => {
+        const r = modalImg.getBoundingClientRect();
+        baseRectW = r.width || 900;
+        computeMaxZoomAllowed();
+        updateZoomButtons();
+        applyZoom(card);
+      });
+    };
+
+    modalImg.src = card.dataset.full;
+    modalCaption.textContent = card.dataset.caption || "";
+    modalImg.alt = modalCaption.textContent;
+
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function openFromClickedItem(clicked){
+    setGroupFromItem(clicked);
+    const idx = groupItems.indexOf(clicked);
+    showItemByGroupIndex(idx >= 0 ? idx : 0);
+  }
+
+  function closeModal(){
+    modal.classList.remove("open");
+    modalImg.src = "";
+    modalCaption.textContent = "";
+    document.body.style.overflow = "";
+    resetZoom();
+  }
+
+  allItems.forEach((item) => item.addEventListener("click", () => openFromClickedItem(item)));
+
+  modal.querySelector(".image-modal-bg").onclick = closeModal;
+  modal.querySelector(".image-modal-close").onclick = closeModal;
+
+  modal.querySelector(".image-modal-arrow.left").onclick = (e) => {
+    e.stopPropagation();
+    showItemByGroupIndex(currentIndex - 1);
+  };
+  modal.querySelector(".image-modal-arrow.right").onclick = (e) => {
+    e.stopPropagation();
+    showItemByGroupIndex(currentIndex + 1);
+  };
+
+  zoomInBtn.onclick = (e) => {
+    e.stopPropagation();
+    const nextIndex = Math.min(zoomLevels.length - 1, zoomIndex + 1);
+    const candidate = zoomLevels[nextIndex];
+
+    if (candidate > maxZoomAllowed + 0.0001) {
+      clampZoomIndexToMax();
+      applyZoom(groupItems[currentIndex]);
+      return;
+    }
+
+    zoomIndex = nextIndex;
+    applyZoom(groupItems[currentIndex]);
+  };
+
+  zoomOutBtn.onclick = (e) => {
+    e.stopPropagation();
+    zoomIndex = Math.max(0, zoomIndex - 1);
+    applyZoom(groupItems[currentIndex]);
+  };
+
+  window.addEventListener("resize", () => {
+    if (!modal.classList.contains("open")) return;
+    computeMaxZoomAllowed();
+    applyZoom(groupItems[currentIndex]);
+  });
+
+  document.addEventListener("keydown", e => {
+    if (!modal.classList.contains("open")) return;
+    if (e.key === "Escape") closeModal();
+
+    if (e.key === "ArrowLeft") showItemByGroupIndex(currentIndex - 1);
+    if (e.key === "ArrowRight") showItemByGroupIndex(currentIndex + 1);
+
+    if (e.key === "+" || e.key === "=") zoomInBtn.click();
+    if (e.key === "-" || e.key === "_") zoomOutBtn.click();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 2 – Mid-fi prototype</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <style>
+    /* HEADER + TAAL */
+    .header-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
+    .header-left{ min-width:0; }
+    .header-subline{ margin-top:10px; }
+    .subtitle{ color:#6b6b6b; font-size:14px; margin-top:6px; }
+
+    .lang-area{
+      display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding-top:2px;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+    .lang-label{ font-size:12px; letter-spacing:0.3px; font-weight:800; color:#6b6b6b; text-transform:uppercase; }
+    .lang-switch{ display:flex; gap:8px; padding:0; background:transparent; border:none; }
+    .lang-switch button{
+      background:none; border:none; cursor:pointer; font-weight:900; font-size:13px; color:#6b6b6b;
+      padding:4px 6px; border-radius:8px; transition:0.2s ease;
+    }
+    .lang-switch button:hover{ color:#F79A6A; background:rgba(247,154,106,0.10); }
+    .lang-switch button.active{ color:#F79A6A; text-decoration:underline; background:transparent; }
+
+    /* ✅ NAV (zelfde als page.html / week 1 update) */
+    nav ul{ list-style:none; padding-left:0; margin:0; }
+    nav ul li{ margin-bottom:8px; }
+
+    nav a{
+      color:#000 !important;
+      font-weight:600;
+      text-decoration:none;
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+    }
+    nav a:hover{
+      color:#F79A6A !important;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* ✅ Actieve pagina = Week 2 (NIET 'Weken') */
+    nav strong{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      color:#F79A6A !important;
+      background:rgba(247,154,106,0.10) !important;
+      font-weight:800;
+    }
+
+    /* ✅ FIX: voorkomt clipping (Week 8/9/10) */
+    .panel.panel-nav,
+    nav.panel.panel-nav,
+    .panel-nav{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .panel-nav ul,
+    .panel-nav li{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    /* dropdown */
+    nav.panel{ overflow:visible !important; }
+    .dropdown{ position: relative; }
+    .dropdown-btn{
+      color:#000;
+      font-weight:700;
+      background:none;
+      border:none;
+      padding:4px 6px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .dropdown-btn:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+
+    .dropdown-content{
+      display:none;
+      margin-top:8px;
+      padding-left:12px;
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .dropdown.open .dropdown-content{ display:block; }
+
+    /* hover in dropdown (op alles) */
+    .dropdown-content a{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+      text-decoration:none;
+      line-height:1.35;
+    }
+    .dropdown-content a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* MODAL + ZOOM (jouw code) */
+    .image-modal{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      z-index: 9999;
+    }
+    .image-modal.open{ display:block; }
+    .image-modal-bg{ position:absolute; inset:0; }
+
+    .image-modal-close{
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: none;
+      background: #fff;
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 10000;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    }
+
+    .image-modal-arrow{
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: none;
+      background: #fff;
+      font-size: 26px;
+      cursor: pointer;
+      z-index: 10000;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    }
+    .image-modal-arrow.left{ left: 22px; }
+    .image-modal-arrow.right{ right: 22px; }
+
+    .zoom-controls{
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      display:flex;
+      gap:10px;
+      z-index: 10000;
+    }
+    .zoom-btn{
+      width:44px;
+      height:44px;
+      border-radius:999px;
+      border:none;
+      background:#fff;
+      cursor:pointer;
+      font-size:22px;
+      font-weight:900;
+      color:#b0602f;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      transition:0.18s ease;
+    }
+    .zoom-btn:hover{ transform: translateY(-1px); }
+    .zoom-btn:disabled{ opacity:0.45; cursor:default; transform:none; }
+
+    .image-modal-content{
+      position: relative;
+      height: 100vh;
+      padding: 72px 24px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: auto;
+      overscroll-behavior: contain;
+      gap: 12px;
+    }
+
+    .image-modal-img{
+      display:block;
+      width:auto;
+      height:auto;
+      max-width: 92vw;
+      max-height: 74vh;
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      background: #fff;
+      image-rendering: auto;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      transition: width .16s ease;
+    }
+
+    .image-modal-caption{
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      opacity: 0.95;
+      text-align:center;
+      max-width:92vw;
+      line-height: 1.35;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+      padding-bottom: 8px;
+    }
+  </style>
+</head>
+
+<body class="week-page">
+<div class="box">
+
+  <header class="panel site-header">
+    <div class="header-top">
+      <div class="header-left">
+        <!-- ✅ "Webpagina" -> "Week 2" -->
+        <h1 data-i18n="siteTitle">Week 2</h1>
+        <p class="subtitle">Daniëlla Ezigbo</p>
+      </div>
+
+      <div class="lang-area" aria-label="Taalkeuze">
+        <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+        <div class="lang-switch">
+          <button type="button" data-lang="nl" aria-label="Nederlands">NL</button>
+          <button type="button" data-lang="fr" aria-label="Français">FR</button>
+          <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ✅ NAV: exact hetzelfde systeem als page.html + week1 -->
+  <nav class="panel panel-nav" aria-label="Navigatie">
+    <ul>
+      <li><a data-page-link href="index.html" data-i18n="navHome">Homepage</a></li>
+      <li><a data-page-link href="page.html" data-i18n="navAbout">Over deze website</a></li>
+      <li><a data-page-link href="contact.html" data-i18n="navContact">Contact</a></li>
+
+      <!-- ✅ NIET op 'Weken' highlighten -->
+      <li class="dropdown">
+        <button class="dropdown-btn" type="button" aria-expanded="false" data-i18n="navWeeks">Weken</button>
+        <ul class="dropdown-content" aria-label="Weekpagina’s">
+          <li><a data-page-link href="Week 1.html" data-i18n="week1">Week 1</a></li>
+          <!-- ✅ actieve week: strong -->
+          <li><strong data-i18n="week2">Week 2</strong></li>
+          <li><a data-page-link href="Week 3.html" data-i18n="week3">Week 3</a></li>
+          <li><a data-page-link href="Week 4.html" data-i18n="week4">Week 4</a></li>
+          <li><a data-page-link href="Week 5.html" data-i18n="week5">Week 5</a></li>
+          <li><a data-page-link href="Week 6.html" data-i18n="week6">Week 6</a></li>
+          <li><a data-page-link href="Week 7.html" data-i18n="week7">Week 7</a></li>
+          <li><a data-page-link href="Week 8.html" data-i18n="week8">Week 8</a></li>
+          <li><a data-page-link href="Week 9.html" data-i18n="week9">Week 9</a></li>
+          <li><a data-page-link href="Week 10.html" data-i18n="week10">Week 10</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="panel">
+
+    <h2 data-i18n="pageTitle">Week 2 – Mid-fi prototype</h2>
+    <p class="page-breadcrumb" data-i18n="breadcrumb">Ontwerp &gt; Prototyping &gt; Week 2</p>
+    <p class="week-meta">
+      <span class="pill" data-i18n="pill">Mid-fi prototype</span>
+      <span data-i18n="metaText">Meer detail, typografie en structuur.</span>
+    </p>
+
+    <section class="section week-summary-card">
+      <div class="week-summary-title" data-i18n="summaryTitle">Kernpunten van deze week</div>
+      <div class="week-summary-sub" data-i18n="summarySub">Van basisstructuur naar een sterker visueel geheel</div>
+
+      <ul class="week-summary-list">
+        <li data-i18n="sum1">De lo-fi opzet werd uitgewerkt tot een mid-fi versie met meer detail en een duidelijke informatiehiërarchie.</li>
+        <li data-i18n="sum2">De lay-out werd doelgericht verfijnd zodat de inhoud sneller scanbaar is en de schermen logisch aanvoelen.</li>
+        <li data-i18n="sum3">Door consistente typografie en verbeterde verhoudingen oogt het ontwerp samenhangender en professioneler.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="goalTitle">Doel van de mid-fi fase</h3>
+      <p data-i18n="goalP1">
+        In deze fase wordt de basisstructuur uit week 1 verfijnd tot een ontwerp dat realistischer aanvoelt:
+        typografie wordt consequenter toegepast, de informatie krijgt een duidelijkere hiërarchie en de schermen sluiten
+        visueel beter op elkaar aan. Het doel is om het concept niet alleen te tonen, maar ook geloofwaardig te maken
+        voor een echte gebruiker die snel informatie nodig heeft.
+      </p>
+      <p data-i18n="goalP2">
+        Om die reden is de lay-out gericht herwerkt: niet om “meer” toe te voegen, maar om de inhoud duidelijker te presenteren
+        en de pagina als geheel professioneler en uitnodigender te maken om de schermen actief te openen en te vergelijken.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="approachTitle">Aanpak</h3>
+      <p data-i18n-html="approachText">
+        In week 2 is de lo-fi structuur doorontwikkeld naar een <strong>mid-fi prototype</strong>, met nadruk op <strong>consistentie</strong> en <strong>leesbaarheid</strong>.
+        De schermen zijn verfijnd via typografische keuzes, vaste verhoudingen en een duidelijkere opbouw, zodat de informatie sneller te scannen is en de interface als één geheel aanvoelt.
+        Op basis van tussentijdse evaluatie werd de lay-out doelgericht bijgestuurd, met als doel een realistischer en beter onderbouwd prototype als voorbereiding op verdere verfijning.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="screensTitle">Mid-fi schermen</h3>
+      <p data-i18n="screensHint">Klik op een wagon om het scherm groter te bekijken.</p>
+
+      <div class="train-wrap" aria-label="Trein met drie kernschermen">
+        <div class="train">
+
+          <div class="engine" title="Lost in Tra(i)nslation">
+            <div class="engine-top"></div>
+            <div class="engine-window"></div>
+            <div class="engine-label">
+              <span class="engine-title">Lost in Tra(i)nslation</span>
+              <span class="engine-sub" data-i18n="engineSub">Week 2 · Mid-fi</span>
+            </div>
+            <div class="wheel-row">
+              <span class="wheel"></span><span class="wheel"></span><span class="wheel"></span>
+            </div>
+          </div>
+
+          <div class="coupler"></div>
+
+          <button class="wagon screen-card modal-item"
+            data-group="midfi"
+            data-full="assets/imgs/overzichtscherm%202.jpg"
+            data-hires2="assets/imgs/overzichtscherm%202@2x.jpg"
+            data-hires3="assets/imgs/overzichtscherm%202@3x.jpg"
+            data-caption=""
+            data-caption-nl="Overzichtscherm (mid-fi)"
+            data-caption-fr="Écran d’aperçu (mid-fi)"
+            data-caption-de="Übersichtsbildschirm (mid-fi)"
+            type="button">
+            <span class="wagon-tag" data-i18n="core1">Kernscherm 1</span>
+            <span class="wagon-title" data-i18n="wOverzicht">Overzicht</span>
+            <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+            <span class="wagon-badge badge-1" aria-hidden="true"></span>
+            <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+          </button>
+
+          <div class="coupler"></div>
+
+          <button class="wagon screen-card modal-item"
+            data-group="midfi"
+            data-full="assets/imgs/Perronscherm%202.jpg"
+            data-hires2="assets/imgs/Perronscherm%202@2x.jpg"
+            data-hires3="assets/imgs/Perronscherm%202@3x.jpg"
+            data-caption=""
+            data-caption-nl="Perronscherm (mid-fi)"
+            data-caption-fr="Écran de quai (mid-fi)"
+            data-caption-de="Bahnsteigbildschirm (mid-fi)"
+            type="button">
+            <span class="wagon-tag" data-i18n="core2">Kernscherm 2</span>
+            <span class="wagon-title" data-i18n="wPerron">Perron</span>
+            <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+            <span class="wagon-badge badge-2" aria-hidden="true"></span>
+            <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+          </button>
+
+          <div class="coupler"></div>
+
+          <button class="wagon screen-card modal-item"
+            data-group="midfi"
+            data-full="assets/imgs/wagonscherm%202.jpg"
+            data-hires2="assets/imgs/wagonscherm%202@2x.jpg"
+            data-hires3="assets/imgs/wagonscherm%202@3x.jpg"
+            data-caption=""
+            data-caption-nl="Wagonscherm (mid-fi)"
+            data-caption-fr="Écran wagon (mid-fi)"
+            data-caption-de="Wagenbildschirm (mid-fi)"
+            type="button">
+            <span class="wagon-tag" data-i18n="core3">Kernscherm 3</span>
+            <span class="wagon-title" data-i18n="wWagon">Wagon</span>
+            <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+            <span class="wagon-badge badge-3" aria-hidden="true"></span>
+            <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="nextTitle">Volgende stap</h3>
+      <p data-i18n="nextText">In week 3 verwerk je feedback en werk je verder richting een nog consistenter prototype.</p>
+
+      <div class="week-nav-bar week-nav-bar--between">
+        <a href="Week 1.html" class="week-nav-link" data-i18n="prevLink">← Terug naar Week 1</a>
+        <a href="Week 3.html" class="week-nav-link" data-i18n="nextLink">Ga verder naar Week 3 →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="panel">
+    <span data-i18n="footer">© 2025 Daniëlla Ezigbo – Mijn website</span>
+  </footer>
+
+</div>
+
+<!-- ✅ Dropdown gedrag (exact zoals page.html / week1 update) -->
+<script>
+  const dropdown = document.querySelector(".dropdown");
+  const dropdownBtn = dropdown?.querySelector(".dropdown-btn");
+
+  if (dropdown && dropdownBtn) {
+    dropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle("open");
+      dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", () => {
+      dropdown.classList.remove("open");
+      dropdownBtn.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        dropdown.classList.remove("open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+</script>
+
+<!-- ✅ TAAL (NL/FR/DE) + links lang param (exact zoals page.html) -->
+<script>
+  const I18N = {
+    nl: {
+      langLabel: "Taalkeuze",
+      siteTitle: "Week 2",
+
+      navHome: "Homepage",
+      navAbout: "Over deze website",
+      navContact: "Contact",
+      navWeeks: "Weken",
+      week1: "Week 1", week2: "Week 2", week3: "Week 3", week4: "Week 4", week5: "Week 5",
+      week6: "Week 6", week7: "Week 7", week8: "Week 8", week9: "Week 9", week10: "Week 10",
+
+      pageTitle: "Week 2 – Mid-fi prototype",
+      breadcrumb: "Ontwerp > Prototyping > Week 2",
+      pill: "Mid-fi prototype",
+      metaText: "Meer detail, typografie en structuur.",
+
+      summaryTitle: "Kernpunten van deze week",
+      summarySub: "Van basisstructuur naar een sterker visueel geheel",
+      sum1: "De lo-fi opzet werd uitgewerkt tot een mid-fi versie met meer detail en een duidelijke informatiehiërarchie.",
+      sum2: "De lay-out werd doelgericht verfijnd zodat de inhoud sneller scanbaar is en de schermen logisch aanvoelen.",
+      sum3: "Door consistente typografie en verbeterde verhoudingen oogt het ontwerp samenhangender en professioneler.",
+
+      goalTitle: "Doel van de mid-fi fase",
+      goalP1:
+        "In deze fase wordt de basisstructuur uit week 1 verfijnd tot een ontwerp dat realistischer aanvoelt: typografie wordt consequenter toegepast, de informatie krijgt een duidelijkere hiërarchie en de schermen sluiten visueel beter op elkaar aan. Het doel is om het concept niet alleen te tonen, maar ook geloofwaardig te maken voor een echte gebruiker die snel informatie nodig heeft.",
+      goalP2:
+        "Om die reden is de lay-out gericht herwerkt: niet om “meer” toe te voegen, maar om de inhoud duidelijker te presenteren en de pagina als geheel professioneler en uitnodigender te maken om de schermen actief te openen en te vergelijken.",
+
+      approachTitle: "Aanpak",
+      approachText:
+        "In week 2 is de lo-fi structuur doorontwikkeld naar een <strong>mid-fi prototype</strong>, met nadruk op <strong>consistentie</strong> en <strong>leesbaarheid</strong>. De schermen zijn verfijnd via typografische keuzes, vaste verhoudingen en een duidelijkere opbouw, zodat de informatie sneller te scannen is en de interface als één geheel aanvoelt. Op basis van tussentijdse evaluatie werd de lay-out doelgericht bijgestuurd, met als doel een realistischer en beter onderbouwd prototype als voorbereiding op verdere verfijning.",
+
+      screensTitle: "Mid-fi schermen",
+      screensHint: "Klik op een wagon om het scherm groter te bekijken.",
+      engineSub: "Week 2 · Mid-fi",
+      core1: "Kernscherm 1",
+      core2: "Kernscherm 2",
+      core3: "Kernscherm 3",
+      wOverzicht: "Overzicht",
+      wPerron: "Perron",
+      wWagon: "Wagon",
+      openHint: "Klik om te openen",
+
+      nextTitle: "Volgende stap",
+      nextText: "In week 3 verwerk je feedback en werk je verder richting een nog consistenter prototype.",
+      prevLink: "← Terug naar Week 1",
+      nextLink: "Ga verder naar Week 3 →",
+
+      footer: "© 2025 Daniëlla Ezigbo – Mijn website"
+    },
+
+    fr: {
+      langLabel: "Langue",
+      siteTitle: "Semaine 2",
+
+      navHome: "Accueil",
+      navAbout: "À propos de ce site",
+      navContact: "Contact",
+      navWeeks: "Semaines",
+      week1: "Semaine 1", week2: "Semaine 2", week3: "Semaine 3", week4: "Semaine 4", week5: "Semaine 5",
+      week6: "Semaine 6", week7: "Semaine 7", week8: "Semaine 8", week9: "Semaine 9", week10: "Semaine 10",
+
+      pageTitle: "Semaine 2 – Prototype mid-fi",
+      breadcrumb: "Conception > Prototypage > Semaine 2",
+      pill: "Prototype mid-fi",
+      metaText: "Plus de détail, de typographie et de structure.",
+
+      summaryTitle: "Points clés de la semaine",
+      summarySub: "De la structure de base à un ensemble visuel plus solide",
+      sum1: "La base lo-fi a été développée en une version mid-fi avec davantage de détail et une hiérarchie d’information plus claire.",
+      sum2: "La mise en page a été affinée de manière ciblée afin de faciliter la lecture et la compréhension des écrans.",
+      sum3: "Grâce à une typographie cohérente et à de meilleures proportions, le design paraît plus homogène et plus professionnel.",
+
+      goalTitle: "Objectif de la phase mid-fi",
+      goalP1:
+        "Dans cette phase, la structure de la semaine 1 est affinée pour obtenir un design plus réaliste : la typographie est appliquée de façon plus cohérente, la hiérarchie de l’information est renforcée et les écrans s’alignent mieux visuellement. L’objectif est de rendre le concept crédible pour un utilisateur qui a besoin d’informations rapidement.",
+      goalP2:
+        "La mise en page a donc été révisée avec intention : non pas pour ajouter « plus », mais pour présenter le contenu plus clairement et rendre l’ensemble plus professionnel et plus engageant pour comparer les écrans.",
+
+      approachTitle: "Démarche",
+      approachText:
+        "En semaine 2, la structure lo-fi a été développée en un prototype mid-fi, avec un focus sur la cohérence et la lisibilité. Les écrans ont été affinés grâce à des choix typographiques, des proportions plus stables et une organisation plus claire, afin de faciliter le repérage de l’information et d’assurer une expérience plus uniforme. Sur base d’une évaluation intermédiaire, la mise en page a été ajustée de manière ciblée en vue des améliorations suivantes.",
+
+      screensTitle: "Écrans mid-fi",
+      screensHint: "Cliquez sur un wagon pour agrandir l’écran.",
+      engineSub: "Semaine 2 · Mid-fi",
+      core1: "Écran clé 1",
+      core2: "Écran clé 2",
+      core3: "Écran clé 3",
+      wOverzicht: "Aperçu",
+      wPerron: "Quai",
+      wWagon: "Wagon",
+      openHint: "Cliquer pour ouvrir",
+
+      nextTitle: "Étape suivante",
+      nextText: "En semaine 3, vous intégrez le feedback et avancez vers un prototype encore plus cohérent.",
+      prevLink: "← Retour à la semaine 1",
+      nextLink: "Continuer vers la semaine 3 →",
+
+      footer: "© 2025 Daniëlla Ezigbo – Mon site"
+    },
+
+    de: {
+      langLabel: "Sprache",
+      siteTitle: "Woche 2",
+
+      navHome: "Startseite",
+      navAbout: "Über diese Website",
+      navContact: "Kontakt",
+      navWeeks: "Wochen",
+      week1: "Woche 1", week2: "Woche 2", week3: "Woche 3", week4: "Woche 4", week5: "Woche 5",
+      week6: "Woche 6", week7: "Woche 7", week8: "Woche 8", week9: "Woche 9", week10: "Woche 10",
+
+      pageTitle: "Woche 2 – Mid-fi Prototyp",
+      breadcrumb: "Design > Prototyping > Woche 2",
+      pill: "Mid-fi Prototyp",
+      metaText: "Mehr Detail, Typografie und Struktur.",
+
+      summaryTitle: "Kernpunkte der Woche",
+      summarySub: "Von der Basisstruktur zu einem stärkeren visuellen Gesamtbild",
+      sum1: "Die lo-fi Basis wurde zu einer mid-fi Version mit mehr Detail und klarerer Informationshierarchie weiterentwickelt.",
+      sum2: "Das Layout wurde gezielt verfeinert, damit Inhalte schneller erfassbar sind und die Screens logisch wirken.",
+      sum3: "Durch konsistente Typografie und bessere Proportionen wirkt das Design stimmiger und professioneller.",
+
+      goalTitle: "Ziel der Mid-fi Phase",
+      goalP1:
+        "In dieser Phase wird die Grundstruktur aus Woche 1 verfeinert, sodass das Design realistischer wirkt: Typografie wird konsistenter eingesetzt, die Informationshierarchie ist klarer und die Screens passen visuell besser zusammen. Ziel ist es, das Konzept glaubwürdig für Nutzer:innen zu machen, die Informationen schnell erfassen müssen.",
+      goalP2:
+        "Daher wurde das Layout bewusst überarbeitet – nicht um „mehr“ hinzuzufügen, sondern um Inhalte klarer zu präsentieren und die Seite insgesamt professioneller und einladender zu gestalten, damit die Screens aktiv geöffnet und verglichen werden.",
+
+      approachTitle: "Vorgehen",
+      approachText:
+        "In Woche 2 wurde die lo-fi Struktur zu einem mid-fi Prototyp weiterentwickelt, mit Fokus auf Konsistenz und Lesbarkeit. Die Screens wurden durch typografische Entscheidungen, stabilere Proportionen und eine klarere Struktur verfeinert, sodass Informationen schneller erfassbar sind und die Oberfläche als zusammenhängendes System wirkt. Auf Basis einer Zwischenbewertung wurde das Layout gezielt angepasst, als Vorbereitung für die nächste Optimierungsphase.",
+
+      screensTitle: "Mid-fi Screens",
+      screensHint: "Klicke auf einen Wagen, um den Screen größer zu sehen.",
+      engineSub: "Woche 2 · Mid-fi",
+      core1: "Kernscreen 1",
+      core2: "Kernscreen 2",
+      core3: "Kernscreen 3",
+      wOverzicht: "Übersicht",
+      wPerron: "Bahnsteig",
+      wWagon: "Wagen",
+      openHint: "Zum Öffnen klicken",
+
+      nextTitle: "Nächster Schritt",
+      nextText: "In Woche 3 verarbeitest du Feedback und arbeitest weiter in Richtung eines noch konsistenteren Prototyps.",
+      prevLink: "← Zurück zu Woche 1",
+      nextLink: "Weiter zu Woche 3 →",
+
+      footer: "© 2025 Daniëlla Ezigbo – Meine Website"
+    }
+  };
+
+  const langButtons = document.querySelectorAll(".lang-switch button");
+
+  function setInternalLinksLang(lang){
+    document.querySelectorAll("a[data-page-link]").forEach(a => {
+      try{
+        const url = new URL(a.getAttribute("href"), window.location.href);
+        url.searchParams.set("lang", lang);
+        a.setAttribute("href", url.pathname + "?" + url.searchParams.toString());
+      }catch(e){}
+    });
+  }
+
+  function getLang(){
+    const urlLang = new URLSearchParams(window.location.search).get("lang");
+    const saved = localStorage.getItem("siteLang");
+    if (urlLang && I18N[urlLang]) return urlLang;
+    if (saved && I18N[saved]) return saved;
+    return "nl";
+  }
+
+  function applyLang(lang){
+    const dict = I18N[lang] || I18N.nl;
+    document.documentElement.lang = lang;
+
+    langButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.lang === lang));
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.dataset.i18n;
+      if (dict[key] != null) el.textContent = dict[key];
+    });
+
+    document.querySelectorAll("[data-i18n-html]").forEach(el => {
+      const key = el.getAttribute("data-i18n-html");
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+
+    document.querySelectorAll(".modal-item").forEach(item => {
+      const cap = item.getAttribute(`data-caption-${lang}`) || item.getAttribute("data-caption-nl") || "";
+      item.dataset.caption = cap;
+    });
+
+    setInternalLinksLang(lang);
+    localStorage.setItem("siteLang", lang);
+  }
+
+  applyLang(getLang());
+  langButtons.forEach(btn => btn.addEventListener("click", () => applyLang(btn.dataset.lang)));
+</script>
+
+<!-- ✅ Modal + zoom scripts: jouw originele (ongewijzigd) -->
+<script>
+  const allItems = [...document.querySelectorAll(".modal-item")];
+  let currentIndex = 0;
+  let currentGroup = "midfi";
+  let groupItems = [];
+
+  const zoomLevels = [1, 1.15, 1.3, 1.45, 1.6, 1.75];
+  let zoomIndex = 0;
+
+  let baseRectW = 0;
+  let maxZoomAllowed = 1.6;
+
+  const modal = document.createElement("div");
+  modal.className = "image-modal";
+  modal.innerHTML = `
+    <div class="image-modal-bg"></div>
+    <button class="image-modal-close" aria-label="Sluiten">×</button>
+    <button class="image-modal-arrow left" aria-label="Vorige">‹</button>
+    <button class="image-modal-arrow right" aria-label="Volgende">›</button>
+    <div class="zoom-controls" aria-label="Zoom">
+      <button class="zoom-btn zoom-out" type="button" aria-label="Uitzoomen">−</button>
+      <button class="zoom-btn zoom-in" type="button" aria-label="Inzoomen">+</button>
+    </div>
+    <div class="image-modal-content">
+      <img class="image-modal-img" alt="">
+      <div class="image-modal-caption"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const modalImg = modal.querySelector(".image-modal-img");
+  const modalCaption = modal.querySelector(".image-modal-caption");
+  const zoomInBtn = modal.querySelector(".zoom-in");
+  const zoomOutBtn = modal.querySelector(".zoom-out");
+  const modalContent = modal.querySelector(".image-modal-content");
+
+  function tryLoad(src){
+    return new Promise((resolve) => {
+      if (!src) return resolve(false);
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src + (src.includes("?") ? "&" : "?") + "v=" + Date.now();
+    });
+  }
+
+  async function preferHiResOnOpen(card){
+    const hires3 = card.dataset.hires3;
+    const hires2 = card.dataset.hires2;
+
+    if (hires3 && await tryLoad(hires3)) { modalImg.src = hires3; modalImg.setAttribute("data-active", hires3); return; }
+    if (hires2 && await tryLoad(hires2)) { modalImg.src = hires2; modalImg.setAttribute("data-active", hires2); return; }
+
+    modalImg.src = card.dataset.full;
+    modalImg.setAttribute("data-active", card.dataset.full);
+  }
+
+  function trySwapHiResOnZoom(card){
+    const z = zoomLevels[zoomIndex];
+    if (z < 1.3) return;
+
+    const hires3 = card.dataset.hires3;
+    const hires2 = card.dataset.hires2;
+    const current = modalImg.getAttribute("data-active") || "";
+
+    (async () => {
+      if (z >= 1.45 && hires3 && current !== hires3 && await tryLoad(hires3)) {
+        modalImg.src = hires3; modalImg.setAttribute("data-active", hires3); return;
+      }
+      if (hires2 && current !== hires2 && await tryLoad(hires2)) {
+        modalImg.src = hires2; modalImg.setAttribute("data-active", hires2); return;
+      }
+    })();
+  }
+
+  function updateZoomButtons(){
+    const nextIndex = Math.min(zoomLevels.length - 1, zoomIndex + 1);
+    const nextZ = zoomLevels[nextIndex];
+    zoomInBtn.disabled = nextZ > maxZoomAllowed + 0.0001;
+    zoomOutBtn.disabled = zoomIndex === 0;
+  }
+
+  function clampZoomIndexToMax(){
+    let best = 0;
+    for (let i = 0; i < zoomLevels.length; i++) {
+      if (zoomLevels[i] <= maxZoomAllowed + 0.0001) best = i;
+    }
+    zoomIndex = best;
+  }
+
+  function applyZoom(card){
+    if (!baseRectW) return;
+
+    if (zoomLevels[zoomIndex] > maxZoomAllowed + 0.0001) clampZoomIndexToMax();
+    const z = Math.min(zoomLevels[zoomIndex], maxZoomAllowed);
+
+    modalImg.style.maxWidth = "none";
+    modalImg.style.maxHeight = "none";
+    modalImg.style.width = Math.round(baseRectW * z) + "px";
+    modalImg.style.height = "auto";
+
+    requestAnimationFrame(() => {
+      const x = (modalContent.scrollWidth - modalContent.clientWidth) / 2;
+      if (x > 0) modalContent.scrollLeft = x;
+    });
+
+    trySwapHiResOnZoom(card);
+    updateZoomButtons();
+  }
+
+  function resetZoom(){
+    zoomIndex = 0;
+    baseRectW = 0;
+    maxZoomAllowed = 1.6;
+
+    modalImg.style.width = "auto";
+    modalImg.style.maxWidth = "92vw";
+    modalImg.style.maxHeight = "74vh";
+
+    modalContent.scrollTop = 0;
+    modalContent.scrollLeft = 0;
+
+    zoomInBtn.disabled = false;
+    zoomOutBtn.disabled = true;
+  }
+
+  function computeMaxZoomAllowed(){
+    const ar = (modalImg.naturalHeight || 1) / (modalImg.naturalWidth || 1);
+    maxZoomAllowed = ar > 1.15 ? 1.6 : 1.75;
+    if (baseRectW > 900) maxZoomAllowed = Math.min(maxZoomAllowed, 1.6);
+  }
+
+  function setGroupFromItem(item){
+    currentGroup = item.dataset.group || "midfi";
+    groupItems = allItems.filter(el => (el.dataset.group || "midfi") === currentGroup);
+  }
+
+  function showItemByGroupIndex(groupIndex){
+    if (groupIndex < 0) groupIndex = groupItems.length - 1;
+    if (groupIndex >= groupItems.length) groupIndex = 0;
+
+    currentIndex = groupIndex;
+    const card = groupItems[currentIndex];
+
+    resetZoom();
+    modalImg.setAttribute("data-active", "");
+
+    modalCaption.textContent = card.dataset.caption || "";
+    modalImg.alt = modalCaption.textContent;
+
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+
+    modalImg.onload = () => {
+      requestAnimationFrame(() => {
+        const r = modalImg.getBoundingClientRect();
+        baseRectW = r.width || 900;
+        computeMaxZoomAllowed();
+        updateZoomButtons();
+        applyZoom(card);
+      });
+    };
+
+    preferHiResOnOpen(card);
+  }
+
+  function openFromClickedItem(clicked){
+    setGroupFromItem(clicked);
+    const idx = groupItems.indexOf(clicked);
+    showItemByGroupIndex(idx >= 0 ? idx : 0);
+  }
+
+  function closeModal(){
+    modal.classList.remove("open");
+    modalImg.src = "";
+    modalCaption.textContent = "";
+    document.body.style.overflow = "";
+    resetZoom();
+  }
+
+  allItems.forEach((item) => item.addEventListener("click", () => openFromClickedItem(item)));
+
+  modal.querySelector(".image-modal-bg").onclick = closeModal;
+  modal.querySelector(".image-modal-close").onclick = closeModal;
+
+  modal.querySelector(".image-modal-arrow.left").onclick = (e) => {
+    e.stopPropagation();
+    showItemByGroupIndex(currentIndex - 1);
+  };
+  modal.querySelector(".image-modal-arrow.right").onclick = (e) => {
+    e.stopPropagation();
+    showItemByGroupIndex(currentIndex + 1);
+  };
+
+  zoomInBtn.onclick = (e) => {
+    e.stopPropagation();
+    const nextIndex = Math.min(zoomLevels.length - 1, zoomIndex + 1);
+    const candidate = zoomLevels[nextIndex];
+
+    if (candidate > maxZoomAllowed + 0.0001) {
+      clampZoomIndexToMax();
+      applyZoom(groupItems[currentIndex]);
+      return;
+    }
+
+    zoomIndex = nextIndex;
+    applyZoom(groupItems[currentIndex]);
+  };
+
+  zoomOutBtn.onclick = (e) => {
+    e.stopPropagation();
+    zoomIndex = Math.max(0, zoomIndex - 1);
+    applyZoom(groupItems[currentIndex]);
+  };
+
+  window.addEventListener("resize", () => {
+    if (!modal.classList.contains("open")) return;
+    computeMaxZoomAllowed();
+    applyZoom(groupItems[currentIndex]);
+  });
+
+  document.addEventListener("keydown", e => {
+    if (!modal.classList.contains("open")) return;
+    if (e.key === "Escape") closeModal();
+
+    if (e.key === "ArrowLeft") showItemByGroupIndex(currentIndex - 1);
+    if (e.key === "ArrowRight") showItemByGroupIndex(currentIndex + 1);
+
+    if (e.key === "+" || e.key === "=") zoomInBtn.click();
+    if (e.key === "-" || e.key === "_") zoomOutBtn.click();
+  });
+</script>
+
+</body>
+</html>

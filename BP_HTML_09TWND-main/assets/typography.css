@@ -1,0 +1,19 @@
+p{
+  margin-top: .5em;
+  line-height: 1.6;           /* ✅ betere leesbaarheid */
+}
+
+h1{ 
+  font-size: 3em;
+  font-weight: 800;           /* ✅ extrabold bestaat niet */
+  line-height: 1.15;          /* ✅ strak maar leesbaar */
+  margin-bottom: .4em;
+}
+
+h2{ 
+  font-size: 1.5em;
+  font-weight: 700;
+  opacity: .5;
+  line-height: 1.3;
+  margin-bottom: .6em;
+}

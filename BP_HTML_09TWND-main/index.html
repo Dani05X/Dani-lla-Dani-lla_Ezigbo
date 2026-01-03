@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ✅ naast je favicon in de tab -->
+  <title>Homepage</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <style>
+    body{
+      font-family:"Inter",Arial,sans-serif;
+      color:#000;
+      line-height:1.75;
+      font-size:17px;
+    }
+    h1,h2,h3{font-weight:800;letter-spacing:-0.3px;margin:0;}
+    .subtitle{color:#6b6b6b;font-size:14px;margin-top:6px;}
+
+    .box{
+      max-width:1250px;
+      margin:50px auto;
+      display:grid;
+      grid-gap:26px;
+      grid-template-columns:330px minmax(0,1fr);
+      align-items:start; /* ✅ FIX: nav-panel niet meer uitrekken zoals op je foto */
+    }
+    .panel{
+      background:#fff;
+      border-radius:14px;
+      padding:32px;
+      box-shadow:0 5px 18px rgba(0,0,0,0.07);
+      height: fit-content; /* ✅ FIX: nav blijft compact (zoals de rest) */
+    }
+
+    /* HEADER */
+    .site-header h1{
+      font-size:40px;
+      font-weight:900;
+      letter-spacing:-0.5px;
+    }
+    .header-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    /* TAALKEUZE */
+    .lang-area{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:6px;
+      padding-top:2px;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+    .lang-label{
+      font-size:12px;
+      letter-spacing:0.3px;
+      font-weight:800;
+      color:#6b6b6b;
+      text-transform:uppercase;
+    }
+    .lang-switch{
+      display:flex;
+      gap:8px;
+      padding:0;
+      background:transparent;
+      box-shadow:none;
+      border:none;
+    }
+    .lang-switch button{
+      background:none;
+      border:none;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13px;
+      color:#6b6b6b;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:0.2s ease;
+    }
+    .lang-switch button:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+    .lang-switch button.active{
+      color:#F79A6A;
+      text-decoration:underline;
+      background:transparent;
+    }
+
+    /* NAV + DROPDOWN FIX */
+    .panel.panel-nav,
+    nav.panel.panel-nav,
+    .panel-nav{
+      overflow: visible !important;
+      max-height: none !important;
+      height: fit-content !important; /* ✅ FIX: nav neemt alleen contenthoogte */
+      align-self: start;              /* ✅ FIX: nav blijft bovenaan */
+    }
+    .panel-nav ul,
+    .panel-nav li{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    nav ul{list-style:none;padding-left:0;margin:0;}
+    nav ul li{margin-bottom:8px;}
+    nav a{
+      color:#000 !important;
+      font-weight:600;
+      text-decoration:none;
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:0.18s ease;
+    }
+    nav a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* ✅ ACTIEVE PAGINA (Homepage) */
+    nav strong{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      font-weight:800;
+    }
+
+    .dropdown{ position:relative; }
+    .dropdown-btn{
+      color:#000;
+      font-weight:700;
+      background:none;
+      border:none;
+      padding:4px 6px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:0.18s ease;
+    }
+    .dropdown-btn:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+    .dropdown-content{
+      display:none;
+      margin-top:8px;
+      padding-left:12px;
+    }
+    .dropdown.open .dropdown-content{display:block;}
+
+    /* INTRO */
+    .page-title{font-size:32px;margin-bottom:10px;}
+    .intro-text{max-width:820px;margin-bottom:26px;}
+
+    /* BOEK */
+    .book-wrapper{position:relative;overflow:hidden;padding:10px 4px 4px;margin-top:10px;}
+    .book-title{font-size:24px;font-weight:900;margin-bottom:6px;letter-spacing:-0.2px;}
+    .book-subtitle{font-size:14px;color:#6b6b6b;margin-bottom:18px;}
+    .book-content p{
+      margin:0 0 12px 0;
+      padding-bottom:6px;
+      background:repeating-linear-gradient(to bottom,transparent,transparent 23px,#f2f2f2 24px);
+    }
+    .book-footer{
+      border-top:1px solid #f2f2f2;
+      margin-top:18px;
+      padding-top:12px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:12px;
+    }
+    .book-nav-btn{
+      width:36px;height:36px;border-radius:50%;
+      background:#FFB98F;color:#fff;
+      font-size:20px;font-weight:bold;
+      border:none;cursor:pointer;
+      box-shadow:0 3px 10px rgba(0,0,0,0.12);
+      transition:0.2s ease;
+    }
+    .book-nav-btn:hover:not(:disabled){
+      background:#F79A6A;
+      transform:translateY(-2px);
+    }
+    .book-nav-btn:disabled{opacity:0.4;cursor:default;}
+    .book-counter{font-size:14px;color:#6b6b6b;}
+
+    /* PROJECTLINKS (GEEN in-/uitklappen meer) */
+    .links-section{margin-top:32px;padding-top:18px;border-top:1px solid #f2f2f2;}
+
+    .links-header{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background:transparent;
+      border:none;
+      padding:0;
+      text-align:left;
+    }
+
+    .links-title{
+      font-size:24px;
+      font-weight:900;
+      letter-spacing:-0.25px;
+    }
+
+    .links-note{
+      font-size:14px;
+      color:#6b6b6b;
+      margin-top:6px;
+      margin-bottom:14px;
+    }
+
+    /* ✅ altijd zichtbaar */
+    .links-collapsible{
+      display:block;
+      margin-top:8px;
+    }
+
+    .links-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .link-item{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding:14px;
+      border:1px solid #f2f2f2;
+      border-radius:12px;
+      text-decoration:none;
+      color:#000;
+      transition:0.2s ease;
+      background:#fff;
+    }
+    .link-item:hover{
+      border-color:rgba(247,154,106,0.6);
+      box-shadow:0 5px 18px rgba(0,0,0,0.06);
+      transform:translateY(-1px);
+    }
+    .link-item:hover .link-title{color:#F79A6A;}
+
+    .link-icon-wrapper{
+      width:36px;height:36px;
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+    }
+    .link-icon{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      display:block;
+    }
+    .icon-github{transform:scale(1.68);transform-origin:center;}
+
+    .link-title{font-weight:900;font-size:16px;transition:0.2s ease;}
+    .link-sub{font-size:13px;font-weight:800;color:#6b6b6b;margin-top:2px;}
+    .link-desc{font-size:14px;color:#6b6b6b;margin-top:6px;line-height:1.5;}
+
+    footer{text-align:center;font-size:14px;color:#6b6b6b;}
+
+    @media (max-width: 950px){
+      .links-grid{grid-template-columns:1fr;}
+      .lang-area{align-items:flex-start;}
+      .box{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+
+    <!-- HEADER -->
+    <header class="panel site-header">
+      <div class="header-top">
+        <div>
+          <!-- ✅ header (taalkunst kader) = Homepage -->
+          <h1 data-i18n="siteTitle">Homepage</h1>
+          <p class="subtitle">Daniëlla Ezigbo</p>
+        </div>
+
+        <div class="lang-area" aria-label="Taalkeuze">
+          <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+          <div class="lang-switch">
+            <button type="button" data-lang="nl" class="active" aria-label="Nederlands">NL</button>
+            <button type="button" data-lang="fr" aria-label="Français">FR</button>
+            <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- NAV -->
+    <nav class="panel panel-nav" aria-label="Navigatie">
+      <ul>
+        <li><strong data-i18n="navHome">Homepage</strong></li>
+        <li><a data-page-link href="page.html" data-i18n="navAbout">Over deze website</a></li>
+        <li><a data-page-link href="contact.html" data-i18n="navContact">Contact</a></li>
+
+        <li class="dropdown">
+          <button class="dropdown-btn" type="button" aria-expanded="false" data-i18n="navWeeks">Weken</button>
+          <ul class="dropdown-content" aria-label="Weekpagina’s">
+            <li><a data-page-link href="Week 1.html" data-i18n="navWeek1">Week 1</a></li>
+            <li><a data-page-link href="Week 2.html" data-i18n="navWeek2">Week 2</a></li>
+            <li><a data-page-link href="Week 3.html" data-i18n="navWeek3">Week 3</a></li>
+            <li><a data-page-link href="Week 4.html" data-i18n="navWeek4">Week 4</a></li>
+            <li><a data-page-link href="Week 5.html" data-i18n="navWeek5">Week 5</a></li>
+            <li><a data-page-link href="Week 6.html" data-i18n="navWeek6">Week 6</a></li>
+            <li><a data-page-link href="Week 7.html" data-i18n="navWeek7">Week 7</a></li>
+            <li><a data-page-link href="Week 8.html" data-i18n="navWeek8">Week 8</a></li>
+            <li><a data-page-link href="Week 9.html" data-i18n="navWeek9">Week 9</a></li>
+            <li><a data-page-link href="Week 10.html" data-i18n="navWeek10">Week 10</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="panel">
+
+      <h2 class="page-title" data-i18n="welcomeTitle">Welkom</h2>
+
+      <p class="intro-text" data-i18n-html="introHTML">
+        Op deze website presenteer ik mijn traject voor <strong>Lost in Tra(i)nslation</strong>,
+        van <strong>ontwerp</strong> naar <strong>prototype</strong>. Per week wordt een <strong>korte</strong>
+        en <strong>heldere</strong> samenvatting gegeven; de <strong>volledige uitwerking</strong> is terug te vinden
+        op de <strong>afzonderlijke weekpagina’s</strong>.
+      </p>
+
+      <!-- BOEK -->
+      <div class="book-wrapper" id="week-book">
+        <h2 id="book-week-title" class="book-title"></h2>
+        <p id="book-week-subtitle" class="book-subtitle"></p>
+        <div id="book-week-content" class="book-content"></div>
+
+        <div class="book-footer">
+          <button id="book-prev" class="book-nav-btn" type="button" aria-label="Vorige">‹</button>
+          <span id="book-counter" class="book-counter"></span>
+          <button id="book-next" class="book-nav-btn" type="button" aria-label="Volgende">›</button>
+        </div>
+      </div>
+
+      <!-- PROJECTLINKS (GEEN dropdown meer) -->
+      <section class="links-section" id="project-links">
+        <div class="links-header" id="project-links-header">
+          <div class="links-title" data-i18n="linksTitle">Projectlinks</div>
+        </div>
+
+        <p class="links-note" data-i18n-html="linksNoteHTML">
+          Snelle toegang tot <strong>ontwerp</strong>, <strong>code</strong> en <strong>documentatie</strong>.
+        </p>
+
+        <div class="links-collapsible">
+          <div class="links-grid">
+
+            <!-- ✅ FIGMA: naar (present/preview) -->
+            <a class="link-item"
+               href="https://www.figma.com/proto/Gw32TgEv8p1lAIb4Knwd4l/Mobile-web?node-id=156-17&scaling=scale-down&page-id=0%3A1&starting-point-node-id=156%3A17"
+               target="_blank" rel="noopener"
+               aria-label="Open Figma – preview">
+              <div class="link-icon-wrapper">
+                <img src="assets/imgs/figma.png" class="link-icon"
+                     alt="Figma" title="Figma – preview" />
+              </div>
+              <div>
+                <div class="link-title">Figma</div>
+                <div class="link-sub" data-i18n="figmaSub">Ontwerp & prototype</div>
+                <div class="link-desc" data-i18n="figmaDesc">Schermen en interacties (preview).</div>
+              </div>
+            </a>
+
+            <!-- ✅ GITHUB: jouw repo -->
+            <a class="link-item"
+               href="https://github.com/Dani05X/Dani-lla-Dani-lla_Ezigbo"
+               target="_blank" rel="noopener"
+               aria-label="Open GitHub – repository">
+              <div class="link-icon-wrapper">
+                <img src="assets/imgs/github.png" class="link-icon icon-github"
+                     alt="GitHub" title="GitHub – repository" />
+              </div>
+              <div>
+                <div class="link-title">GitHub</div>
+                <div class="link-sub" data-i18n="gitSub">Code & evolutie</div>
+                <div class="link-desc" data-i18n="gitDesc">Repository en voortgang.</div>
+              </div>
+            </a>
+
+            <!-- ✅ PDF: download -->
+            <a class="link-item"
+               href="pdf/Mobile%20web.pdf"
+               download="Mobile web.pdf"
+               aria-label="Download PDF – Mobile web">
+              <div class="link-icon-wrapper">
+                <img src="assets/imgs/pdf.png" class="link-icon"
+                     alt="PDF" title="PDF – download" />
+              </div>
+              <div>
+                <div class="link-title">PDF</div>
+                <div class="link-sub" data-i18n="pdfSub">Documentatie</div>
+                <div class="link-desc" data-i18n="pdfDesc">Download de PDF.</div>
+              </div>
+            </a>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="panel">
+      © 2025 Daniëlla Ezigbo – <span data-i18n="footerText">Mijn website</span>
+    </footer>
+
+  </div>
+
+  <!-- NAV dropdown -->
+  <script>
+    const dropdown = document.querySelector(".dropdown");
+    const dropdownBtn = dropdown.querySelector(".dropdown-btn");
+
+    dropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle("open");
+      dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", () => {
+      dropdown.classList.remove("open");
+      dropdownBtn.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        dropdown.classList.remove("open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  </script>
+
+  <!-- i18n + boek per taal + links taal doorgeven -->
+  <script>
+    const i18n = {
+      nl: {
+        langLabel:"Taalkeuze",
+        siteTitle:"Homepage",
+        navHome:"Homepage",
+        navAbout:"Over deze website",
+        navContact:"Contact",
+        navWeeks:"Weken",
+        navWeek1:"Week 1", navWeek2:"Week 2", navWeek3:"Week 3", navWeek4:"Week 4", navWeek5:"Week 5",
+        navWeek6:"Week 6", navWeek7:"Week 7", navWeek8:"Week 8", navWeek9:"Week 9", navWeek10:"Week 10",
+        welcomeTitle:"Welkom",
+        introHTML:"Op deze website presenteer ik mijn traject voor <strong>Lost in Tra(i)nslation</strong>, van <strong>ontwerp</strong> naar <strong>prototype</strong>. Per week wordt een <strong>korte</strong> en <strong>heldere</strong> samenvatting gegeven; de <strong>volledige uitwerking</strong> is terug te vinden op de <strong>afzonderlijke weekpagina’s</strong>.",
+        linksTitle:"Projectlinks",
+        linksNoteHTML:"Snelle toegang tot <strong>ontwerp</strong>, <strong>code</strong> en <strong>documentatie</strong>.",
+        figmaSub:"Ontwerp & prototype",
+        figmaDesc:"Schermen en interacties (preview).",
+        gitSub:"Code & evolutie",
+        gitDesc:"Repository en voortgang.",
+        pdfSub:"Documentatie",
+        pdfDesc:"Download de PDF.",
+        footerText:"Mijn website",
+        counterLabel:"Pagina"
+      },
+      fr: {
+        langLabel:"Langue",
+        siteTitle:"Accueil",
+        navHome:"Accueil",
+        navAbout:"À propos du site",
+        navContact:"Contact",
+        navWeeks:"Semaines",
+        navWeek1:"Semaine 1", navWeek2:"Semaine 2", navWeek3:"Semaine 3", navWeek4:"Semaine 4", navWeek5:"Semaine 5",
+        navWeek6:"Semaine 6", navWeek7:"Semaine 7", navWeek8:"Semaine 8", navWeek9:"Semaine 9", navWeek10:"Semaine 10",
+        welcomeTitle:"Bienvenue",
+        introHTML:"Ce site présente mon parcours pour <strong>Lost in Tra(i)nslation</strong>, du <strong>design</strong> au <strong>prototype</strong>. Chaque semaine, un aperçu <strong>court</strong> et <strong>clair</strong> est proposé ; le <strong>développement complet</strong> est disponible sur les <strong>pages hebdomadaires correspondantes</strong>.",
+        linksTitle:"Liens du projet",
+        linksNoteHTML:"Accès rapide au <strong>design</strong>, au <strong>code</strong> et à la <strong>documentation</strong>.",
+        figmaSub:"Design & prototype",
+        figmaDesc:"Écrans et interactions (aperçu).",
+        gitSub:"Code & évolution",
+        gitDesc:"Dépôt et progression.",
+        pdfSub:"Documentation",
+        pdfDesc:"Télécharger le PDF.",
+        footerText:"Mon site",
+        counterLabel:"Page"
+      },
+      de: {
+        langLabel:"Sprache",
+        siteTitle:"Startseite",
+        navHome:"Startseite",
+        navAbout:"Über diese Website",
+        navContact:"Kontakt",
+        navWeeks:"Wochen",
+        navWeek1:"Woche 1", navWeek2:"Woche 2", navWeek3:"Woche 3", navWeek4:"Woche 4", navWeek5:"Woche 5",
+        navWeek6:"Woche 6", navWeek7:"Woche 7", navWeek8:"Woche 8", navWeek9:"Woche 9", navWeek10:"Woche 10",
+        welcomeTitle:"Willkommen",
+        introHTML:"Auf dieser Website präsentiere ich meinen Arbeitsprozess für <strong>Lost in Tra(i)nslation</strong> – vom <strong>Entwurf</strong> bis zum <strong>Prototyp</strong>. Jede Woche wird eine <strong>kurze</strong> und <strong>klare</strong> Zusammenfassung gegeben; die <strong>vollständige Ausarbeitung</strong> ist auf den <strong>jeweiligen Wochenseiten</strong> zu finden.",
+        linksTitle:"Projektlinks",
+        linksNoteHTML:"Schneller Zugriff auf <strong>Design</strong>, <strong>Code</strong> und <strong>Dokumentation</strong>.",
+        figmaSub:"Design & Prototyp",
+        figmaDesc:"Screens und Interaktionen (Vorschau).",
+        gitSub:"Code & Entwicklung",
+        gitDesc:"Repository und Fortschritt.",
+        pdfSub:"Dokumentation",
+        pdfDesc:"PDF herunterladen.",
+        footerText:"Meine Website",
+        counterLabel:"Seite"
+      }
+    };
+
+    const pagesByLang = {
+      nl: [
+        { title:"Week 1 – Opstart & richting", subtitle:"Kader van de opdracht",
+          content:["Opdracht en doel helder afbakenen.","Structuur kiezen voor de weken en de website.","Eerste richting voor inhoud en stijl bepalen."]},
+        { title:"Week 2 – Ontwerpen in Figma", subtitle:"Basis van het prototype",
+          content:["Eerste schermen opzetten in Figma.","Typografie, contrast en grid testen.","Consistente componenten starten."]},
+        { title:"Week 3 – Verbeterd prototype", subtitle:"Structuur en hiërarchie",
+          content:["Schermen verfijnen met duidelijke informatiehiërarchie.","Uitlijning, spacing en consistentie aanscherpen.","Presentatie van ontwerpkeuzes verbeteren."]},
+        { title:"Week 4 – Van ontwerp naar web", subtitle:"Opbouw in HTML",
+          content:["Weekpagina’s structureren in HTML.","Basis layout en navigatie correct maken.","Consistente opbouw klaarzetten voor alle weken."]},
+        { title:"Week 5 – Publiceren & testen", subtitle:"Werkend geheel",
+          content:["Website online zetten (links en structuur).","Testen en fouten corrigeren.","Navigatie en pagina’s controleerbaar maken."]},
+        { title:"Week 6 – Styling & consistentie", subtitle:"Afwerking in CSS/Tailwind",
+          content:["Stijlregels consistent toepassen (spacing, typografie).","Herbruikbare onderdelen uniform maken.","Leesbaarheid en rust verbeteren."]},
+        { title:"Week 7 – Structuur verbeteren", subtitle:"Professionaliseren",
+          content:["Pagina’s op één lijn brengen qua layout.","Code opschonen en herhaling verminderen.","Navigatie en details consistenter maken."]},
+        { title:"Week 8 – Afronding", subtitle:"Kwaliteitscontrole",
+          content:["Laatste controles op consistentie en presentatie.","Kleine afwijkingen corrigeren.","Eindafwerking netjes en uniform maken."]},
+        { title:"Week 9 – Flow en afronding", subtitle:"Gebruikersflow verfijnen",
+          content:["Volledige flow controleren: inloggen → ticket → afronden.","Overgangen logisch en duidelijk maken.","Tekst en knoppen afstemmen voor consistentie."]},
+        { title:"Week 10 – Finale conclusies", subtitle:"Eindversie & reflectie",
+          content:["Project afronden en eindversie presenteren.","Kernkeuzes kort toelichten en onderbouwen.","Belangrijkste leerpunten en conclusies formuleren."]}
+      ],
+      fr: [
+        { title:"Semaine 1 – Démarrage & orientation", subtitle:"Cadrer la consigne",
+          content:["Clarifier la consigne et l’objectif.","Choisir la structure des semaines et du site.","Définir la direction (contenu et style)."]},
+        { title:"Semaine 2 – Conception dans Figma", subtitle:"Base du prototype",
+          content:["Créer les premiers écrans dans Figma.","Tester typographie, contraste et grille.","Démarrer des composants cohérents."]},
+        { title:"Semaine 3 – Prototype amélioré", subtitle:"Structure et hiérarchie",
+          content:["Affiner les écrans avec une hiérarchie claire.","Améliorer alignements et espacements.","Mieux expliquer les choix de design."]},
+        { title:"Semaine 4 – Du design au web", subtitle:"Structure en HTML",
+          content:["Structurer les pages hebdomadaires en HTML.","Mettre en place layout et navigation.","Préparer une base cohérente pour toutes les semaines."]},
+        { title:"Semaine 5 – Publication & tests", subtitle:"Ensemble fonctionnel",
+          content:["Mettre le site en ligne (liens et structure).","Tester et corriger les erreurs.","Rendre la navigation vérifiable."]},
+        { title:"Semaine 6 – Style & cohérence", subtitle:"Finition CSS/Tailwind",
+          content:["Appliquer un style cohérent (espaces, typo).","Uniformiser les éléments réutilisables.","Améliorer lisibilité et clarté."]},
+        { title:"Semaine 7 – Améliorer la structure", subtitle:"Professionnaliser",
+          content:["Harmoniser le layout entre les pages.","Nettoyer le code et réduire la répétition.","Rendre la navigation plus cohérente."]},
+        { title:"Semaine 8 – Finalisation", subtitle:"Contrôle qualité",
+          content:["Contrôler cohérence et présentation.","Corriger les petites différences.","Uniformiser la finition."]},
+        { title:"Semaine 9 – Flux et finalisation", subtitle:"Affiner le parcours",
+          content:["Vérifier le flux complet : connexion → billet → fin.","Rendre les transitions logiques et claires.","Aligner textes et boutons pour la cohérence."]},
+        { title:"Semaine 10 – Conclusions finales", subtitle:"Version finale & bilan",
+          content:["Finaliser et présenter la version finale.","Justifier brièvement les choix clés.","Formuler les apprentissages et conclusions."]}
+      ],
+      de: [
+        { title:"Woche 1 – Start & Ausrichtung", subtitle:"Aufgabe einordnen",
+          content:["Aufgabe und Ziel klar abgrenzen.","Struktur für Wochen und Website festlegen.","Richtung für Inhalt und Stil bestimmen."]},
+        { title:"Woche 2 – Design in Figma", subtitle:"Prototyp-Basis",
+          content:["Erste Screens in Figma erstellen.","Typografie, Kontrast und Grid testen.","Konsistente Komponenten beginnen."]},
+        { title:"Woche 3 – Verbessertes Prototyp", subtitle:"Struktur & Hierarchie",
+          content:["Screens mit klarer Hierarchie verfeinern.","Ausrichtung und Spacing verbessern.","Designentscheidungen besser erklären."]},
+        { title:"Woche 4 – Vom Design ins Web", subtitle:"HTML-Struktur",
+          content:["Wochenseiten in HTML strukturieren.","Layout und Navigation aufbauen.","Konsistente Basis für alle Wochen vorbereiten."]},
+        { title:"Woche 5 – Veröffentlichen & testen", subtitle:"Funktionierendes Gesamtbild",
+          content:["Website online stellen (Links und Struktur).","Testen und Fehler korrigieren.","Navigation klar nachvollziehbar machen."]},
+        { title:"Woche 6 – Styling & Konsistenz", subtitle:"CSS/Tailwind-Finish",
+          content:["Stil konsistent anwenden (Spacing, Typo).","Wiederverwendbare Elemente vereinheitlichen.","Lesbarkeit und Ruhe verbessern."]},
+        { title:"Woche 7 – Struktur verbessern", subtitle:"Professionalität erhöhen",
+          content:["Layout über Seiten hinweg harmonisieren.","Code bereinigen und Wiederholung reduzieren.","Navigation und Details konsistenter machen."]},
+        { title:"Woche 8 – Feinschliff", subtitle:"Qualitätskontrolle",
+          content:["Konsistenz und Präsentation prüfen.","Kleine Abweichungen korrigieren.","Visuelles Finish vereinheitlichen."]},
+        { title:"Woche 9 – Flow & Abschluss", subtitle:"Nutzerfluss verfeinern",
+          content:["Gesamten Flow prüfen: Login → Ticket → Abschluss.","Übergänge logisch und klar machen.","Texte und Buttons konsistent abstimmen."]},
+        { title:"Woche 10 – Finale Schlussfolgerungen", subtitle:"Endversion & Reflexion",
+          content:["Projekt abschließen und Endversion präsentieren.","Zentrale Entscheidungen kurz begründen.","Wichtigste Learnings und Fazit formulieren."]}
+      ]
+    };
+
+    let currentLang = "nl";
+    let currentIndex = 0;
+
+    const titleEl = document.getElementById("book-week-title");
+    const subtitleEl = document.getElementById("book-week-subtitle");
+    const contentEl = document.getElementById("book-week-content");
+    const counterEl = document.getElementById("book-counter");
+    const prevBtn = document.getElementById("book-prev");
+    const nextBtn = document.getElementById("book-next");
+
+    function setInternalLinksLang(lang){
+      document.querySelectorAll("a[data-page-link]").forEach(a => {
+        try{
+          const url = new URL(a.getAttribute("href"), window.location.href);
+          url.searchParams.set("lang", lang);
+          a.setAttribute("href", url.pathname + "?" + url.searchParams.toString());
+        }catch(e){}
+      });
+    }
+
+    function renderPage(){
+      const pages = pagesByLang[currentLang];
+      const p = pages[currentIndex];
+
+      titleEl.textContent = p.title;
+      subtitleEl.textContent = p.subtitle;
+
+      contentEl.innerHTML = "";
+      p.content.forEach(text => {
+        const line = document.createElement("p");
+        line.textContent = text;
+        contentEl.appendChild(line);
+      });
+
+      counterEl.textContent = `${i18n[currentLang].counterLabel} ${currentIndex + 1} / ${pages.length}`;
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === pages.length - 1;
+    }
+
+    function applyLanguage(lang){
+      currentLang = lang;
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (i18n[lang] && i18n[lang][key]) el.textContent = i18n[lang][key];
+      });
+
+      document.querySelectorAll("[data-i18n-html]").forEach(el => {
+        const key = el.getAttribute("data-i18n-html");
+        if (i18n[lang] && i18n[lang][key]) el.innerHTML = i18n[lang][key];
+      });
+
+      setInternalLinksLang(lang);
+
+      const max = pagesByLang[lang].length - 1;
+      if (currentIndex > max) currentIndex = max;
+      renderPage();
+
+      localStorage.setItem("siteLang", lang);
+    }
+
+    nextBtn.addEventListener("click", () => {
+      const pages = pagesByLang[currentLang];
+      if (currentIndex < pages.length - 1) { currentIndex++; renderPage(); }
+    });
+    prevBtn.addEventListener("click", () => {
+      if (currentIndex > 0) { currentIndex--; renderPage(); }
+    });
+
+    document.querySelectorAll(".lang-switch button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".lang-switch button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        applyLanguage(btn.dataset.lang);
+      });
+    });
+
+    const urlLang = new URLSearchParams(window.location.search).get("lang");
+    const savedLang = localStorage.getItem("siteLang");
+    const initLang = (urlLang && i18n[urlLang]) ? urlLang : ((savedLang && i18n[savedLang]) ? savedLang : "nl");
+
+    document.querySelectorAll(".lang-switch button").forEach(b => {
+      b.classList.toggle("active", b.dataset.lang === initLang);
+    });
+
+    applyLanguage(initLang);
+  </script>
+</body>
+</html>
