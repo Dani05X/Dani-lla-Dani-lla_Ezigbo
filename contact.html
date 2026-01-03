@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <!-- ✅ Contact-styles extern -->
+  <link rel="stylesheet" href="assets/contact.css" />
+
+  <!-- ✅ EXTRA: dezelfde nav/dropdown layout als page.html (zonder je content weg te halen) -->
+  <style>
+    /* NAV (zelfde stijl als page.html) */
+    nav ul{ list-style:none; padding-left:0; margin:0; }
+    nav ul li{ margin-bottom:8px; }
+
+    nav a{
+      color:#000 !important;
+      font-weight:600;
+      text-decoration:none;
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+    }
+    nav a:hover{
+      color:#F79A6A !important;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* ✅ actieve pagina (Contact) zoals page.html */
+    nav strong{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      font-weight:800;
+    }
+
+    /* ✅ Dropdown fix: voorkomt dat Week 10 wordt afgekapt */
+    .panel.panel-nav,
+    nav.panel.panel-nav,
+    .panel-nav{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .panel-nav ul,
+    .panel-nav li{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    /* dropdown knop zoals page.html */
+    .dropdown{ position:relative; }
+    .dropdown-btn{
+      color:#000;
+      font-weight:700;
+      background:none;
+      border:none;
+      padding:4px 6px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .dropdown-btn:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+
+    .dropdown-content{
+      display:none;
+      margin-top:8px;
+      padding-left:12px;
+
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .dropdown.open .dropdown-content{ display:block; }
+
+    .dropdown-content a{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+      text-decoration:none;
+    }
+    .dropdown-content a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+
+    <!-- HEADER -->
+    <header class="panel site-header">
+      <div class="header-top">
+        <div>
+          <h1 data-i18n="pageTitle">Contact</h1>
+          <p class="subtitle" data-i18n="siteSubline">Daniëlla Ezigbo · Prototyping Tools 1</p>
+        </div>
+
+        <div class="lang-area" aria-label="Taalkeuze">
+          <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+          <div class="lang-switch">
+            <button type="button" data-lang="nl" aria-label="Nederlands">NL</button>
+            <button type="button" data-lang="fr" aria-label="Français">FR</button>
+            <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- NAV ✅ zelfde structuur als page.html + Contact actief -->
+    <nav class="panel panel-nav" aria-label="Navigatie">
+      <ul>
+        <li><a data-page-link href="index.html" data-i18n="navHome">Homepage</a></li>
+        <li><a data-page-link href="page.html" data-i18n="navAbout">Over deze website</a></li>
+        <li><strong data-i18n="navContact">Contact</strong></li>
+
+        <li class="dropdown">
+          <button class="dropdown-btn" type="button" aria-expanded="false" data-i18n="navWeeks">Weken</button>
+          <ul class="dropdown-content" aria-label="Weekpagina’s">
+            <li><a data-page-link href="Week 1.html" data-i18n="week1">Week 1</a></li>
+            <li><a data-page-link href="Week 2.html" data-i18n="week2">Week 2</a></li>
+            <li><a data-page-link href="Week 3.html" data-i18n="week3">Week 3</a></li>
+            <li><a data-page-link href="Week 4.html" data-i18n="week4">Week 4</a></li>
+            <li><a data-page-link href="Week 5.html" data-i18n="week5">Week 5</a></li>
+            <li><a data-page-link href="Week 6.html" data-i18n="week6">Week 6</a></li>
+            <li><a data-page-link href="Week 7.html" data-i18n="week7">Week 7</a></li>
+            <li><a data-page-link href="Week 8.html" data-i18n="week8">Week 8</a></li>
+            <li><a data-page-link href="Week 9.html" data-i18n="week9">Week 9</a></li>
+            <li><a data-page-link href="Week 10.html" data-i18n="week10">Week 10</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="panel">
+
+      <h2 data-i18n="contactTitle">Contactinformatie</h2>
+
+      <p data-i18n-html="contactIntro">
+        Deze pagina is bedoeld voor vragen over mijn project <strong>Lost in Tra(i)nslation</strong>
+        en de uitwerking binnen <strong>Prototyping Tools 1</strong>.
+      </p>
+
+      <div class="contact-grid">
+
+        <!-- INFO -->
+        <section class="contact-card" aria-label="Contactgegevens">
+          <h3 data-i18n="infoTitle">Gegevens</h3>
+          <ul class="info-list">
+            <li><strong data-i18n="nameLabel">Naam:</strong> Daniëlla Ezigbo</li>
+            <li><strong data-i18n="courseLabel">Opleiding:</strong> Prototyping Tools 1</li>
+            <li><strong data-i18n="topicLabel">Project:</strong> Lost in Tra(i)nslation</li>
+            <li><strong data-i18n="emailLabel">E-mail:</strong> <span data-i18n="emailHint">(via formulier)</span></li>
+          </ul>
+
+          <p data-i18n="infoNote" class="info-note">
+            Deze pagina is bedoeld voor academische en projectgerelateerde communicatie.
+          </p>
+        </section>
+
+        <!-- FORM -->
+        <section class="form-wrap" aria-label="Contactformulier">
+          <h3 data-i18n="formTitle">Stuur een bericht</h3>
+          <p class="form-sub" data-i18n="formSub">Vul de velden in en klik op verzenden.</p>
+
+          <form id="contactForm" action="https://formspree.io/f/xeeokzzd" method="POST" autocomplete="on">
+            <div class="field">
+              <label for="name" data-i18n="fName">Naam</label>
+              <input id="name" name="name" type="text" required />
+            </div>
+
+            <div class="field">
+              <label for="email" data-i18n="fEmail">E-mail</label>
+              <input id="email" name="email" type="email" required />
+            </div>
+
+            <div class="field">
+              <label for="subject" data-i18n="fSubject">Onderwerp</label>
+              <input id="subject" name="subject" type="text" required />
+            </div>
+
+            <div class="field">
+              <label for="message" data-i18n="fMessage">Bericht</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit" id="sendBtn" data-i18n="sendBtn">Verzenden</button>
+              <button class="btn btn-ghost" type="button" id="clearBtn" data-i18n="clearBtn">Wissen</button>
+            </div>
+
+            <div class="notice" id="formNotice" role="status" aria-live="polite"></div>
+          </form>
+
+          <div class="sent-overlay" id="sentOverlay" aria-hidden="true">
+            <div class="sent-card" role="status" aria-live="polite">
+              <div class="sent-icon">✓</div>
+              <div class="sent-title" id="sentTitle">Verzonden</div>
+              <div class="sent-sub" id="sentSub">Uw bericht is succesvol verzonden.</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="panel">
+      <span data-i18n="footer">© 2025 Daniëlla Ezigbo – Mijn website</span>
+    </footer>
+
+  </div>
+
+  <!-- ✅ Dropdown gedrag (EXACT zoals page.html / index.html) -->
+  <script>
+    const dropdown = document.querySelector(".dropdown");
+    const dropdownBtn = dropdown?.querySelector(".dropdown-btn");
+
+    if (dropdown && dropdownBtn) {
+      dropdownBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.toggle("open");
+        dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      document.addEventListener("click", () => {
+        dropdown.classList.remove("open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
+
+  <!-- ✅ Formspree: echt verzenden + animatie + reload + taal behouden -->
+  <script>
+    const form = document.getElementById("contactForm");
+    const notice = document.getElementById("formNotice");
+    const clearBtn = document.getElementById("clearBtn");
+    const sendBtn = document.getElementById("sendBtn");
+
+    const overlay = document.getElementById("sentOverlay");
+    const sentTitle = document.getElementById("sentTitle");
+    const sentSub = document.getElementById("sentSub");
+
+    function showNotice(text, type){
+      notice.classList.add("show");
+      notice.classList.toggle("notice--success", type === "success");
+      notice.classList.toggle("notice--error", type === "error");
+      notice.textContent = text;
+    }
+    function hideNotice(){
+      notice.classList.remove("show", "notice--success", "notice--error");
+      notice.textContent = "";
+    }
+    function showOverlay(){
+      overlay.classList.add("show");
+      overlay.setAttribute("aria-hidden","false");
+    }
+
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      if(params.get("sent") === "1"){
+        sentTitle.textContent = window.__t?.sentTitle || "Verzonden";
+        sentSub.textContent = window.__t?.sentMsg || "Uw bericht is succesvol verzonden.";
+        showOverlay();
+
+        setTimeout(() => {
+          overlay.classList.remove("show");
+          overlay.setAttribute("aria-hidden","true");
+
+          const url = new URL(window.location.href);
+          url.searchParams.delete("sent");
+          window.history.replaceState({}, "", url.pathname + (url.searchParams.toString() ? "?" + url.searchParams.toString() : ""));
+        }, 2200);
+      }
+    })();
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      hideNotice();
+      sendBtn.disabled = true;
+      showNotice(window.__t?.sendingMsg || "Bezig met verzenden…", "success");
+
+      try{
+        const data = new FormData(form);
+
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: data,
+          headers: { "Accept": "application/json" }
+        });
+
+        if(!res.ok) throw new Error("Formspree error");
+
+        hideNotice();
+        sentTitle.textContent = window.__t?.sentTitle || "Verzonden";
+        sentSub.textContent = window.__t?.sentMsg || "Uw bericht is succesvol verzonden.";
+        showOverlay();
+
+        const lang = document.documentElement.lang || "nl";
+        setTimeout(() => {
+          window.location.href = "contact.html?sent=1&lang=" + encodeURIComponent(lang);
+        }, 1200);
+
+      }catch(err){
+        showNotice(window.__t?.errorMsg || "Er ging iets mis. Probeer opnieuw.", "error");
+        sendBtn.disabled = false;
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      form.reset();
+      hideNotice();
+      sendBtn.disabled = false;
+    });
+  </script>
+
+  <!-- i18n (NL/FR/DE) + links met lang parameter -->
+  <script>
+    const I18N = {
+      nl: {
+        langLabel: "Taalkeuze",
+        pageTitle: "Contact",
+        siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+        navHome: "Homepage",
+        navAbout: "Over deze website",
+        navContact: "Contact",
+        navWeeks: "Weken",
+        week1:"Week 1", week2:"Week 2", week3:"Week 3", week4:"Week 4", week5:"Week 5",
+        week6:"Week 6", week7:"Week 7", week8:"Week 8", week9:"Week 9", week10:"Week 10",
+
+        contactTitle: "Contactinformatie",
+        contactIntro: "Deze pagina is bedoeld voor vragen over mijn project <strong>Lost in Tra(i)nslation</strong> en de uitwerking binnen <strong>Prototyping Tools 1</strong>.",
+        infoTitle: "Gegevens",
+        nameLabel: "Naam:",
+        courseLabel: "Opleiding:",
+        topicLabel: "Project:",
+        emailLabel: "E-mail:",
+        emailHint: "(via formulier)",
+        infoNote: "Deze pagina is bedoeld voor academische en projectgerelateerde communicatie.",
+
+        formTitle: "Stuur een bericht",
+        formSub: "Vul de velden in en klik op verzenden.",
+        fName: "Naam",
+        fEmail: "E-mail",
+        fSubject: "Onderwerp",
+        fMessage: "Bericht",
+        sendBtn: "Verzenden",
+        clearBtn: "Wissen",
+
+        sendingMsg: "Bezig met verzenden…",
+        sentTitle: "Verzonden",
+        sentMsg: "Uw bericht is succesvol verzonden.",
+        errorMsg: "Er ging iets mis. Controleer de velden en probeer opnieuw.",
+
+        footer: "© 2025 Daniëlla Ezigbo – Mijn website"
+      },
+
+      fr: {
+        langLabel: "Langue",
+        pageTitle: "Contact",
+        siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+        navHome: "Accueil",
+        navAbout: "À propos de ce site",
+        navContact: "Contact",
+        navWeeks: "Semaines",
+        week1:"Semaine 1", week2:"Semaine 2", week3:"Semaine 3", week4:"Semaine 4", week5:"Semaine 5",
+        week6:"Semaine 6", week7:"Semaine 7", week8:"Semaine 8", week9:"Semaine 9", week10:"Semaine 10",
+
+        contactTitle: "Informations de contact",
+        contactIntro: "Cette page est destinée aux questions concernant mon projet <strong>Lost in Tra(i)nslation</strong> et son développement dans le cadre de <strong>Prototyping Tools 1</strong>.",
+        infoTitle: "Coordonnées",
+        nameLabel: "Nom :",
+        courseLabel: "Cours :",
+        topicLabel: "Projet :",
+        emailLabel: "E-mail :",
+        emailHint: "(via le formulaire)",
+        infoNote: "Cette page est destinée à une communication académique et liée au projet.",
+
+        formTitle: "Envoyer un message",
+        formSub: "Remplissez les champs puis cliquez sur envoyer.",
+        fName: "Nom",
+        fEmail: "E-mail",
+        fSubject: "Objet",
+        fMessage: "Message",
+        sendBtn: "Envoyer",
+        clearBtn: "Effacer",
+
+        sendingMsg: "Envoi en cours…",
+        sentTitle: "Envoyé",
+        sentMsg: "Votre message a été envoyé avec succès.",
+        errorMsg: "Une erreur s’est produite. Veuillez réessayer.",
+
+        footer: "© 2025 Daniëlla Ezigbo – Mon site"
+      },
+
+      de: {
+        langLabel: "Sprache",
+        pageTitle: "Kontakt",
+        siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+        navHome: "Startseite",
+        navAbout: "Über diese Website",
+        navContact: "Kontakt",
+        navWeeks: "Wochen",
+        week1:"Woche 1", week2:"Woche 2", week3:"Woche 3", week4:"Woche 4", week5:"Woche 5",
+        week6:"Woche 6", week7:"Woche 7", week8:"Woche 8", week9:"Woche 9", week10:"Woche 10",
+
+        contactTitle: "Kontaktinformationen",
+        contactIntro: "Diese Seite ist für Fragen zu meinem Projekt <strong>Lost in Tra(i)nslation</strong> und der Ausarbeitung im Kurs <strong>Prototyping Tools 1</strong> gedacht.",
+        infoTitle: "Angaben",
+        nameLabel: "Name:",
+        courseLabel: "Kurs:",
+        topicLabel: "Projekt:",
+        emailLabel: "E-Mail:",
+        emailHint: "(über das Formular)",
+        infoNote: "Diese Seite dient der akademischen und projektbezogenen Kommunikation.",
+
+        formTitle: "Nachricht senden",
+        formSub: "Füllen Sie die Felder aus und klicken Sie auf Senden.",
+        fName: "Name",
+        fEmail: "E-Mail",
+        fSubject: "Betreff",
+        fMessage: "Nachricht",
+        sendBtn: "Senden",
+        clearBtn: "Leeren",
+
+        sendingMsg: "Wird gesendet…",
+        sentTitle: "Gesendet",
+        sentMsg: "Ihre Nachricht wurde erfolgreich gesendet.",
+        errorMsg: "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+
+        footer: "© 2025 Daniëlla Ezigbo – Meine Website"
+      }
+    };
+
+    function setInternalLinksLang(lang){
+      document.querySelectorAll("a[data-page-link]").forEach(a => {
+        try{
+          const url = new URL(a.getAttribute("href"), window.location.href);
+          url.searchParams.set("lang", lang);
+          a.setAttribute("href", url.pathname + "?" + url.searchParams.toString());
+        }catch(e){}
+      });
+    }
+
+    function getLang(){
+      const urlLang = new URLSearchParams(window.location.search).get("lang");
+      const saved = localStorage.getItem("siteLang");
+      return (urlLang && I18N[urlLang]) ? urlLang : ((saved && I18N[saved]) ? saved : "nl");
+    }
+
+    function applyLang(lang){
+      const dict = I18N[lang] || I18N.nl;
+      document.documentElement.lang = lang;
+
+      window.__t = dict;
+
+      document.querySelectorAll(".lang-switch button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key] != null) el.textContent = dict[key];
+      });
+
+      document.querySelectorAll("[data-i18n-html]").forEach(el => {
+        const key = el.getAttribute("data-i18n-html");
+        if (dict[key] != null) el.innerHTML = dict[key];
+      });
+
+      setInternalLinksLang(lang);
+      localStorage.setItem("siteLang", lang);
+    }
+
+    const initLang = getLang();
+    applyLang(initLang);
+
+    document.querySelectorAll(".lang-switch button").forEach(btn => {
+      btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+    });
+  </script>
+</body>
+</html>

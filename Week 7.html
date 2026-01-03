@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 7 – Uitwerking</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <style>
+/* BASE */
+body{ font-family:"Inter", Arial, sans-serif; color:#000; line-height:1.75; font-size:17px; }
+h1,h2,h3{ font-weight:700; color:#000; letter-spacing:-0.2px; }
+h2{ font-size:28px; margin-bottom:6px; }
+h3{ font-size:21px; margin:26px 0 8px; }
+
+/* GRID */
+.box{
+  max-width:1250px; margin:50px auto; display:grid; grid-gap:40px;
+  grid-template-columns:330px minmax(0,1fr); align-items:flex-start;
+}
+.panel{ background:#fff; border-radius:14px; padding:48px 56px; box-shadow:0 5px 18px rgba(0,0,0,0.07); }
+.panel-nav{ padding:28px 32px; align-self:flex-start; overflow: visible !important; }
+
+.site-header h1{ font-size:40px; font-weight:800; margin:0; letter-spacing:-0.5px; }
+
+/* HEADER + TAAL */
+.header-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
+.header-left{ min-width:0; }
+.header-subline{ margin-top:10px; }
+.lang-area{
+  display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding-top:2px;
+  -webkit-user-select:none;
+  user-select:none;
+}
+.lang-label{ font-size:12px; letter-spacing:0.3px; font-weight:800; color:#777; text-transform:uppercase; }
+.lang-switch{ display:flex; gap:8px; padding:0; background:transparent; border:none; }
+.lang-switch button{
+  background:none; border:none; cursor:pointer; font-weight:900; font-size:13px; color:#777;
+  padding:4px 6px; border-radius:8px; transition:0.2s ease;
+}
+.lang-switch button:hover{ color:#F79A6A; background:rgba(247,154,106,0.10); }
+.lang-switch button.active{ color:#F79A6A; text-decoration:underline; background:transparent; }
+
+/* NAV */
+nav ul{ list-style:none; padding-left:0; margin:0; }
+nav ul li{ margin-bottom:8px; }
+nav a{ font-weight:600; text-decoration:none; color:#000; }
+nav a:hover{ text-decoration:underline; }
+.dropdown{ position:relative; }
+.dropdown-btn{ background:none; border:none; font-weight:700; cursor:pointer; padding:0; }
+.dropdown-content{
+  display:none; padding-left:16px; margin-top:6px; overflow: visible !important; max-height:none !important;
+}
+.dropdown.open .dropdown-content{ display:block; }
+.dropdown-content a{
+  display:inline-block; padding:4px 6px; border-radius:8px; transition:.18s ease; text-decoration:none;
+}
+.dropdown-content a:hover{ color:#F79A6A; background:rgba(247,154,106,0.10); text-decoration:none; }
+
+/* META */
+.page-breadcrumb{ font-size:13px; color:#777; margin:-2px 0 8px; }
+.week-meta{ font-size:14px; color:#555; margin-bottom:20px; }
+.pill{
+  display:inline-flex; padding:4px 10px; border-radius:999px;
+  background:#fff7f1; color:#b0602f; font-size:12px; font-weight:600; margin-right:8px;
+}
+.section{ margin-bottom:28px; }
+
+/* WEEK NAV */
+.week-nav-bar{
+  border-top:1px solid #eee;
+  margin-top:26px;
+  padding-top:16px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.week-nav-link{
+  padding:6px 12px;
+  background:#fff7f1;
+  border-radius:999px;
+  border:1px solid #ffb98f33;
+  text-decoration:none;
+  font-weight:600;
+  color:#000;
+  transition:0.18s ease;
+  display:inline-block;
+  white-space:nowrap;
+}
+.week-nav-link:hover{
+  background:#ffb98f;
+  color:#fff;
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* WEEK 7 DROPDOWNS */
+.w7-stack{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
+.w7-drop{
+  border-radius:16px;
+  border:1px solid rgba(0,0,0,0.06);
+  background:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+  overflow:hidden;
+  transition:0.18s ease;
+}
+.w7-drop:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(0,0,0,0.10); }
+
+.w7-drop-btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px;
+  border:none;
+  background:#fff;
+  cursor:pointer;
+  font-weight:900;
+  text-align:left;
+}
+.w7-drop-left{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.w7-drop-title{
+  font-size:14px; line-height:1.2; color:#111;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.w7-drop-sub{
+  font-size:12px; font-weight:800; color:#777;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.w7-drop-icon{
+  flex:0 0 auto;
+  width:38px; height:38px;
+  border-radius:999px;
+  border:none;
+  background:rgba(247,154,106,0.95);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);
+}
+.w7-drop-icon svg{ width:16px; height:16px; fill:#fff; transform:rotate(0deg); transition:0.18s ease; }
+.w7-drop.open .w7-drop-icon svg{ transform:rotate(180deg); }
+
+/* dropdown panel */
+.w7-drop-panel{
+  border-top:1px solid rgba(0,0,0,0.06);
+  background:#fff;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.w7-thumbwrap{
+  background:#fafafa;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:14px;
+  padding:10px;
+}
+
+/* thumbnails */
+.w7-thumbs{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:10px;
+}
+.w7-thumbs-one{ grid-template-columns:1fr; }
+@media (max-width:820px){ .w7-thumbs{ grid-template-columns:1fr; } }
+
+.w7-thumb{ border-radius:12px; border:1px solid rgba(0,0,0,0.06); background:#fff; overflow:hidden; }
+.w7-thumb-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 10px 8px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  background:#fffaf6;
+  font-weight:900;
+  font-size:12px;
+  color:#111;
+}
+.w7-badge{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  font-weight:900;
+  font-size:10px;
+  background:#fff;
+  border:1px solid rgba(247,154,106,0.28);
+  padding:5px 8px;
+  border-radius:999px;
+  color:#6a3b22;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* thumbnails size */
+.w7-thumb-img{
+  height:150px;
+  background:#fafafa;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+}
+
+/* ✅ SYSTEEMOVERZICHT: VEEL GROTER standaard */
+.w7-thumbs-one .w7-thumb-img{
+  height:420px;
+  padding:12px;
+}
+.w7-thumbs-one .w7-thumb-img img{
+  max-width:100%;
+  max-height:100%;
+}
+
+.w7-thumb-img img{
+  max-width:92%;
+  max-height:92%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  display:block;
+  cursor:zoom-in;
+}
+
+/* 3W blok */
+.w7-3w{
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.06);
+  background: #fffaf6;
+}
+.w7-3w h4{ margin:0 0 6px; font-size:13px; font-weight:900; }
+.w7-3w ul{ margin:0; padding-left:18px; color:#444; font-size:13px; line-height:1.6; font-weight:600; }
+.w7-3w li{ margin:6px 0; }
+
+/* ZOOM MODAL */
+.modal{ position:fixed; inset:0; display:none; z-index:9999; }
+.modal.open{ display:block; }
+.modal-bg{ position:absolute; inset:0; background:rgba(0,0,0,0.45); }
+
+.modal-dialog{
+  position:relative;
+  margin:6vh auto;
+  width:min(1100px, 94vw);
+  max-height:86vh;
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.30);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.modal-head{
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid rgba(0,0,0,0.08);
+  background:#fffaf6;
+}
+.modal-title{ margin:0; font-size:15px; font-weight:900; color:#111; }
+.modal-close{
+  width:40px; height:40px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,0.10);
+  background:#fff;
+  cursor:pointer;
+  font-size:20px;
+  font-weight:900;
+  line-height:1;
+}
+.modal-body{ padding:14px; overflow:hidden; background:#fff; }
+
+.zoom-shell{
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,0.06);
+  background:#f7f7f7;
+  overflow:hidden;
+  position:relative;
+}
+
+/* ✅ alleen verticaal scrollen (horizontaal UIT) */
+.zoom-viewport{
+  height:560px;
+  background:#fafafa;
+  overflow-y:auto;
+  overflow-x:hidden;
+  position:relative;
+
+  padding-bottom:120px;
+  padding-right:40px;
+
+  -ms-overflow-style: none;
+}
+.zoom-viewport::-webkit-scrollbar{ width:0; height:0; }
+
+@media (max-width:720px){ .zoom-viewport{ height:420px; } }
+
+/* ✅ Z-INDEX FIX zodat + altijd klikbaar is */
+.zoom-corner{
+  position:sticky;
+  top:12px;
+  right:12px;
+  float:right;
+  margin:12px;
+  display:flex;
+  gap:8px;
+  z-index:30;
+}
+.zoom-btn{
+  width:38px; height:38px;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,0.10);
+  background:rgba(255,255,255,0.95);
+  font-weight:900;
+  font-size:18px;
+  cursor:pointer;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);
+  line-height:1;
+}
+.zoom-btn:disabled{ opacity:.5; cursor:default; box-shadow:none; }
+
+/* ✅ content default = onder elkaar (single) */
+.zoom-content{
+  min-width:100%;
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:18px;
+  align-items:center;
+  justify-content:flex-start;
+  width:100%;
+  height:auto;
+}
+
+/* ✅ pair = naast elkaar (zonder horizontale scroll) */
+.zoom-content.is-pair{
+  flex-direction:row;
+  justify-content:center;
+  align-items:flex-start;
+}
+
+.zoom-col{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:12px;
+  overflow:hidden;
+  flex:0 0 auto;
+}
+.zoom-col-head{
+  padding:10px 10px 8px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  background:#fffaf6;
+  font-weight:900;
+  font-size:12px;
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.zoom-col img{
+  display:block;
+  background:#fafafa;
+  -webkit-user-select:none;
+  user-select:none;
+  pointer-events:none;
+}
+
+/* ✅ alleen verticale bar (en niet over knoppen heen) */
+.vbar{
+  position:absolute;
+  top:14px;
+  bottom:10px;
+  right:14px;
+  width:10px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.12);
+  overflow:hidden;
+  z-index:20;
+
+  pointer-events:auto;
+  cursor:pointer;
+}
+.vbar .thumb{
+  width:100%;
+  height:30%;
+  border-radius:999px;
+  background:rgba(0,0,0,0.55);
+  transform:translateY(0);
+}
+
+/* Scroll-to-top */
+.to-top{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  width:46px;
+  height:46px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,0.10);
+  background:rgba(255,255,255,0.95);
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);
+  cursor:pointer;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
+  font-weight:900;
+  font-size:18px;
+  transition:.16s ease;
+}
+.to-top:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(0,0,0,0.14); }
+.to-top.show{ display:flex; }
+
+@media (max-width:1050px){
+  .box{ grid-template-columns:1fr; }
+  .panel{ padding:34px 22px; }
+  .panel-nav{ padding:22px 22px; }
+}
+  </style>
+</head>
+
+<body>
+<div class="box">
+
+  <header class="panel site-header">
+    <div class="header-top">
+      <div class="header-left">
+        <h1 data-i18n="siteTitle">Webpagina</h1>
+        <p class="page-breadcrumb header-subline" data-i18n="siteSubline">Daniëlla Ezigbo · Prototyping Tools 1</p>
+      </div>
+
+      <div class="lang-area" aria-label="Taalkeuze">
+        <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+        <div class="lang-switch">
+          <button type="button" data-lang="nl" class="active" aria-label="Nederlands">NL</button>
+          <button type="button" data-lang="fr" aria-label="Français">FR</button>
+          <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="panel panel-nav">
+    <ul>
+      <li><a href="index.html" data-i18n="navHome">Homepage</a></li>
+      <li><a href="page.html" data-i18n="navAbout">Over deze website</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-btn" type="button" data-i18n="navWeeks" aria-expanded="false">Weken</button>
+        <ul class="dropdown-content" aria-label="Weeknavigatie">
+          <li><a href="Week 1.html" data-i18n="week1">Week 1</a></li>
+          <li><a href="Week 2.html" data-i18n="week2">Week 2</a></li>
+          <li><a href="Week 3.html" data-i18n="week3">Week 3</a></li>
+          <li><a href="Week 4.html" data-i18n="week4">Week 4</a></li>
+          <li><a href="Week 5.html" data-i18n="week5">Week 5</a></li>
+          <li><a href="Week 6.html" data-i18n="week6">Week 6</a></li>
+          <li><a href="Week 7.html"><strong data-i18n="week7">Week 7</strong></a></li>
+          <li><a href="Week 8.html" data-i18n="week8">Week 8</a></li>
+          <li><a href="Week 9.html" data-i18n="week9">Week 9</a></li>
+          <li><a href="Week 10.html" data-i18n="week10">Week 10</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="panel">
+    <h2 data-i18n="pageTitle">Week 7 – Uitwerking</h2>
+    <p class="page-breadcrumb" data-i18n="breadcrumb">Ontwerp &gt; Prototyping &gt; Week 7</p>
+
+    <p class="week-meta">
+      <span class="pill" data-i18n="pill">Week 7</span>
+      <span data-i18n="metaText">Deze week stond in het teken van verfijning, consistentie en voorbereiding richting afronding.</span>
+    </p>
+
+    <section class="section">
+      <h3 data-i18n="sec1Title">Doel en verwachtingen</h3>
+      <p data-i18n-html="sec1Text">
+        In week 7 lag de nadruk op <strong>uitwerking</strong> in plaats van grote nieuwe toevoegingen.
+        Het doel was om het ontwerp <strong>consistent</strong> te maken: dezelfde componenten gedragen zich hetzelfde,
+        de hiërarchie is duidelijk en de lay-out blijft rustig en scanbaar.
+        Daarnaast moest ik mijn keuzes kort kunnen onderbouwen: <strong>wat is aangepast</strong> en <strong>waarom is dit beter</strong>.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="sec2Title">Aanpak</h3>
+      <p data-i18n-html="sec2Text">
+        Ik heb de schermen gecontroleerd op terugkerende elementen (titels, labels, marges, uitlijning, contrast en kleuraccenten).
+        Daarna heb ik verschillen gelijkgetrokken zodat er één herkenbaar systeem ontstaat.
+        Tot slot heb ik getest of de informatie sneller te lezen is en of de structuur logisch blijft bij meerdere schermen.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="sec3Title">Resultaat</h3>
+      <p data-i18n-html="sec3Text">
+        Het resultaat is een set schermen die visueel en inhoudelijk beter op elkaar aansluit.
+        Door de verbeterde consistentie en hiërarchie is de interface sneller te begrijpen en makkelijker te presenteren als één duidelijke flow.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="sec4Title">Visuele voorbeelden</h3>
+      <p data-i18n="sec4Text">
+        Open per groep de dropdown. Klik op een thumbnail om te zoomen.
+      </p>
+
+      <div class="w7-stack">
+
+        <!-- SYSTEEMOVERZICHT -->
+        <div class="w7-drop" data-w7drop>
+          <button class="w7-drop-btn" type="button" aria-expanded="false" data-w7btn>
+            <span class="w7-drop-left">
+              <span class="w7-drop-title" data-i18n="g0Title">Systeemoverzicht</span>
+              <span class="w7-drop-sub" data-i18n="gSub">Klik om te openen</span>
+            </span>
+            <span class="w7-drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7.41 14.59 12 10l4.59 4.59L18 13.17 12 7.17l-6 6z"></path></svg>
+            </span>
+          </button>
+
+          <div class="w7-drop-panel" hidden data-w7panel>
+            <div class="w7-thumbwrap">
+              <div class="w7-thumbs w7-thumbs-one">
+                <div class="w7-thumb">
+                  <div class="w7-thumb-top">
+                    <span data-i18n="g0One">Overzicht</span>
+                    <span class="w7-badge">schermen werking.jpeg</span>
+                  </div>
+                  <div class="w7-thumb-img">
+                    <img
+                      src="assets/imgs/schermen%20werking.jpeg"
+                      alt="Systeemoverzicht"
+                      data-zoom="single"
+                      data-title-key="g0Title"
+                      data-src1="assets/imgs/schermen%20werking.jpeg"
+                      data-label1-key="zSingle"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="w7-3w">
+              <h4 data-i18n="g0_3wTitle">3 W’s (Week 7)</h4>
+              <ul>
+                <li data-i18n-html="g0_wat"><strong>Wat?</strong> Dit is het volledige systeemoverzicht: alle schermen en hun volgorde in één flow.</li>
+                <li data-i18n-html="g0_waarom"><strong>Waarom?</strong> Week 7 focust op consistentie. Hier zie je in één oogopslag of dezelfde regels (typografie, spacing en labels) overal terugkomen.</li>
+                <li data-i18n-html="g0_geleerd"><strong>Wat geleerd?</strong> Door eerst de hele flow te bekijken, ontdek je sneller waar dingen afwijken en kan je gericht verfijnen.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- OVERZICHTSCHERM -->
+        <div class="w7-drop" data-w7drop>
+          <button class="w7-drop-btn" type="button" aria-expanded="false" data-w7btn>
+            <span class="w7-drop-left">
+              <span class="w7-drop-title" data-i18n="g1Title">Overzichtscherm – vergelijking (v1 ↔ v2)</span>
+              <span class="w7-drop-sub" data-i18n="gSub">Klik om te openen</span>
+            </span>
+            <span class="w7-drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7.41 14.59 12 10l4.59 4.59L18 13.17 12 7.17l-6 6z"></path></svg>
+            </span>
+          </button>
+
+          <div class="w7-drop-panel" hidden data-w7panel>
+            <div class="w7-thumbwrap">
+              <div class="w7-thumbs">
+
+                <div class="w7-thumb">
+                  <div class="w7-thumb-top">
+                    <span data-i18n="v1Label">Versie 1</span>
+                    <span class="w7-badge">overzichtscherm.jpeg</span>
+                  </div>
+                  <div class="w7-thumb-img">
+                    <img
+                      src="assets/imgs/overzichtscherm.jpeg"
+                      alt="Overzichtscherm v1 (oud, roze)"
+                      data-zoom="pair"
+                      data-title-key="g1Title"
+                      data-src1="assets/imgs/overzichtscherm.jpeg"
+                      data-src2="assets/imgs/overzichtscherm%202.jpg"
+                      data-label1-key="v1Label"
+                      data-label2-key="v2Label"
+                    />
+                  </div>
+                </div>
+
+                <div class="w7-thumb">
+                  <div class="w7-thumb-top">
+                    <span data-i18n="v2Label">Versie 2</span>
+                    <span class="w7-badge">overzichtscherm 2.jpg</span>
+                  </div>
+                  <div class="w7-thumb-img">
+                    <img
+                      src="assets/imgs/overzichtscherm%202.jpg"
+                      alt="Overzichtscherm v2 (nieuw, blauw)"
+                      data-zoom="pair"
+                      data-title-key="g1Title"
+                      data-src1="assets/imgs/overzichtscherm.jpeg"
+                      data-src2="assets/imgs/overzichtscherm%202.jpg"
+                      data-label1-key="v1Label"
+                      data-label2-key="v2Label"
+                    />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="w7-3w">
+              <h4 data-i18n="g1_3wTitle">3 W’s (Week 7)</h4>
+              <ul>
+                <li data-i18n-html="g1_wat"><strong>Wat?</strong> Twee versies van hetzelfde overzichtscherm: v1 (basis) en v2 (verfijnd).</li>
+                <li data-i18n-html="g1_waarom"><strong>Waarom?</strong> Week 7 draait om uitwerking: in v2 is de hiërarchie duidelijker en is de layout rustiger en beter scanbaar.</li>
+                <li data-i18n-html="g1_geleerd"><strong>Wat geleerd?</strong> Goede uitlijning en consistente spacing zorgen dat de gebruiker sneller begrijpt waar de focus ligt.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- PERRONSCHERM -->
+        <div class="w7-drop" data-w7drop>
+          <button class="w7-drop-btn" type="button" aria-expanded="false" data-w7btn>
+            <span class="w7-drop-left">
+              <span class="w7-drop-title" data-i18n="g2Title">Perronscherm – vergelijking (v1 ↔ v2)</span>
+              <span class="w7-drop-sub" data-i18n="gSub">Klik om te openen</span>
+            </span>
+            <span class="w7-drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7.41 14.59 12 10l4.59 4.59L18 13.17 12 7.17l-6 6z"></path></svg>
+            </span>
+          </button>
+
+          <div class="w7-drop-panel" hidden data-w7panel>
+            <div class="w7-thumbwrap">
+              <div class="w7-thumbs">
+
+                <div class="w7-thumb">
+                  <div class="w7-thumb-top">
+                    <span data-i18n="v1Label">Versie 1</span>
+                    <span class="w7-badge">perronscherm.jpeg</span>
+                  </div>
+                  <div class="w7-thumb-img">
+                    <img
+                      src="assets/imgs/perronscherm.jpeg"
+                      alt="Perronscherm v1 (oud, roze)"
+                      data-zoom="pair"
+                      data-title-key="g2Title"
+                      data-src1="assets/imgs/perronscherm.jpeg"
+                      data-src2="assets/imgs/perronscherm%202.jpg"
+                      data-label1-key="v1Label"
+                      data-label2-key="v2Label"
+                    />
+                  </div>
+                </div>
+
+                <div class="w7-thumb">
+                  <div class="w7-thumb-top">
+                    <span data-i18n="v2Label">Versie 2</span>
+                    <span class="w7-badge">perronscherm 2.jpg</span>
+                  </div>
+                  <div class="w7-thumb-img">
+                    <img
+                      src="assets/imgs/perronscherm%202.jpg"
+                      alt="Perronscherm v2 (nieuw, blauw)"
+                      data-zoom="pair"
+                      data-title-key="g2Title"
+                      data-src1="assets/imgs/perronscherm.jpeg"
+                      data-src2="assets/imgs/perronscherm%202.jpg"
+                      data-label1-key="v1Label"
+                      data-label2-key="v2Label"
+                    />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="w7-3w">
+              <h4 data-i18n="g2_3wTitle">3 W’s (Week 7)</h4>
+              <ul>
+                <li data-i18n-html="g2_wat"><strong>Wat?</strong> Perronscherm: v1 naast v2 om de verfijning zichtbaar te maken.</li>
+                <li data-i18n-html="g2_waarom"><strong>Waarom?</strong> In week 7 worden dezelfde ontwerpregels overal doorgetrokken, zodat alle schermen één geheel vormen.</li>
+                <li data-i18n-html="g2_geleerd"><strong>Wat geleerd?</strong> Consistente typografie en labels voorkomen verwarring en maken keuzes sneller.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAGONSCHERM -->
+        <div class="w7-drop" data-w7drop>
+          <button class="w7-drop-btn" type="button" aria-expanded="false" data-w7btn>
+            <span class="w7-drop-left">
+              <span class="w7-drop-title" data-i18n="g3Title">Wagonscherm – vergelijking (v1 ↔ v2)</span>
+              <span class="w7-drop-sub" data-i18n="gSub">Klik om te openen</span>
+            </span>
+            <span class="w7-drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7.41 14.59 12 10l4.59 4.59L18 13.17 12 7.17l-6 6z"></path></svg>
+            </span>
+          </button>
+
+          <div class="w7-drop-panel" hidden data-w7panel>
+            <div class="w7-thumbwrap">
+              <div class="w7-thumbs">
+
+                <div class="w7-thumb">
+                  <div class="w7-thumb-top">
+                    <span data-i18n="v1Label">Versie 1</span>
+                    <span class="w7-badge">wagonscherm.jpeg</span>
+                  </div>
+                  <div class="w7-thumb-img">
+                    <img
+                      src="assets/imgs/wagonscherm.jpeg"
+                      alt="Wagonscherm v1 (oud, roze)"
+                      data-zoom="pair"
+                      data-title-key="g3Title"
+                      data-src1="assets/imgs/wagonscherm.jpeg"
+                      data-src2="assets/imgs/wagonscherm%202.jpg"
+                      data-label1-key="v1Label"
+                      data-label2-key="v2Label"
+                    />
+                  </div>
+                </div>
+
+                <div class="w7-thumb">
+                  <div class="w7-thumb-top">
+                    <span data-i18n="v2Label">Versie 2</span>
+                    <span class="w7-badge">wagonscherm 2.jpg</span>
+                  </div>
+                  <div class="w7-thumb-img">
+                    <img
+                      src="assets/imgs/wagonscherm%202.jpg"
+                      alt="Wagonscherm v2 (nieuw, blauw)"
+                      data-zoom="pair"
+                      data-title-key="g3Title"
+                      data-src1="assets/imgs/wagonscherm.jpeg"
+                      data-src2="assets/imgs/wagonscherm%202.jpg"
+                      data-label1-key="v1Label"
+                      data-label2-key="v2Label"
+                    />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="w7-3w">
+              <h4 data-i18n="g3_3wTitle">3 W’s (Week 7)</h4>
+              <ul>
+                <li data-i18n-html="g3_wat"><strong>Wat?</strong> Wagonscherm: v1 (eerste opzet) versus v2 (uitgewerkt) voor duidelijke vergelijking.</li>
+                <li data-i18n-html="g3_waarom"><strong>Waarom?</strong> Week 7 = consistentie: dezelfde hiërarchie, marges en styling moeten op elk scherm terugkomen.</li>
+                <li data-i18n-html="g3_geleerd"><strong>Wat geleerd?</strong> Eén vaste opbouw maakt de UI voorspelbaar, waardoor de gebruiker sneller begrijpt wat belangrijk is.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="week-nav-bar">
+        <a href="Week 6.html" class="week-nav-link" data-i18n="prevLink">← Terug naar Week 6</a>
+        <a href="Week 8.html" class="week-nav-link" data-i18n="nextLink">Ga verder naar Week 8 →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="panel">
+    <span data-i18n="footer">© 2025 Daniëlla Ezigbo – Prototyping Tools 1</span>
+  </footer>
+
+</div>
+
+<!-- ✅ Zoom modal -->
+<div class="modal" id="zoomModal" aria-hidden="true">
+  <div class="modal-bg" id="zoomBg" aria-hidden="true"></div>
+
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-label="Zoom">
+    <div class="modal-head">
+      <p class="modal-title" id="zoomTitle">Zoom</p>
+      <button class="modal-close" id="zoomClose" type="button" aria-label="Sluiten">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="zoom-shell">
+        <div class="zoom-viewport" id="zoomViewport">
+          <div class="zoom-corner" aria-label="Zoom knoppen">
+            <button class="zoom-btn" id="zOut" type="button" aria-label="Uitzoomen">−</button>
+            <button class="zoom-btn" id="zIn" type="button" aria-label="Inzoomen">+</button>
+          </div>
+
+          <div class="zoom-content" id="zoomContent"></div>
+
+          <!-- ✅ alleen verticale scroll UI -->
+          <div class="vbar" aria-hidden="true"><div class="thumb" id="vThumb"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Scroll-to-top -->
+<button class="to-top" id="toTop" type="button" aria-label="Naar boven">↑</button>
+
+<script>
+  /* ✅ Dropdown "Weken" */
+  const dropdown = document.querySelector(".dropdown");
+  const dropdownBtn = dropdown?.querySelector(".dropdown-btn");
+
+  if (dropdown && dropdownBtn) {
+    dropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle("open");
+      dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", () => {
+      dropdown.classList.remove("open");
+      dropdownBtn.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        dropdown.classList.remove("open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+</script>
+
+<script>
+  /* ✅ Week 7 dropdowns: echte werking + altijd starten DICHT (ook na refresh) */
+  document.addEventListener("DOMContentLoaded", () => {
+    const w7Drops = Array.from(document.querySelectorAll("[data-w7drop]"));
+
+    function setDrop(drop, open){
+      const btn = drop.querySelector("[data-w7btn]");
+      const panel = drop.querySelector("[data-w7panel]");
+      drop.classList.toggle("open", open);
+
+      if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (panel){
+        panel.hidden = !open;
+        panel.style.display = open ? "flex" : "none";
+      }
+    }
+
+    function closeAll(except = null){
+      w7Drops.forEach(d => {
+        if (except && d === except) return;
+        setDrop(d, false);
+      });
+    }
+
+    w7Drops.forEach(d => setDrop(d, false));
+
+    w7Drops.forEach(drop => {
+      const btn = drop.querySelector("[data-w7btn]");
+      const panel = drop.querySelector("[data-w7panel]");
+      if (!btn || !panel) return;
+
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const willOpen = !drop.classList.contains("open");
+        closeAll(drop);
+        setDrop(drop, willOpen);
+      });
+
+      panel.addEventListener("click", (e) => e.stopPropagation());
+    });
+
+    document.addEventListener("click", () => closeAll());
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeAll();
+    });
+  });
+</script>
+
+<script>
+  /* ✅ Zoom modal: horizontaal weg, maar PAIR blijft naast elkaar + plus werkt */
+  const zoomModal = document.getElementById("zoomModal");
+  const zoomBg = document.getElementById("zoomBg");
+  const zoomClose = document.getElementById("zoomClose");
+  const zoomTitle = document.getElementById("zoomTitle");
+  const zoomContent = document.getElementById("zoomContent");
+  const zoomViewport = document.getElementById("zoomViewport");
+  const zIn = document.getElementById("zIn");
+  const zOut = document.getElementById("zOut");
+  const vThumb = document.getElementById("vThumb");
+
+  const Z_MIN = 0.35;
+  const Z_MAX = 2.6;
+  const Z_STEP = 0.15;
+  let z = 1;
+
+  let base = { cols: [], isPair:false };
+
+  function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+  function dictForLang(){
+    const lang = localStorage.getItem("siteLang") || "nl";
+    return (typeof I18N !== "undefined" && I18N[lang]) ? I18N[lang] : null;
+  }
+  function t(key, fallback){
+    const dict = dictForLang();
+    return (dict && dict[key]) ? dict[key] : (fallback || key || "");
+  }
+
+  function updateZoomBtns(){
+    if (!zOut || !zIn) return;
+    zOut.disabled = z <= Z_MIN + 1e-9;
+    zIn.disabled  = z >= Z_MAX - 1e-9;
+  }
+
+  function updateScrollThumbs(){
+    if (!vThumb) return;
+
+    const scrollH = zoomViewport.scrollHeight;
+    const clientH = zoomViewport.clientHeight;
+    const maxTop = Math.max(1, scrollH - clientH);
+    const vhRatio = clientH / Math.max(scrollH, 1);
+
+    const vSize = Math.max(0.18, Math.min(0.60, vhRatio));
+    vThumb.style.height = (vSize * 100) + "%";
+
+    const vPos = zoomViewport.scrollTop / maxTop;
+    vThumb.style.transform = `translateY(${vPos * (100 - vSize*100)}%)`;
+  }
+
+  zoomViewport.addEventListener("scroll", updateScrollThumbs, { passive:true });
+  window.addEventListener("resize", updateScrollThumbs, { passive:true });
+
+  function renderZoom(){
+    zoomContent.innerHTML = "";
+    zoomViewport.scrollLeft = 0; // ✅ nooit horizontaal
+
+    zoomContent.classList.toggle("is-pair", base.isPair);
+
+    base.cols.forEach(col => {
+      const wrap = document.createElement("div");
+      wrap.className = "zoom-col";
+      wrap.style.width = (col.w * z) + "px";
+
+      const head = document.createElement("div");
+      head.className = "zoom-col-head";
+      head.innerHTML = `<span>${col.label}</span><span class="w7-badge">${(col.badge || "").replaceAll("%20"," ")}</span>`;
+
+      const img = document.createElement("img");
+      img.src = col.src;
+      img.alt = col.label;
+      img.style.width = (col.w * z) + "px";
+      img.style.height = (col.h * z) + "px";
+
+      wrap.appendChild(head);
+      wrap.appendChild(img);
+      zoomContent.appendChild(wrap);
+    });
+
+    updateZoomBtns();
+    updateScrollThumbs();
+  }
+
+  function calcFitZoom(){
+    const availH = zoomViewport.clientHeight - 190;
+    const maxH = Math.max(...base.cols.map(c=>c.h)) + 90;
+    let fit = Math.min(1, (availH / Math.max(maxH, 1)));
+
+    // single iets groter starten
+    if (!base.isPair) fit *= 1.08;
+
+    fit = clamp(fit * 0.98, Z_MIN, 1);
+    return Math.round(fit * 100) / 100;
+  }
+
+  function openZoom(payload){
+    base.cols = [];
+    zoomTitle.textContent = payload.title || "Zoom";
+
+    const sources = payload.sources;
+    const loaders = sources.map(s => new Promise((resolve, reject) => {
+      const im = new Image();
+      im.onload = () => resolve({
+        nw: im.naturalWidth, nh: im.naturalHeight,
+        src: s.src, label: s.label, badge: s.badge
+      });
+      im.onerror = reject;
+      im.src = s.src;
+    }));
+
+    Promise.all(loaders).then(cols => {
+      const isPair = cols.length === 2;
+      base.isPair = isPair;
+
+      // ✅ Pair = naast elkaar, zonder horizontale scroll: neem halve viewport breedte
+      const gap = 12;
+      const safePad = 170; // padding + ruimte voor vbar
+      const pairW = Math.max(380, Math.min(560, Math.floor((zoomViewport.clientWidth - safePad - gap) / 2)));
+
+      // ✅ Single = groot
+      const singleW = Math.min(980, zoomViewport.clientWidth - 160);
+
+      const targetW = isPair ? pairW : singleW;
+
+      base.cols = cols.map(c => ({
+        src: c.src,
+        label: c.label,
+        badge: c.badge,
+        w: targetW,
+        h: Math.round((c.nh / c.nw) * targetW)
+      }));
+
+      z = calcFitZoom();
+      renderZoom();
+
+      zoomViewport.scrollTop = 0;
+      zoomViewport.scrollLeft = 0;
+      updateScrollThumbs();
+
+      zoomModal.classList.add("open");
+      zoomModal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }).catch(() => {});
+  }
+
+  function closeZoom(){
+    zoomModal.classList.remove("open");
+    zoomModal.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+    zoomContent.innerHTML = "";
+    zoomContent.classList.remove("is-pair");
+    base.cols = [];
+  }
+
+  document.querySelectorAll("img[data-zoom]").forEach(img => {
+    img.addEventListener("click", () => {
+      const mode = img.getAttribute("data-zoom");
+      const titleKey = img.getAttribute("data-title-key");
+      const titleText = t(titleKey, img.alt || "Zoom");
+
+      if (mode === "single"){
+        const src1 = img.getAttribute("data-src1");
+        openZoom({
+          title: titleText,
+          sources: [{ src: src1, label: t(img.getAttribute("data-label1-key"), "Afbeelding"), badge: src1.split("/").pop() }]
+        });
+      } else {
+        const src1 = img.getAttribute("data-src1");
+        const src2 = img.getAttribute("data-src2");
+        openZoom({
+          title: titleText,
+          sources: [
+            { src: src1, label: t(img.getAttribute("data-label1-key"), "Versie 1"), badge: src1.split("/").pop() },
+            { src: src2, label: t(img.getAttribute("data-label2-key"), "Versie 2"), badge: src2.split("/").pop() }
+          ]
+        });
+      }
+    });
+  });
+
+  // ✅ FIX: + en − werken altijd
+  zIn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    z = clamp(+(z + Z_STEP).toFixed(3), Z_MIN, Z_MAX);
+    renderZoom();
+  });
+  zOut.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    z = clamp(+(z - Z_STEP).toFixed(3), Z_MIN, Z_MAX);
+    renderZoom();
+  });
+
+  zoomClose.addEventListener("click", closeZoom);
+  zoomBg.addEventListener("click", closeZoom);
+
+  document.addEventListener("keydown", (e) => {
+    if (!zoomModal.classList.contains("open")) return;
+    if (e.key === "Escape") closeZoom();
+    if (e.key === "+" || e.key === "=") zIn.click();
+    if (e.key === "-" || e.key === "_") zOut.click();
+  });
+
+  // ✅ verticale bar klikbaar + sleepbaar
+  function setScrollFromBar(clientPos){
+    const bar = document.querySelector(".vbar");
+    if (!bar) return;
+
+    const rect = bar.getBoundingClientRect();
+    const viewport = zoomViewport;
+
+    const y = clamp(clientPos - rect.top, 0, rect.height);
+    const ratio = rect.height > 0 ? y / rect.height : 0;
+    const maxTop = Math.max(0, viewport.scrollHeight - viewport.clientHeight);
+    viewport.scrollTop = ratio * maxTop;
+
+    updateScrollThumbs();
+  }
+
+  function enableDrag(barEl){
+    let dragging = false;
+
+    const down = (e) => {
+      dragging = true;
+      const pos = (e.touches ? e.touches[0].clientY : e.clientY);
+      setScrollFromBar(pos);
+      e.preventDefault();
+    };
+
+    const move = (e) => {
+      if (!dragging) return;
+      const pos = (e.touches ? e.touches[0].clientY : e.clientY);
+      setScrollFromBar(pos);
+      e.preventDefault();
+    };
+
+    const up = () => { dragging = false; };
+
+    barEl.addEventListener("mousedown", down);
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", up);
+
+    barEl.addEventListener("touchstart", down, { passive:false });
+    window.addEventListener("touchmove", move, { passive:false });
+    window.addEventListener("touchend", up);
+  }
+
+  const vbar = document.querySelector(".vbar");
+  if (vbar) enableDrag(vbar);
+</script>
+
+<script>
+  /* ✅ Scroll-to-top knop */
+  const toTop = document.getElementById("toTop");
+  function toggleToTop(){
+    if (window.scrollY > 420) toTop.classList.add("show");
+    else toTop.classList.remove("show");
+  }
+  window.addEventListener("scroll", toggleToTop, { passive:true });
+  toggleToTop();
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+</script>
+
+<script>
+  /* ✅ Taal-systeem (ondersteunt data-i18n + data-i18n-html) */
+  const I18N = {
+    nl: {
+      siteTitle: "Webpagina",
+      siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+      langLabel: "Taalkeuze",
+      navHome: "Homepage",
+      navAbout: "Over deze website",
+      navWeeks: "Weken",
+      week1:"Week 1", week2:"Week 2", week3:"Week 3", week4:"Week 4", week5:"Week 5",
+      week6:"Week 6", week7:"Week 7", week8:"Week 8", week9:"Week 9", week10:"Week 10",
+      pageTitle: "Week 7 – Uitwerking",
+      breadcrumb: "Ontwerp > Prototyping > Week 7",
+      pill: "Week 7",
+      metaText: "Deze week stond in het teken van verfijning, consistentie en voorbereiding richting afronding.",
+      sec1Title: "Doel en verwachtingen",
+      sec1Text: `In week 7 lag de nadruk op <strong>uitwerking</strong> in plaats van grote nieuwe toevoegingen.
+                Het doel was om het ontwerp <strong>consistent</strong> te maken: dezelfde componenten gedragen zich hetzelfde,
+                de hiërarchie is duidelijk en de lay-out blijft rustig en scanbaar.
+                Daarnaast moest ik mijn keuzes kort kunnen onderbouwen: <strong>wat is aangepast</strong> en <strong>waarom is dit beter</strong>.`,
+      sec2Title: "Aanpak",
+      sec2Text: `Ik heb de schermen gecontroleerd op terugkerende elementen (titels, labels, marges, uitlijning, contrast en kleuraccenten).
+                Daarna heb ik verschillen gelijkgetrokken zodat er één herkenbaar systeem ontstaat.
+                Tot slot heb ik getest of de informatie sneller te lezen is en of de structuur logisch blijft bij meerdere schermen.`,
+      sec3Title: "Resultaat",
+      sec3Text: `Het resultaat is een set schermen die visueel en inhoudelijk beter op elkaar aansluit.
+                Door de verbeterde consistentie en hiërarchie is de interface sneller te begrijpen en makkelijker te presenteren als één duidelijke flow.`,
+      sec4Title: "Visuele voorbeelden",
+      sec4Text: "Open per groep de dropdown. Klik op een thumbnail om te zoomen.",
+      gSub: "Klik om te openen",
+      v1Label: "Versie 1",
+      v2Label: "Versie 2",
+      zSingle: "Afbeelding",
+      g0Title: "Systeemoverzicht",
+      g0One: "Overzicht",
+      g0_3wTitle: "3 W’s (Week 7)",
+      g0_wat: "<strong>Wat?</strong> Dit is het volledige systeemoverzicht: alle schermen en hun volgorde in één flow.",
+      g0_waarom: "<strong>Waarom?</strong> Week 7 focust op consistentie. Hier zie je of dezelfde regels (typografie, spacing en labels) overal terugkomen.",
+      g0_geleerd: "<strong>Wat geleerd?</strong> Door eerst de hele flow te bekijken, ontdek je sneller waar dingen afwijken en kan je gericht verfijnen.",
+      g1Title: "Overzichtscherm – vergelijking (v1 ↔ v2)",
+      g1_3wTitle: "3 W’s (Week 7)",
+      g1_wat: "<strong>Wat?</strong> Twee versies van hetzelfde overzichtscherm: v1 (basis) en v2 (verfijnd).",
+      g1_waarom: "<strong>Waarom?</strong> Week 7 draait om uitwerking: in v2 is de hiërarchie duidelijker en is de layout rustiger en beter scanbaar.",
+      g1_geleerd: "<strong>Wat geleerd?</strong> Goede uitlijning en consistente spacing zorgen dat de gebruiker sneller begrijpt waar de focus ligt.",
+      g2Title: "Perronscherm – vergelijking (v1 ↔ v2)",
+      g2_3wTitle: "3 W’s (Week 7)",
+      g2_wat: "<strong>Wat?</strong> Perronscherm: v1 naast v2 om de verfijning zichtbaar te maken.",
+      g2_waarom: "<strong>Waarom?</strong> In week 7 worden dezelfde ontwerpregels overal doorgetrokken, zodat alle schermen één geheel vormen.",
+      g2_geleerd: "<strong>Wat geleerd?</strong> Consistente typografie en labels voorkomen verwarring en maken keuzes sneller.",
+      g3Title: "Wagonscherm – vergelijking (v1 ↔ v2)",
+      g3_3wTitle: "3 W’s (Week 7)",
+      g3_wat: "<strong>Wat?</strong> Wagonscherm: v1 (eerste opzet) versus v2 (uitgewerkt) voor duidelijke vergelijking.",
+      g3_waarom: "<strong>Waarom?</strong> Week 7 = consistentie: dezelfde hiërarchie, marges en styling moeten op elk scherm terugkomen.",
+      g3_geleerd: "<strong>Wat geleerd?</strong> Eén vaste opbouw maakt de UI voorspelbaar, waardoor de gebruiker sneller begrijpt wat belangrijk is.",
+      prevLink: "← Terug naar Week 6",
+      nextLink: "Ga verder naar Week 8 →",
+      footer: "© 2025 Daniëlla Ezigbo – Prototyping Tools 1"
+    },
+
+    fr: { /* (ongewijzigd) */ },
+    de: { /* (ongewijzigd) */ }
+  };
+
+  function getLang(){ return localStorage.getItem("siteLang") || "nl"; }
+
+  function applyLang(lang){
+    const dict = I18N[lang] || I18N.nl;
+    document.documentElement.setAttribute("lang", lang);
+
+    document.querySelectorAll(".lang-switch button").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const k = el.getAttribute("data-i18n");
+      if (dict[k] != null) el.textContent = dict[k];
+    });
+
+    document.querySelectorAll("[data-i18n-html]").forEach(el => {
+      const k = el.getAttribute("data-i18n-html");
+      if (dict[k] != null) el.innerHTML = dict[k];
+    });
+  }
+
+  function setLang(lang){
+    localStorage.setItem("siteLang", lang);
+    applyLang(lang);
+  }
+
+  applyLang(getLang());
+  document.querySelectorAll(".lang-switch button").forEach(btn => {
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+</script>
+
+</body>
+</html>
+```0

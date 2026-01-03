@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Over deze website — Daniëlla Ezigbo</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <style>
+    /* BASIS */
+    body{
+      font-family:"Inter",Arial,sans-serif;
+      color:#000;
+      line-height:1.75;
+      font-size:17px;
+    }
+    h1,h2,h3{ font-weight:800; letter-spacing:-0.3px; margin:0; }
+    .subtitle{ color:#6b6b6b; font-size:14px; margin-top:6px; }
+
+    .box{
+      max-width:1250px;
+      margin:50px auto;
+      display:grid;
+      grid-gap:26px;
+      grid-template-columns:330px minmax(0,1fr);
+      align-items:start;
+    }
+    .panel{
+      background:#fff;
+      border-radius:14px;
+      padding:32px;
+      box-shadow:0 5px 18px rgba(0,0,0,0.07);
+    }
+
+    /* HEADER + TAALKEUZE */
+    .site-header h1{
+      font-size:40px;
+      font-weight:900;
+      letter-spacing:-0.5px;
+    }
+    .header-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .lang-area{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:6px;
+      padding-top:2px;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+    .lang-label{
+      font-size:12px;
+      letter-spacing:0.3px;
+      font-weight:800;
+      color:#6b6b6b;
+      text-transform:uppercase;
+    }
+    .lang-switch{
+      display:flex;
+      gap:8px;
+      padding:0;
+      background:transparent;
+      border:none;
+    }
+    .lang-switch button{
+      background:none;
+      border:none;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13px;
+      color:#6b6b6b;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:0.2s ease;
+    }
+    .lang-switch button:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+    .lang-switch button.active{
+      color:#F79A6A;
+      text-decoration:underline;
+      background:transparent;
+    }
+
+    /* NAV */
+    nav ul{ list-style:none; padding-left:0; margin:0; }
+    nav ul li{ margin-bottom:8px; }
+
+    nav a{
+      color:#000 !important;
+      font-weight:600;
+      text-decoration:none;
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+    }
+    nav a:hover{
+      color:#F79A6A !important;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* actieve pagina */
+    nav strong{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      font-weight:800;
+    }
+
+    /* NAV + DROPDOWN FIX */
+    .panel.panel-nav,
+    nav.panel.panel-nav,
+    .panel-nav{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .panel-nav ul,
+    .panel-nav li{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    /* dropdown */
+    nav.panel{ overflow:visible !important; }
+    .dropdown{ position:relative; }
+    .dropdown-btn{
+      color:#000;
+      font-weight:700;
+      background:none;
+      border:none;
+      padding:4px 6px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .dropdown-btn:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+
+    .dropdown-content{
+      display:none;
+      margin-top:8px;
+      padding-left:12px;
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .dropdown.open .dropdown-content{ display:block; }
+
+    .dropdown-content a{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+      text-decoration:none;
+    }
+    .dropdown-content a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* MAIN */
+    h2{ font-size:28px; margin-bottom:12px; }
+    p{ font-size:17px; line-height:1.75; margin:0 0 14px; }
+
+    .about-hero-overlay{
+      background:#fff;
+      padding:40px;
+      border-radius:14px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    /* ✅ super veilig: hidden wint altijd */
+    [hidden]{ display:none !important; }
+
+    /* ✅ TUSSENTITELS + NETTE OPMAAK */
+    .section-title{
+      margin:18px 0 10px;
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:-0.2px;
+    }
+    .section-title:first-of-type{ margin-top:8px; }
+
+    .section-divider{
+      height:1px;
+      background:rgba(0,0,0,0.08);
+      margin:16px 0 6px;
+      border-radius:999px;
+    }
+
+    /* ✅ Belangrijke woorden extra leesbaar */
+    strong{ font-weight:900; }
+
+    footer{
+      text-align:center;
+      font-size:14px;
+      color:#6b6b6b;
+    }
+
+    @media (max-width: 980px){
+      .box{ grid-template-columns:1fr; }
+      .lang-area{ align-items:flex-start; }
+      .about-hero-overlay{ padding:26px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+
+    <!-- HEADER -->
+    <header class="panel site-header">
+      <div class="header-top">
+        <div>
+          <h1 data-i18n="siteTitle">Over deze website</h1>
+          <p class="subtitle">Daniëlla Ezigbo</p>
+        </div>
+
+        <div class="lang-area" aria-label="Taalkeuze">
+          <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+          <div class="lang-switch">
+            <button type="button" data-lang="nl" aria-label="Nederlands">NL</button>
+            <button type="button" data-lang="fr" aria-label="Français">FR</button>
+            <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- NAV -->
+    <nav class="panel panel-nav" aria-label="Navigatie">
+      <ul>
+        <li><a data-page-link href="index.html" data-i18n="navHome">Homepage</a></li>
+        <li><strong data-i18n="navAbout">Over deze website</strong></li>
+        <li><a data-page-link href="contact.html" data-i18n="navContact">Contact</a></li>
+
+        <li class="dropdown">
+          <button class="dropdown-btn" type="button" aria-expanded="false" data-i18n="navWeeks">Weken</button>
+          <ul class="dropdown-content" aria-label="Weekpagina’s">
+            <li><a data-page-link href="Week 1.html" data-i18n="week1">Week 1</a></li>
+            <li><a data-page-link href="Week 2.html" data-i18n="week2">Week 2</a></li>
+            <li><a data-page-link href="Week 3.html" data-i18n="week3">Week 3</a></li>
+            <li><a data-page-link href="Week 4.html" data-i18n="week4">Week 4</a></li>
+            <li><a data-page-link href="Week 5.html" data-i18n="week5">Week 5</a></li>
+            <li><a data-page-link href="Week 6.html" data-i18n="week6">Week 6</a></li>
+            <li><a data-page-link href="Week 7.html" data-i18n="week7">Week 7</a></li>
+            <li><a data-page-link href="Week 8.html" data-i18n="week8">Week 8</a></li>
+            <li><a data-page-link href="Week 9.html" data-i18n="week9">Week 9</a></li>
+            <li><a data-page-link href="Week 10.html" data-i18n="week10">Week 10</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="panel">
+      <div class="about-hero-overlay">
+        <h2 data-i18n="pageTitle">Over deze website</h2>
+
+        <!-- ✅ NL -->
+        <section data-lang-block="nl">
+          <div class="section-divider"></div>
+
+          <h3 class="section-title">Doel</h3>
+          <p>
+            Deze website documenteert het ontwikkelproces van een digitaal prototype binnen het opleidingsonderdeel
+            <strong>Prototyping Tools 1</strong>.
+            Waar de weekpagina’s het proces chronologisch tonen, focust deze pagina op
+            <strong>de opbouw en realisatie van de website</strong> zelf.
+          </p>
+
+          <h3 class="section-title">Ontwerp & structuur</h3>
+          <p>
+            Het traject startte met het uitwerken van de structuur en interface in <strong>Figma</strong>.
+            Daarbij werden bewuste keuzes gemaakt rond <strong>informatiehiërarchie</strong>,
+            <strong>navigatie</strong> en <strong>lay-out</strong>.
+            Deze ontwerpen vormden de basis voor de technische uitwerking in <strong>Visual Studio Code</strong>.
+          </p>
+
+          <h3 class="section-title">Technische uitwerking</h3>
+          <p>
+            De website werd opgebouwd met <strong>HTML</strong> en <strong>CSS</strong>, aangevuld met
+            <strong>Tailwind CSS</strong> voor consistente styling en herbruikbare componenten.
+            Interactieve elementen zoals <strong>navigatie</strong>, <strong>dropdownmenu’s</strong> en
+            <strong>taalkeuze</strong> zijn gerealiseerd met <strong>JavaScript</strong>.
+          </p>
+
+          <h3 class="section-title">Contact</h3>
+          <p>
+            Voor de contactfunctionaliteit werd <strong>Formspree</strong> geïntegreerd, zodat gebruikers
+            berichten kunnen verzenden via een <strong>werkend formulier</strong>.
+          </p>
+
+          <h3 class="section-title">Eindresultaat</h3>
+          <p>
+            Het eindresultaat is een <strong>overzichtelijke, meertalige website</strong> waarin
+            <strong>structuur</strong>, <strong>leesbaarheid</strong> en <strong>technische samenhang</strong>
+            centraal staan.
+          </p>
+        </section>
+
+        <!-- ✅ FR -->
+        <section data-lang-block="fr" hidden>
+          <div class="section-divider"></div>
+
+          <h3 class="section-title">Objectif</h3>
+          <p>
+            Ce site présente le processus de développement d’un prototype numérique réalisé dans le cadre du cours
+            <strong>Prototyping Tools 1</strong>.
+            Alors que les pages hebdomadaires montrent l’évolution du projet, cette page se concentre sur
+            <strong>la conception et la réalisation du site web</strong>.
+          </p>
+
+          <h3 class="section-title">Conception & structure</h3>
+          <p>
+            Le projet a commencé par la création de la structure et de l’interface dans <strong>Figma</strong>.
+            Les choix portaient notamment sur la <strong>hiérarchie de l’information</strong>, la
+            <strong>navigation</strong> et la <strong>mise en page</strong>.
+            Ces bases ont ensuite été traduites en une version fonctionnelle via <strong>Visual Studio Code</strong>.
+          </p>
+
+          <h3 class="section-title">Réalisation technique</h3>
+          <p>
+            Le site a été développé avec <strong>HTML</strong> et <strong>CSS</strong>, complétés par
+            <strong>Tailwind CSS</strong> pour assurer une mise en forme cohérente.
+            Les éléments interactifs ( <strong>navigation</strong>, <strong>menus déroulants</strong> et
+            <strong>choix de langue</strong> ) ont été implémentés en <strong>JavaScript</strong>.
+          </p>
+
+          <h3 class="section-title">Contact</h3>
+          <p>
+            La page de contact utilise <strong>Formspree</strong>, permettant l’envoi effectif de messages via un
+            <strong>formulaire fonctionnel</strong>.
+          </p>
+
+          <h3 class="section-title">Résultat final</h3>
+          <p>
+            Le résultat est un <strong>site web clair et multilingue</strong>, axé sur la
+            <strong>structure</strong>, la <strong>lisibilité</strong> et la <strong>cohérence technique</strong>.
+          </p>
+        </section>
+
+        <!-- ✅ DE -->
+        <section data-lang-block="de" hidden>
+          <div class="section-divider"></div>
+
+          <h3 class="section-title">Ziel</h3>
+          <p>
+            Diese Website dokumentiert den Entwicklungsprozess eines digitalen Prototyps im Rahmen des Kurses
+            <strong>Prototyping Tools 1</strong>.
+            Während die Wochenseiten den Projektverlauf zeigen, liegt der Fokus dieser Seite auf
+            <strong>der Umsetzung der Website</strong> selbst.
+          </p>
+
+          <h3 class="section-title">Design & Struktur</h3>
+          <p>
+            Der Prozess begann mit der Gestaltung von Struktur und Interface in <strong>Figma</strong>.
+            Dabei standen Entscheidungen zu <strong>Informationshierarchie</strong>, <strong>Navigation</strong> und
+            <strong>Layout</strong> im Mittelpunkt.
+            Diese Entwürfe wurden anschließend technisch in <strong>Visual Studio Code</strong> umgesetzt.
+          </p>
+
+          <h3 class="section-title">Technische Umsetzung</h3>
+          <p>
+            Die Website basiert auf <strong>HTML</strong> und <strong>CSS</strong>, ergänzt durch
+            <strong>Tailwind CSS</strong> für ein konsistentes Erscheinungsbild.
+            Interaktive Funktionen wie <strong>Navigation</strong>, <strong>Dropdown-Menüs</strong> und
+            <strong>Sprachauswahl</strong> wurden mit <strong>JavaScript</strong> realisiert.
+          </p>
+
+          <h3 class="section-title">Kontakt</h3>
+          <p>
+            Für das Kontaktformular wurde <strong>Formspree</strong> integriert, sodass Nachrichten zuverlässig über ein
+            <strong>funktionierendes Formular</strong> übermittelt werden können.
+          </p>
+
+          <h3 class="section-title">Endergebnis</h3>
+          <p>
+            Das Ergebnis ist eine <strong>übersichtliche, mehrsprachige Website</strong>, die
+            <strong>Struktur</strong>, <strong>Lesbarkeit</strong> und <strong>technische Klarheit</strong> vereint.
+          </p>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="panel">
+      <span data-i18n="footer">© 2025 Daniëlla Ezigbo – Mijn website</span>
+    </footer>
+
+  </div>
+
+  <!-- Dropdown gedrag -->
+  <script>
+    const dropdown = document.querySelector(".dropdown");
+    const dropdownBtn = dropdown?.querySelector(".dropdown-btn");
+
+    if (dropdown && dropdownBtn) {
+      dropdownBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.toggle("open");
+        dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      document.addEventListener("click", () => {
+        dropdown.classList.remove("open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
+
+  <!-- ✅ Taal switch (NL/FR/DE) + links lang param -->
+  <script>
+    const I18N = {
+      nl: {
+        langLabel:"Taalkeuze",
+        siteTitle:"Over deze website",
+        navHome:"Homepage",
+        navAbout:"Over deze website",
+        navContact:"Contact",
+        navWeeks:"Weken",
+        week1:"Week 1", week2:"Week 2", week3:"Week 3", week4:"Week 4", week5:"Week 5",
+        week6:"Week 6", week7:"Week 7", week8:"Week 8", week9:"Week 9", week10:"Week 10",
+        pageTitle:"Over deze website",
+        footer:"© 2025 Daniëlla Ezigbo – Mijn website"
+      },
+      fr: {
+        langLabel:"Langue",
+        siteTitle:"À propos de ce site",
+        navHome:"Accueil",
+        navAbout:"À propos de ce site",
+        navContact:"Contact",
+        navWeeks:"Semaines",
+        week1:"Semaine 1", week2:"Semaine 2", week3:"Semaine 3", week4:"Semaine 4", week5:"Semaine 5",
+        week6:"Semaine 6", week7:"Semaine 7", week8:"Semaine 8", week9:"Semaine 9", week10:"Semaine 10",
+        pageTitle:"À propos de ce site",
+        footer:"© 2025 Daniëlla Ezigbo – Mon site"
+      },
+      de: {
+        langLabel:"Sprache",
+        siteTitle:"Über diese Website",
+        navHome:"Startseite",
+        navAbout:"Über diese Website",
+        navContact:"Kontakt",
+        navWeeks:"Wochen",
+        week1:"Woche 1", week2:"Woche 2", week3:"Woche 3", week4:"Woche 4", week5:"Woche 5",
+        week6:"Woche 6", week7:"Woche 7", week8:"Woche 8", week9:"Woche 9", week10:"Woche 10",
+        pageTitle:"Über diese Website",
+        footer:"© 2025 Daniëlla Ezigbo – Meine Website"
+      }
+    };
+
+    const langButtons = document.querySelectorAll(".lang-switch button");
+    const blocks = document.querySelectorAll("[data-lang-block]");
+
+    function setInternalLinksLang(lang){
+      document.querySelectorAll("a[data-page-link]").forEach(a => {
+        try{
+          const url = new URL(a.getAttribute("href"), window.location.href);
+          url.searchParams.set("lang", lang);
+          a.setAttribute("href", url.pathname + "?" + url.searchParams.toString());
+        }catch(e){}
+      });
+    }
+
+    function getLang(){
+      const urlLang = new URLSearchParams(window.location.search).get("lang");
+      const saved = localStorage.getItem("siteLang");
+      if (urlLang && I18N[urlLang]) return urlLang;
+      if (saved && I18N[saved]) return saved;
+      return "nl";
+    }
+
+    function applyLang(lang){
+      const dict = I18N[lang] || I18N.nl;
+
+      document.documentElement.lang = lang;
+
+      // active knop
+      langButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.lang === lang));
+
+      // tekst vertalen (header/nav/titles/footer)
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key] != null) el.textContent = dict[key];
+      });
+
+      // taalblokken tonen
+      blocks.forEach(sec => {
+        const show = sec.getAttribute("data-lang-block") === lang;
+        if (show) sec.removeAttribute("hidden");
+        else sec.setAttribute("hidden", "");
+      });
+
+      setInternalLinksLang(lang);
+      localStorage.setItem("siteLang", lang);
+    }
+
+    applyLang(getLang());
+
+    langButtons.forEach(btn => {
+      btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+    });
+  </script>
+</body>
+</html>

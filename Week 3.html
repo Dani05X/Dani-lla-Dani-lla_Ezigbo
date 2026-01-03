@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 3 – Verbeterd prototype</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <style>
+    /* ===========================================
+       ✅ WEEK 3: NAV DROPDOWN FIX (zoals Week 1/2)
+       - voorkomt afkappen van Week 8/9/10
+       - hover systeem identiek (oranje)
+       =========================================== */
+
+    /* zorg dat nav/panel NIETS afkapt */
+    .panel.panel-nav,
+    nav.panel.panel-nav,
+    .panel-nav{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    .panel-nav ul,
+    .panel-nav li{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    .dropdown{ position:relative; }
+    .dropdown-btn{
+      background:none;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      padding:0;
+    }
+
+    /* dropdown menu open/close zoals Week 1 */
+    .dropdown-content{
+      display:none;
+      padding-left:16px;
+      margin-top:6px;
+
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .dropdown.open .dropdown-content{ display:block; }
+
+    /* ✅ Hover op weken: exact het Week 1 gevoel */
+    .dropdown-content a{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+      text-decoration:none;
+    }
+    .dropdown-content a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* =========================
+       ✅ HEADER + TAAL (zoals Week 2)
+    ========================= */
+    .header-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
+    .header-left{ min-width:0; }
+    .header-subline{ margin-top:10px; }
+
+    .lang-area{
+      display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding-top:2px;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+    .lang-label{ font-size:12px; letter-spacing:0.3px; font-weight:800; color:#777; text-transform:uppercase; }
+    .lang-switch{ display:flex; gap:8px; padding:0; background:transparent; border:none; }
+    .lang-switch button{
+      background:none; border:none; cursor:pointer; font-weight:900; font-size:13px; color:#777;
+      padding:4px 6px; border-radius:8px; transition:0.2s ease;
+    }
+    .lang-switch button:hover{ color:#F79A6A; background:rgba(247,154,106,0.10); }
+    .lang-switch button.active{ color:#F79A6A; text-decoration:underline; background:transparent; }
+
+    /* =========================
+       ✅ WEEK 3: DROPDOWN-KNOP (In-/uitklappen)
+    ========================= */
+    .screen-dropdown{ margin-top: 14px; }
+
+    .screen-dropdown-btn{
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: #fff;
+      padding: 14px 16px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      transition: 0.18s ease;
+    }
+    .screen-dropdown-btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+    }
+
+    .screen-dd-left{
+      display:flex;
+      flex-direction:column;
+      gap: 3px;
+      min-width:0;
+      text-align:left;
+    }
+    .screen-dd-title{
+      font-weight: 900;
+      font-size: 16px;
+      color: #111;
+      line-height: 1.1;
+    }
+    .screen-dd-sub{
+      font-size: 13px;
+      color: #777;
+      font-weight: 700;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .screen-dd-icon{
+      flex: 0 0 auto;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border:none;
+      background: #f5a77d;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+    }
+    .screen-dd-icon svg{
+      width: 18px;
+      height: 18px;
+      transform: rotate(0deg);
+      transition: 0.18s ease;
+      fill: #fff;
+    }
+    .screen-dropdown.open .screen-dd-icon svg{
+      transform: rotate(180deg);
+    }
+
+    .screen-dropdown-panel{ margin-top: 12px; }
+
+    /* =========================
+       ✅ GROEPEN: elk in een nette kader
+    ========================= */
+    details.group{
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    details.group > summary{
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      background: #fffaf6;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    details.group > summary::-webkit-details-marker{ display:none; }
+
+    .group-summary-left{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+      min-width:0;
+    }
+    .group-title{
+      font-weight: 900;
+      font-size: 15px;
+      color: #111;
+      line-height: 1.15;
+    }
+    .group-sub{
+      font-size: 13px;
+      color: #777;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .group-chev{
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: rgba(247,154,106,0.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+      border: 1px solid rgba(247,154,106,0.20);
+    }
+    .group-chev span{
+      display:inline-block;
+      font-size: 16px;
+      font-weight: 900;
+      color: #b0602f;
+      transform: rotate(0deg);
+      transition: 0.18s ease;
+    }
+    details.group[open] .group-chev span{
+      transform: rotate(180deg);
+    }
+
+    .group-body{
+      padding: 12px 12px 14px;
+      background: #fff;
+    }
+
+    /* ✅ GEEN mini-afbeeldingen in wagons */
+    .wagon{ min-height: 210px; }
+    @media (max-width: 1050px){
+      .wagon{ min-height: 230px; }
+    }
+
+    /* =========================
+       ✅ MODAL
+    ========================= */
+    .image-modal{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      z-index: 9999;
+    }
+    .image-modal.open{ display:block; }
+    .image-modal-bg{ position:absolute; inset:0; }
+
+    .image-modal-close{
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: none;
+      background: #fff;
+      font-size: 24px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 10000;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    }
+
+    .image-modal-arrow{
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: none;
+      background: #fff;
+      font-size: 26px;
+      cursor: pointer;
+      z-index: 10000;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    }
+    .image-modal-arrow.left{ left: 22px; }
+    .image-modal-arrow.right{ right: 22px; }
+
+    .zoom-controls{
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      display:flex;
+      gap:10px;
+      z-index: 10000;
+    }
+    .zoom-btn{
+      width:44px;
+      height:44px;
+      border-radius:999px;
+      border:none;
+      background:#fff;
+      cursor:pointer;
+      font-size:22px;
+      font-weight:900;
+      color:#b0602f;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      transition:0.18s ease;
+    }
+    .zoom-btn:hover{ transform: translateY(-1px); }
+    .zoom-btn:disabled{ opacity:0.45; cursor:default; transform:none; }
+
+    .image-modal-content{
+      position: relative;
+      height: 100vh;
+      padding: 72px 24px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+
+      overflow: auto;
+      overscroll-behavior: contain;
+      touch-action: pan-x pan-y;
+      gap: 12px;
+    }
+
+    @supports (-webkit-overflow-scrolling: touch) {
+      .image-modal-content{ -webkit-overflow-scrolling: touch; }
+    }
+
+    .image-modal-img{
+      display:block;
+      height:auto;
+      max-width:none;
+      max-height:none;
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      background: #fff;
+      transition: width .16s ease;
+    }
+
+    .image-modal-caption{
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      opacity: 0.95;
+      text-align:center;
+      max-width:92vw;
+      line-height: 1.35;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+      padding-bottom: 8px;
+    }
+
+    .week-nav-bar--between{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 18px;
+      width: 100%;
+    }
+    @media (max-width: 700px){
+      .week-nav-bar--between{
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .week-nav-bar--between .week-nav-link{ text-align:center; }
+    }
+  </style>
+</head>
+
+<body class="week-page week3">
+<div class="box">
+
+  <!-- ✅ HEADER met taalkeuze (zoals Week 2) -->
+  <header class="panel site-header">
+    <div class="header-top">
+      <div class="header-left">
+        <h1 data-i18n="siteTitle">Webpagina</h1>
+        <p class="page-breadcrumb site-subtitle header-subline" data-i18n="siteSubline">Daniëlla Ezigbo · Prototyping Tools 1</p>
+      </div>
+
+      <div class="lang-area" aria-label="Taalkeuze">
+        <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+        <div class="lang-switch">
+          <button type="button" data-lang="nl" aria-label="Nederlands">NL</button>
+          <button type="button" data-lang="fr" aria-label="Français">FR</button>
+          <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="panel panel-nav">
+    <ul>
+      <li><a href="index.html" data-i18n="navHome">Homepage</a></li>
+      <li><a href="page.html" data-i18n="navAbout">Over deze website</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-btn" type="button" aria-expanded="false" data-i18n="navWeeks">Weken</button>
+        <ul class="dropdown-content" aria-label="Weeknavigatie">
+          <li><a href="Week 1.html" data-i18n="week1">Week 1</a></li>
+          <li><a href="Week 2.html" data-i18n="week2">Week 2</a></li>
+          <li><a href="Week 3.html"><strong data-i18n="week3">Week 3</strong></a></li>
+          <li><a href="Week 4.html" data-i18n="week4">Week 4</a></li>
+          <li><a href="Week 5.html" data-i18n="week5">Week 5</a></li>
+          <li><a href="Week 6.html" data-i18n="week6">Week 6</a></li>
+          <li><a href="Week 7.html" data-i18n="week7">Week 7</a></li>
+          <li><a href="Week 8.html" data-i18n="week8">Week 8</a></li>
+          <li><a href="Week 9.html" data-i18n="week9">Week 9</a></li>
+          <li><a href="Week 10.html" data-i18n="week10">Week 10</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="panel">
+
+    <h2 data-i18n="pageTitle">Week 3 – Verbeterd prototype</h2>
+    <p class="page-breadcrumb" data-i18n="breadcrumb">Ontwerp &gt; Prototyping &gt; Week 3</p>
+
+    <p class="week-meta">
+      <span class="pill" data-i18n="pill">Verbeterde mid-fi</span>
+      <span data-i18n="metaText">Feedback verwerken en het prototype consistenter maken.</span>
+    </p>
+
+    <section class="section week-summary-card">
+      <div class="week-summary-title" data-i18n="summaryTitle">Kernpunten van deze week</div>
+      <div class="week-summary-sub" data-i18n="summarySub">Van een solide basis naar een helder onderbouwde uitwerking</div>
+      <ul class="week-summary-list">
+        <li data-i18n-html="sum1">De mid-fi versie is verfijnd met focus op <strong>hiërarchie</strong>, <strong>structuur</strong> en <strong>leesbaarheid</strong>.</li>
+        <li data-i18n="sum2">Typografie en contrast zijn aangescherpt om informatie sneller en consistenter scanbaar te maken.</li>
+        <li data-i18n="sum3">De presentatie ondersteunt een duidelijke toelichting van ontwerpkeuzes (evaluatie/examencontext).</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="goalTitle">Doel van week 3</h3>
+
+      <p data-i18n-html="goalP1">
+        In week 3 lag de focus op het <strong>verwerken van feedback</strong> en het verder structureren van het prototype.
+        De schermen zijn herbekeken en <strong>gegroepeerd per functie</strong> om meer overzicht en samenhang te creëren binnen het geheel.
+      </p>
+
+      <p data-i18n-html="goalP2">
+        Er werd bewust gekozen om de schermen onder te verdelen in <strong>aanmelden &amp; accounts</strong>,
+        <strong>start &amp; profiel</strong>, <strong>zoeken &amp; tickets</strong> en <strong>treinschermen</strong>.
+        Deze indeling maakt de logica van de interface duidelijker en ondersteunt een heldere presentatie van de ontwerpkeuzes.
+      </p>
+
+      <p data-i18n-html="goalP3">
+        Daarnaast is aandacht besteed aan <strong>kleurgebruik</strong>, <strong>detailniveau</strong> en <strong>consistentie</strong>,
+        zodat belangrijke informatie sneller opvalt en het prototype rustiger en professioneler aanvoelt.
+        Week 3 vormt daarmee een <strong>doordachte verfijning</strong> van het eerdere ontwerp, met het oog op verdere uitwerking en presentatie.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="screensTitle">Schermen</h3>
+
+      <div class="screen-dropdown" id="screenDropdown">
+        <button class="screen-dropdown-btn" type="button" aria-expanded="false">
+          <span class="screen-dd-left">
+            <span class="screen-dd-title" data-i18n="screensDropdownTitle">Schermen</span>
+            <span class="screen-dd-sub" data-i18n="screensDropdownSub">In-/uitklappen</span>
+          </span>
+
+          <span class="screen-dd-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7.41 14.59 12 10l4.59 4.59L18 13.17 12 7.17l-6 6z"></path>
+            </svg>
+          </span>
+        </button>
+
+        <div class="screen-dropdown-panel" hidden>
+
+          <!-- GROEP 1 -->
+          <details class="group">
+            <summary class="group-summary">
+              <span class="group-summary-left">
+                <span class="group-title" data-i18n="g1Title">Aanmelden &amp; accounts</span>
+                <span class="group-sub" data-i18n="g1Sub">Inlog · Google · Apple</span>
+              </span>
+              <span class="group-chev" aria-hidden="true"><span>˄</span></span>
+            </summary>
+
+            <div class="group-body">
+              <div class="train-wrap" aria-label="Groep: Aanmelden & accounts">
+                <div class="train">
+
+                  <div class="engine" title="Aanmelden & accounts">
+                    <div class="engine-top"></div>
+                    <div class="engine-window"></div>
+                    <div class="engine-label">
+                      <span class="engine-title" data-i18n="g1Engine">Aanmelden &amp; accounts</span>
+                      <span class="engine-sub" data-i18n="groupLabel">Groep</span>
+                    </div>
+                    <div class="wheel-row">
+                      <span class="wheel"></span><span class="wheel"></span><span class="wheel"></span>
+                    </div>
+                  </div>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="accounts"
+                    data-full="assets/imgs/inlogscherm.jpg"
+                    data-hires2="assets/imgs/inlogscherm@2x.jpg"
+                    data-hires3="assets/imgs/inlogscherm@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Inlogscherm"
+                    data-caption-fr="Écran de connexion"
+                    data-caption-de="Anmeldebildschirm">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="login">inlog</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-1" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="accounts"
+                    data-full="assets/imgs/googlescherm.jpg"
+                    data-hires2="assets/imgs/googlescherm@2x.jpg"
+                    data-hires3="assets/imgs/googlescherm@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Googlescherm"
+                    data-caption-fr="Écran Google"
+                    data-caption-de="Google-Bildschirm">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="google">google</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-2" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="accounts"
+                    data-full="assets/imgs/applescherm.jpg"
+                    data-hires2="assets/imgs/applescherm@2x.jpg"
+                    data-hires3="assets/imgs/applescherm@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Applescherm"
+                    data-caption-fr="Écran Apple"
+                    data-caption-de="Apple-Bildschirm">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="apple">apple</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-3" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- GROEP 2 -->
+          <details class="group">
+            <summary class="group-summary">
+              <span class="group-summary-left">
+                <span class="group-title" data-i18n="g2Title">Start &amp; profiel</span>
+                <span class="group-sub" data-i18n="g2Sub">homescherm · profiel · profiel bewerken</span>
+              </span>
+              <span class="group-chev" aria-hidden="true"><span>˄</span></span>
+            </summary>
+
+            <div class="group-body">
+              <div class="train-wrap" aria-label="Groep: Start & profiel">
+                <div class="train">
+
+                  <div class="engine" title="Start & profiel">
+                    <div class="engine-top"></div>
+                    <div class="engine-window"></div>
+                    <div class="engine-label">
+                      <span class="engine-title" data-i18n="g2Engine">Start &amp; profiel</span>
+                      <span class="engine-sub" data-i18n="groupLabel">Groep</span>
+                    </div>
+                    <div class="wheel-row">
+                      <span class="wheel"></span><span class="wheel"></span><span class="wheel"></span>
+                    </div>
+                  </div>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="profiel"
+                    data-full="assets/imgs/homescherm.jpg"
+                    data-hires2="assets/imgs/homescherm@2x.jpg"
+                    data-hires3="assets/imgs/homescherm@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Homescherm"
+                    data-caption-fr="Écran d’accueil"
+                    data-caption-de="Startbildschirm">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="home">home</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-1" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="profiel"
+                    data-full="assets/imgs/profielscherm.jpg"
+                    data-hires2="assets/imgs/profielscherm@2x.jpg"
+                    data-hires3="assets/imgs/profielscherm@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Profielscherm"
+                    data-caption-fr="Écran de profil"
+                    data-caption-de="Profilbildschirm">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="profile">profiel</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-2" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="profiel"
+                    data-full="assets/imgs/profielbewerken.jpg"
+                    data-hires2="assets/imgs/profielbewerken@2x.jpg"
+                    data-hires3="assets/imgs/profielbewerken@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Profiel bewerken"
+                    data-caption-fr="Modifier le profil"
+                    data-caption-de="Profil bearbeiten">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="editProfile">profiel bewerken</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-3" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- GROEP 3 -->
+          <details class="group">
+            <summary class="group-summary">
+              <span class="group-summary-left">
+                <span class="group-title" data-i18n="g3Title">Zoeken &amp; tickets</span>
+                <span class="group-sub" data-i18n="g3Sub">zoekscherm · ticketscherm · winkelwagen</span>
+              </span>
+              <span class="group-chev" aria-hidden="true"><span>˄</span></span>
+            </summary>
+
+            <div class="group-body">
+              <div class="train-wrap" aria-label="Groep: Zoeken & tickets">
+                <div class="train">
+
+                  <div class="engine" title="Zoeken & tickets">
+                    <div class="engine-top"></div>
+                    <div class="engine-window"></div>
+                    <div class="engine-label">
+                      <span class="engine-title" data-i18n="g3Engine">Zoeken &amp; tickets</span>
+                      <span class="engine-sub" data-i18n="groupLabel">Groep</span>
+                    </div>
+                    <div class="wheel-row">
+                      <span class="wheel"></span><span class="wheel"></span><span class="wheel"></span>
+                    </div>
+                  </div>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="tickets"
+                    data-full="assets/imgs/zoekscherm.jpg"
+                    data-hires2="assets/imgs/zoekscherm@2x.jpg"
+                    data-hires3="assets/imgs/zoekscherm@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Zoekscherm"
+                    data-caption-fr="Écran de recherche"
+                    data-caption-de="Suchbildschirm">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="search">zoek</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-1" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="tickets"
+                    data-full="assets/imgs/ticketscherm.jpg"
+                    data-hires2="assets/imgs/ticketscherm@2x.jpg"
+                    data-hires3="assets/imgs/ticketscherm@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Ticketscherm"
+                    data-caption-fr="Écran des billets"
+                    data-caption-de="Ticketbildschirm">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="ticket">ticket</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-2" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="tickets"
+                    data-full="assets/imgs/winkelwagen.jpg"
+                    data-hires2="assets/imgs/winkelwagen@2x.jpg"
+                    data-hires3="assets/imgs/winkelwagen@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Winkelwagen"
+                    data-caption-fr="Panier"
+                    data-caption-de="Warenkorb">
+                    <span class="wagon-tag" data-i18n="screenLabel">Scherm</span>
+                    <span class="wagon-title" data-i18n="cart">winkelwagen</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-3" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- GROEP 4 -->
+          <details class="group">
+            <summary class="group-summary">
+              <span class="group-summary-left">
+                <span class="group-title" data-i18n="g4Title">Treinschermen</span>
+                <span class="group-sub" data-i18n="g4Sub">overzichtscherm · perronscherm · wagonscherm</span>
+              </span>
+              <span class="group-chev" aria-hidden="true"><span>˄</span></span>
+            </summary>
+
+            <div class="group-body">
+              <div class="train-wrap" aria-label="Groep: Treinschermen">
+                <div class="train">
+
+                  <div class="engine" title="Treinschermen">
+                    <div class="engine-top"></div>
+                    <div class="engine-window"></div>
+                    <div class="engine-label">
+                      <span class="engine-title" data-i18n="trainTitle">Lost in Tra(i)nslation</span>
+                      <span class="engine-sub" data-i18n="trainLabel">Trein</span>
+                    </div>
+                    <div class="wheel-row">
+                      <span class="wheel"></span><span class="wheel"></span><span class="wheel"></span>
+                    </div>
+                  </div>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="trein"
+                    data-full="assets/imgs/overzichtscherm 2.jpg"
+                    data-hires2="assets/imgs/overzichtscherm 2@2x.jpg"
+                    data-hires3="assets/imgs/overzichtscherm 2@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Overzichtscherm"
+                    data-caption-fr="Écran d’aperçu"
+                    data-caption-de="Übersichtsbildschirm">
+                    <span class="wagon-tag" data-i18n="coreLabel">Kernscherm</span>
+                    <span class="wagon-title" data-i18n="overview">overzicht</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-1" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="trein"
+                    data-full="assets/imgs/perronscherm 2.jpg"
+                    data-hires2="assets/imgs/perronscherm 2@2x.jpg"
+                    data-hires3="assets/imgs/perronscherm 2@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Perronscherm"
+                    data-caption-fr="Écran de quai"
+                    data-caption-de="Bahnsteigbildschirm">
+                    <span class="wagon-tag" data-i18n="coreLabel">Kernscherm</span>
+                    <span class="wagon-title" data-i18n="platform">perron</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-2" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                  <div class="coupler"></div>
+
+                  <button class="wagon screen-card modal-item" type="button"
+                    data-group="trein"
+                    data-full="assets/imgs/wagonscherm 2.jpg"
+                    data-hires2="assets/imgs/wagonscherm 2@2x.jpg"
+                    data-hires3="assets/imgs/wagonscherm 2@3x.jpg"
+                    data-caption=""
+                    data-caption-nl="Wagonscherm"
+                    data-caption-fr="Écran wagon"
+                    data-caption-de="Wagenbildschirm">
+                    <span class="wagon-tag" data-i18n="coreLabel">Kernscherm</span>
+                    <span class="wagon-title" data-i18n="wagon">wagon</span>
+                    <span class="wagon-hint" data-i18n="openHint">Klik om te openen</span>
+                    <span class="wagon-badge badge-3" aria-hidden="true"></span>
+                    <div class="wheel-row"><span class="wheel"></span><span class="wheel"></span></div>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="nextTitle">Volgende stap</h3>
+      <p data-i18n="nextText">
+        In week 4 wordt dit verder doorgetrokken: de afwerking wordt consistenter, details worden verfijnd
+        en het geheel wordt klaargemaakt om nog sterker te kunnen presenteren.
+      </p>
+
+      <div class="week-nav-bar week-nav-bar--between">
+        <a href="Week 2.html" class="week-nav-link" data-i18n="prevLink">← Terug naar Week 2</a>
+        <a href="Week 4.html" class="week-nav-link" data-i18n="nextLink">Ga verder naar Week 4 →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="panel">
+    <span data-i18n="footer">© 2025 Daniëlla Ezigbo – Mijn website</span>
+  </footer>
+
+</div>
+
+<script>
+  /* ✅ Dropdown "Weken" (stabiel + exact zoals Week 1/2) */
+  const dropdown = document.querySelector(".dropdown");
+  const dropdownBtn = dropdown?.querySelector(".dropdown-btn");
+
+  if (dropdown && dropdownBtn) {
+    dropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle("open");
+      dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", () => {
+      dropdown.classList.remove("open");
+      dropdownBtn.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        dropdown.classList.remove("open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  /* Schermen dropdown */
+  const sd = document.getElementById("screenDropdown");
+  if (sd) {
+    const btn = sd.querySelector(".screen-dropdown-btn");
+    const panel = sd.querySelector(".screen-dropdown-panel");
+
+    btn.addEventListener("click", () => {
+      const isOpen = sd.classList.toggle("open");
+      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      panel.hidden = !isOpen;
+    });
+  }
+</script>
+
+<script>
+  /* ✅ TAAL (NL/FR/DE) – localStorage, zoals Week 2 */
+  const I18N = {
+    nl: {
+      siteTitle: "Webpagina",
+      siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+      langLabel: "Taalkeuze",
+      navHome: "Homepage",
+      navAbout: "Over deze website",
+      navWeeks: "Weken",
+      week1: "Week 1", week2: "Week 2", week3: "Week 3", week4: "Week 4", week5: "Week 5",
+      week6: "Week 6", week7: "Week 7", week8: "Week 8", week9: "Week 9", week10: "Week 10",
+
+      pageTitle: "Week 3 – Verbeterd prototype",
+      breadcrumb: "Ontwerp > Prototyping > Week 3",
+      pill: "Verbeterde mid-fi",
+      metaText: "Feedback verwerken en het prototype consistenter maken.",
+
+      summaryTitle: "Kernpunten van deze week",
+      summarySub: "Van een solide basis naar een helder onderbouwde uitwerking",
+      sum1: "De mid-fi versie is verfijnd met focus op <strong>hiërarchie</strong>, <strong>structuur</strong> en <strong>leesbaarheid</strong>.",
+      sum2: "Typografie en contrast zijn aangescherpt om informatie sneller en consistenter scanbaar te maken.",
+      sum3: "De presentatie ondersteunt een duidelijke toelichting van ontwerpkeuzes (evaluatie/examencontext).",
+
+      goalTitle: "Doel van week 3",
+      goalP1:
+        "In week 3 lag de focus op het <strong>verwerken van feedback</strong> en het verder structureren van het prototype. De schermen zijn herbekeken en <strong>gegroepeerd per functie</strong> om meer overzicht en samenhang te creëren binnen het geheel.",
+      goalP2:
+        "Er werd bewust gekozen om de schermen onder te verdelen in <strong>aanmelden &amp; accounts</strong>, <strong>start &amp; profiel</strong>, <strong>zoeken &amp; tickets</strong> en <strong>treinschermen</strong>. Deze indeling maakt de logica van de interface duidelijker en ondersteunt een heldere presentatie van de ontwerpkeuzes.",
+      goalP3:
+        "Daarnaast is aandacht besteed aan <strong>kleurgebruik</strong>, <strong>detailniveau</strong> en <strong>consistentie</strong>, zodat belangrijke informatie sneller opvalt en het prototype rustiger en professioneler aanvoelt. Week 3 vormt daarmee een <strong>doordachte verfijning</strong> van het eerdere ontwerp, met het oog op verdere uitwerking en presentatie.",
+
+      screensTitle: "Schermen",
+      screensDropdownTitle: "Schermen",
+      screensDropdownSub: "In-/uitklappen",
+
+      g1Title: "Aanmelden & accounts",
+      g1Sub: "Inlog · Google · Apple",
+      g1Engine: "Aanmelden & accounts",
+
+      g2Title: "Start & profiel",
+      g2Sub: "homescherm · profiel · profiel bewerken",
+      g2Engine: "Start & profiel",
+
+      g3Title: "Zoeken & tickets",
+      g3Sub: "zoekscherm · ticketscherm · winkelwagen",
+      g3Engine: "Zoeken & tickets",
+
+      g4Title: "Treinschermen",
+      g4Sub: "overzichtscherm · perronscherm · wagonscherm",
+      trainTitle: "Lost in Tra(i)nslation",
+      trainLabel: "Trein",
+
+      groupLabel: "Groep",
+      screenLabel: "Scherm",
+      coreLabel: "Kernscherm",
+      openHint: "Klik om te openen",
+
+      login: "inlog",
+      google: "google",
+      apple: "apple",
+      home: "home",
+      profile: "profiel",
+      editProfile: "profiel bewerken",
+      search: "zoek",
+      ticket: "ticket",
+      cart: "winkelwagen",
+      overview: "overzicht",
+      platform: "perron",
+      wagon: "wagon",
+
+      nextTitle: "Volgende stap",
+      nextText:
+        "In week 4 wordt dit verder doorgetrokken: de afwerking wordt consistenter, details worden verfijnd en het geheel wordt klaargemaakt om nog sterker te kunnen presenteren.",
+      prevLink: "← Terug naar Week 2",
+      nextLink: "Ga verder naar Week 4 →",
+      footer: "© 2025 Daniëlla Ezigbo – Mijn website"
+    },
+
+    fr: {
+      siteTitle: "Site web",
+      siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+      langLabel: "Langue",
+      navHome: "Accueil",
+      navAbout: "À propos de ce site",
+      navWeeks: "Semaines",
+      week1: "Semaine 1", week2: "Semaine 2", week3: "Semaine 3", week4: "Semaine 4", week5: "Semaine 5",
+      week6: "Semaine 6", week7: "Semaine 7", week8: "Semaine 8", week9: "Semaine 9", week10: "Semaine 10",
+
+      pageTitle: "Semaine 3 – Prototype amélioré",
+      breadcrumb: "Conception > Prototypage > Semaine 3",
+      pill: "Mid-fi amélioré",
+      metaText: "Intégrer les retours et rendre le prototype plus cohérent.",
+
+      summaryTitle: "Points clés de la semaine",
+      summarySub: "D’une base solide à une version clairement argumentée",
+      sum1: "La version mid-fi a été affinée en mettant l’accent sur la <strong>hiérarchie</strong>, la <strong>structure</strong> et la <strong>lisibilité</strong>.",
+      sum2: "La typographie et le contraste ont été renforcés pour rendre l’information plus rapidement et plus uniformément scannable.",
+      sum3: "La présentation soutient une explication claire des choix de conception (contexte d’évaluation/examen).",
+
+      goalTitle: "Objectif de la semaine 3",
+      goalP1:
+        "En semaine 3, l’accent a été mis sur l’<strong>intégration des retours</strong> et sur une meilleure structuration du prototype. Les écrans ont été revus et <strong>regroupés par fonction</strong> afin d’améliorer la lisibilité et la cohérence globale.",
+      goalP2:
+        "Un choix conscient a été fait de classer les écrans en <strong>connexion &amp; comptes</strong>, <strong>accueil &amp; profil</strong>, <strong>recherche &amp; billets</strong> et <strong>écrans du train</strong>. Cette organisation clarifie la logique de l’interface et soutient une présentation plus lisible des décisions de design.",
+      goalP3:
+        "Une attention a également été portée au <strong>choix des couleurs</strong>, au <strong>niveau de détail</strong> et à la <strong>cohérence</strong>, afin que les informations importantes ressortent plus vite et que le prototype paraisse plus calme et plus professionnel. La semaine 3 constitue ainsi un <strong>raffinement réfléchi</strong> du design précédent, en vue d’une suite plus aboutie et mieux présentée.",
+
+      screensTitle: "Écrans",
+      screensDropdownTitle: "Écrans",
+      screensDropdownSub: "Ouvrir / fermer",
+
+      g1Title: "Connexion & comptes",
+      g1Sub: "Connexion · Google · Apple",
+      g1Engine: "Connexion & comptes",
+
+      g2Title: "Accueil & profil",
+      g2Sub: "accueil · profil · modifier le profil",
+      g2Engine: "Accueil & profil",
+
+      g3Title: "Recherche & billets",
+      g3Sub: "recherche · billets · panier",
+      g3Engine: "Recherche & billets",
+
+      g4Title: "Écrans du train",
+      g4Sub: "aperçu · quai · wagon",
+      trainTitle: "Lost in Tra(i)nslation",
+      trainLabel: "Train",
+
+      groupLabel: "Groupe",
+      screenLabel: "Écran",
+      coreLabel: "Écran clé",
+      openHint: "Cliquer pour ouvrir",
+
+      login: "connexion",
+      google: "google",
+      apple: "apple",
+      home: "accueil",
+      profile: "profil",
+      editProfile: "modifier le profil",
+      search: "recherche",
+      ticket: "billet",
+      cart: "panier",
+      overview: "aperçu",
+      platform: "quai",
+      wagon: "wagon",
+
+      nextTitle: "Étape suivante",
+      nextText:
+        "En semaine 4, cette amélioration se poursuit : la finition devient plus cohérente, les détails sont affinés et l’ensemble est préparé pour une présentation encore plus solide.",
+      prevLink: "← Retour à la semaine 2",
+      nextLink: "Continuer vers la semaine 4 →",
+      footer: "© 2025 Daniëlla Ezigbo – Mon site"
+    },
+
+    de: {
+      siteTitle: "Webseite",
+      siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+      langLabel: "Sprache",
+      navHome: "Startseite",
+      navAbout: "Über diese Website",
+      navWeeks: "Wochen",
+      week1: "Woche 1", week2: "Woche 2", week3: "Woche 3", week4: "Woche 4", week5: "Woche 5",
+      week6: "Woche 6", week7: "Woche 7", week8: "Woche 8", week9: "Woche 9", week10: "Woche 10",
+
+      pageTitle: "Woche 3 – Verbessertes Prototyp",
+      breadcrumb: "Design > Prototyping > Woche 3",
+      pill: "Verbessertes Mid-fi",
+      metaText: "Feedback verarbeiten und den Prototyp konsistenter machen.",
+
+      summaryTitle: "Kernpunkte der Woche",
+      summarySub: "Von einer soliden Basis zu einer klar begründeten Ausarbeitung",
+      sum1: "Die Mid-fi Version wurde verfeinert mit Fokus auf <strong>Hierarchie</strong>, <strong>Struktur</strong> und <strong>Lesbarkeit</strong>.",
+      sum2: "Typografie und Kontrast wurden geschärft, damit Informationen schneller und konsistenter erfassbar sind.",
+      sum3: "Die Präsentation unterstützt eine klare Begründung von Designentscheidungen (Bewertung/Prüfungskontext).",
+
+      goalTitle: "Ziel der Woche 3",
+      goalP1:
+        "In Woche 3 lag der Fokus auf dem <strong>Verarbeiten von Feedback</strong> und der weiteren Strukturierung des Prototyps. Die Screens wurden erneut betrachtet und <strong>nach Funktionen gruppiert</strong>, um mehr Übersicht und Zusammenhang zu schaffen.",
+      goalP2:
+        "Die Screens wurden bewusst in <strong>Anmeldung &amp; Konten</strong>, <strong>Start &amp; Profil</strong>, <strong>Suche &amp; Tickets</strong> und <strong>Train-Screens</strong> unterteilt. Diese Einteilung macht die Logik der Oberfläche klarer und unterstützt eine verständliche Präsentation der Designentscheidungen.",
+      goalP3:
+        "Außerdem wurde auf <strong>Farbwahl</strong>, <strong>Detaillierungsgrad</strong> und <strong>Konsistenz</strong> geachtet, damit wichtige Informationen schneller auffallen und der Prototyp ruhiger sowie professioneller wirkt. Woche 3 ist damit eine <strong>durchdachte Verfeinerung</strong> des vorherigen Designs – als Grundlage für die nächste Ausarbeitung und Präsentation.",
+
+      screensTitle: "Screens",
+      screensDropdownTitle: "Screens",
+      screensDropdownSub: "Ein-/ausklappen",
+
+      g1Title: "Anmeldung & Konten",
+      g1Sub: "Login · Google · Apple",
+      g1Engine: "Anmeldung & Konten",
+
+      g2Title: "Start & Profil",
+      g2Sub: "Start · Profil · Profil bearbeiten",
+      g2Engine: "Start & Profil",
+
+      g3Title: "Suche & Tickets",
+      g3Sub: "Suche · Tickets · Warenkorb",
+      g3Engine: "Suche & Tickets",
+
+      g4Title: "Train-Screens",
+      g4Sub: "Übersicht · Bahnsteig · Wagen",
+      trainTitle: "Lost in Tra(i)nslation",
+      trainLabel: "Zug",
+
+      groupLabel: "Gruppe",
+      screenLabel: "Screen",
+      coreLabel: "Kernscreen",
+      openHint: "Zum Öffnen klicken",
+
+      login: "login",
+      google: "google",
+      apple: "apple",
+      home: "start",
+      profile: "profil",
+      editProfile: "profil bearbeiten",
+      search: "suche",
+      ticket: "ticket",
+      cart: "warenkorb",
+      overview: "übersicht",
+      platform: "bahnsteig",
+      wagon: "wagen",
+
+      nextTitle: "Nächster Schritt",
+      nextText:
+        "In Woche 4 wird das weitergeführt: Das Finish wird konsistenter, Details werden verfeinert und das Gesamtbild wird für eine noch stärkere Präsentation vorbereitet.",
+      prevLink: "← Zurück zu Woche 2",
+      nextLink: "Weiter zu Woche 4 →",
+      footer: "© 2025 Daniëlla Ezigbo – Meine Website"
+    }
+  };
+
+  function getLang(){ return localStorage.getItem("siteLang") || "nl"; }
+
+  function applyLang(lang){
+    const dict = I18N[lang] || I18N.nl;
+    document.documentElement.setAttribute("lang", lang);
+
+    document.querySelectorAll(".lang-switch button").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const k = el.getAttribute("data-i18n");
+      if (dict[k] != null) el.textContent = dict[k];
+    });
+
+    document.querySelectorAll("[data-i18n-html]").forEach(el => {
+      const k = el.getAttribute("data-i18n-html");
+      if (dict[k] != null) el.innerHTML = dict[k];
+    });
+
+    /* ✅ Captions voor modal-items per taal */
+    document.querySelectorAll(".modal-item").forEach(item => {
+      const cap =
+        item.getAttribute(`data-caption-${lang}`) ||
+        item.getAttribute("data-caption-nl") ||
+        item.getAttribute("data-caption") ||
+        "";
+      item.dataset.caption = cap;
+    });
+  }
+
+  function setLang(lang){
+    localStorage.setItem("siteLang", lang);
+    applyLang(lang);
+  }
+
+  applyLang(getLang());
+  document.querySelectorAll(".lang-switch button").forEach(btn => {
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+</script>
+
+<script>
+  /* ✅ Modal + Zoom (jouw code: ongewijzigd, werkt nu met vertaalde captions) */
+  const allItems = [...document.querySelectorAll(".modal-item")];
+  let currentIndex = 0;
+  let currentGroup = "accounts";
+  let groupItems = [];
+
+  const zoomLevelsNormal = [1.75, 2.0, 2.25, 2.5, 2.75, 3.0];
+  const zoomLevelsTrein  = [1.0, 1.12, 1.25, 1.38, 1.52, 1.68];
+
+  let activeZoomLevels = zoomLevelsNormal;
+  let zoomIndex = 0;
+
+  let baseRectW = 620;
+  let normalBaseW = 0;
+  let isTreinActive = false;
+
+  const modal = document.createElement("div");
+  modal.className = "image-modal";
+  modal.innerHTML = `
+    <div class="image-modal-bg"></div>
+    <button class="image-modal-close" aria-label="Sluiten">×</button>
+    <button class="image-modal-arrow left" aria-label="Vorige">‹</button>
+    <button class="image-modal-arrow right" aria-label="Volgende">›</button>
+
+    <div class="zoom-controls" aria-label="Zoom">
+      <button class="zoom-btn zoom-out" type="button" aria-label="Uitzoomen">−</button>
+      <button class="zoom-btn zoom-in" type="button" aria-label="Inzoomen">+</button>
+    </div>
+
+    <div class="image-modal-content">
+      <img class="image-modal-img" alt="">
+      <div class="image-modal-caption"></div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const modalImg = modal.querySelector(".image-modal-img");
+  const modalCaption = modal.querySelector(".image-modal-caption");
+  const zoomInBtn = modal.querySelector(".zoom-in");
+  const zoomOutBtn = modal.querySelector(".zoom-out");
+  const modalContent = modal.querySelector(".image-modal-content");
+
+  function tryLoad(src){
+    return new Promise((resolve) => {
+      if (!src) return resolve(false);
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = src + (src.includes("?") ? "&" : "?") + "v=" + Date.now();
+    });
+  }
+
+  async function preferHiResOnOpen(card){
+    const hires3 = card.dataset.hires3;
+    const hires2 = card.dataset.hires2;
+
+    if (hires3 && await tryLoad(hires3)) { modalImg.src = hires3; modalImg.dataset.active = hires3; return; }
+    if (hires2 && await tryLoad(hires2)) { modalImg.src = hires2; modalImg.dataset.active = hires2; return; }
+
+    modalImg.src = card.dataset.full;
+    modalImg.dataset.active = card.dataset.full;
+  }
+
+  function trySwapHiResOnZoom(card){
+    const z = activeZoomLevels[zoomIndex];
+    const threshold2 = isTreinActive ? 1.25 : 2.0;
+    const threshold3 = isTreinActive ? 1.52 : 2.5;
+
+    if (z < threshold2) return;
+
+    const hires3 = card.dataset.hires3;
+    const hires2 = card.dataset.hires2;
+    const current = modalImg.dataset.active || "";
+
+    (async () => {
+      if (z >= threshold3 && hires3 && current !== hires3 && await tryLoad(hires3)) {
+        modalImg.src = hires3; modalImg.dataset.active = hires3; return;
+      }
+      if (hires2 && current !== hires2 && await tryLoad(hires2)) {
+        modalImg.src = hires2; modalImg.dataset.active = hires2; return;
+      }
+    })();
+  }
+
+  function updateZoomButtons(){
+    zoomInBtn.disabled = zoomIndex >= activeZoomLevels.length - 1;
+    zoomOutBtn.disabled = zoomIndex === 0;
+  }
+
+  function applyZoom(card){
+    const z = activeZoomLevels[zoomIndex];
+    modalImg.style.width = Math.round(baseRectW * z) + "px";
+    modalImg.style.height = "auto";
+    trySwapHiResOnZoom(card);
+    updateZoomButtons();
+  }
+
+  function resetZoom(){
+    zoomIndex = 0;
+    modalImg.style.width = "";
+    modalContent.scrollTop = 0;
+    modalContent.scrollLeft = 0;
+    updateZoomButtons();
+  }
+
+  function setGroupFromItem(item){
+    currentGroup = item.dataset.group || "accounts";
+    groupItems = allItems.filter(el => (el.dataset.group || "accounts") === currentGroup);
+  }
+
+  function showItemByGroupIndex(groupIndex){
+    if (groupIndex < 0) groupIndex = groupItems.length - 1;
+    if (groupIndex >= groupItems.length) groupIndex = 0;
+
+    currentIndex = groupIndex;
+    const card = groupItems[currentIndex];
+
+    resetZoom();
+    modalImg.dataset.active = "";
+
+    modalCaption.textContent = card.dataset.caption || "";
+    modalImg.alt = modalCaption.textContent;
+
+    isTreinActive = (card.dataset.group || "") === "trein";
+    activeZoomLevels = isTreinActive ? zoomLevelsTrein : zoomLevelsNormal;
+
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+
+    modalImg.onload = () => {
+      requestAnimationFrame(() => {
+        if (!isTreinActive) {
+          const r = modalImg.getBoundingClientRect();
+          baseRectW = r.width || baseRectW;
+
+          if (!normalBaseW) normalBaseW = baseRectW;
+          else normalBaseW = Math.round(normalBaseW * 0.7 + baseRectW * 0.3);
+        } else {
+          const ref = normalBaseW || 520;
+          baseRectW = Math.max(170, Math.round(ref * 0.36));
+        }
+
+        applyZoom(card);
+      });
+    };
+
+    preferHiResOnOpen(card);
+  }
+
+  function openFromClickedItem(clicked){
+    setGroupFromItem(clicked);
+    const idx = groupItems.indexOf(clicked);
+    showItemByGroupIndex(idx >= 0 ? idx : 0);
+  }
+
+  function closeModal(){
+    modal.classList.remove("open");
+    modalImg.src = "";
+    modalCaption.textContent = "";
+    document.body.style.overflow = "";
+    resetZoom();
+  }
+
+  allItems.forEach((item) => item.addEventListener("click", () => openFromClickedItem(item)));
+
+  modal.querySelector(".image-modal-bg").onclick = closeModal;
+  modal.querySelector(".image-modal-close").onclick = closeModal;
+
+  modal.querySelector(".image-modal-arrow.left").onclick = (e) => {
+    e.stopPropagation();
+    showItemByGroupIndex(currentIndex - 1);
+  };
+  modal.querySelector(".image-modal-arrow.right").onclick = (e) => {
+    e.stopPropagation();
+    showItemByGroupIndex(currentIndex + 1);
+  };
+
+  zoomInBtn.onclick = (e) => {
+    e.stopPropagation();
+    zoomIndex = Math.min(activeZoomLevels.length - 1, zoomIndex + 1);
+    applyZoom(groupItems[currentIndex]);
+  };
+
+  zoomOutBtn.onclick = (e) => {
+    e.stopPropagation();
+    zoomIndex = Math.max(0, zoomIndex - 1);
+    applyZoom(groupItems[currentIndex]);
+  };
+
+  document.addEventListener("keydown", e => {
+    if (!modal.classList.contains("open")) return;
+    if (e.key === "Escape") closeModal();
+
+    if (e.key === "ArrowLeft") showItemByGroupIndex(currentIndex - 1);
+    if (e.key === "ArrowRight") showItemByGroupIndex(currentIndex + 1);
+
+    if (e.key === "+" || e.key === "=") zoomInBtn.click();
+    if (e.key === "-" || e.key === "_") zoomOutBtn.click();
+  });
+
+  updateZoomButtons();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Over deze website — Daniëlla Ezigbo</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <style>
+    body{
+      font-family:"Inter",Arial,sans-serif;
+      color:#000;
+      line-height:1.75;
+      font-size:17px;
+    }
+    h1,h2,h3{ font-weight:800; letter-spacing:-0.3px; margin:0; }
+    .subtitle{ color:#6b6b6b; font-size:14px; margin-top:6px; }
+
+    .box{
+      max-width:1250px;
+      margin:50px auto;
+      display:grid;
+      grid-gap:26px;
+      grid-template-columns:330px minmax(0,1fr);
+      align-items:start;
+    }
+    .panel{
+      background:#fff;
+      border-radius:14px;
+      padding:32px;
+      box-shadow:0 5px 18px rgba(0,0,0,0.07);
+    }
+
+    /* HEADER */
+    .site-header h1{
+      font-size:40px;
+      font-weight:900;
+      letter-spacing:-0.5px;
+    }
+    .header-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    /* TAAL */
+    .lang-area{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:6px;
+      user-select:none;
+    }
+    .lang-label{
+      font-size:12px;
+      font-weight:800;
+      color:#6b6b6b;
+      text-transform:uppercase;
+    }
+    .lang-switch{
+      display:flex;
+      gap:8px;
+    }
+    .lang-switch button{
+      background:none;
+      border:none;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13px;
+      color:#6b6b6b;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+    }
+    .lang-switch button:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+    .lang-switch button.active{
+      color:#F79A6A;
+      text-decoration:underline;
+    }
+
+    /* NAV */
+    nav ul{ list-style:none; padding-left:0; margin:0; }
+    nav ul li{ margin-bottom:8px; }
+
+    nav a{
+      color:#000;
+      font-weight:600;
+      text-decoration:none;
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+    }
+    nav a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+    nav strong{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      font-weight:800;
+    }
+
+    .dropdown{ position:relative; }
+    .dropdown-btn{
+      background:none;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+    }
+    .dropdown-btn:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+
+    /* FIX: week 10 verdwijnt niet */
+    .panel-nav,
+    .dropdown-content{
+      overflow:visible !important;
+      max-height:none !important;
+    }
+
+    .dropdown-content{
+      display:none;
+      margin-top:8px;
+      padding-left:12px;
+    }
+    .dropdown.open .dropdown-content{ display:block; }
+
+    .dropdown-content a{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+    }
+    .dropdown-content a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+    }
+
+    h2{ font-size:28px; margin-bottom:12px; }
+    h3{ font-size:21px; margin-top:26px; margin-bottom:8px; }
+
+    footer{
+      text-align:center;
+      font-size:14px;
+      color:#6b6b6b;
+    }
+
+    @media (max-width:980px){
+      .box{ grid-template-columns:1fr; }
+      .lang-area{ align-items:flex-start; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="box">
+
+  <!-- HEADER -->
+  <header class="panel site-header">
+    <div class="header-top">
+      <div>
+        <h1 data-i18n="siteTitle">Webpagina</h1>
+        <p class="subtitle">Daniëlla Ezigbo</p>
+      </div>
+
+      <div class="lang-area">
+        <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+        <div class="lang-switch">
+          <button data-lang="nl">NL</button>
+          <button data-lang="fr">FR</button>
+          <button data-lang="de">DE</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="panel panel-nav">
+    <ul>
+      <li><a data-page-link href="index.html" data-i18n="navHome">Homepage</a></li>
+      <li><strong data-i18n="navAbout">Over deze website</strong></li>
+      <li><a data-page-link href="contact.html" data-i18n="navContact">Contact</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-btn" type="button" data-i18n="navWeeks">Weken</button>
+        <ul class="dropdown-content">
+          <li><a data-page-link href="Week 1.html">Week 1</a></li>
+          <li><a data-page-link href="Week 2.html">Week 2</a></li>
+          <li><a data-page-link href="Week 3.html">Week 3</a></li>
+          <li><a data-page-link href="Week 4.html">Week 4</a></li>
+          <li><a data-page-link href="Week 5.html">Week 5</a></li>
+          <li><a data-page-link href="Week 6.html">Week 6</a></li>
+          <li><a data-page-link href="Week 7.html">Week 7</a></li>
+          <li><a data-page-link href="Week 8.html">Week 8</a></li>
+          <li><a data-page-link href="Week 9.html">Week 9</a></li>
+          <li><a data-page-link href="Week 10.html">Week 10</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="panel">
+    <h2 data-i18n="title">Over deze website</h2>
+
+    <h3 data-i18n="goalTitle">Doel</h3>
+    <p data-i18n-html="goalText">
+      Deze website bundelt het volledige traject van <strong>week 1 t.e.m. week 10</strong> binnen Prototyping Tools 1.
+    </p>
+
+    <h3 data-i18n="contextTitle">Projectcontext</h3>
+    <p data-i18n-html="contextText">
+      Lost in Tra(i)nslation vertaalt stationsinformatie naar een compacte mobiele interface.
+    </p>
+
+    <p data-i18n="tipText">Gebruik het menu links om door de weken te navigeren.</p>
+  </main>
+
+  <footer class="panel">
+    © 2025 Daniëlla Ezigbo – Mijn website
+  </footer>
+
+</div>
+
+<script>
+  /* Dropdown */
+  const dropdown = document.querySelector(".dropdown");
+  const btn = dropdown.querySelector(".dropdown-btn");
+
+  btn.onclick = e => {
+    e.stopPropagation();
+    dropdown.classList.toggle("open");
+  };
+  document.onclick = () => dropdown.classList.remove("open");
+</script>
+
+<script>
+  const I18N = {
+    nl:{siteTitle:"Webpagina",langLabel:"Taalkeuze",navHome:"Homepage",navAbout:"Over deze website",navContact:"Contact",navWeeks:"Weken",title:"Over deze website",goalTitle:"Doel",goalText:"Deze website bundelt het volledige traject van <strong>week 1 t.e.m. week 10</strong> binnen Prototyping Tools 1.",contextTitle:"Projectcontext",contextText:"Lost in Tra(i)nslation vertaalt stationsinformatie naar een compacte mobiele interface.",tipText:"Gebruik het menu links om door de weken te navigeren."},
+    fr:{siteTitle:"Site web",langLabel:"Langue",navHome:"Accueil",navAbout:"À propos",navContact:"Contact",navWeeks:"Semaines",title:"À propos de ce site",goalTitle:"Objectif",goalText:"Ce site regroupe les semaines 1 à 10.",contextTitle:"Contexte",contextText:"Traduction d’informations ferroviaires.",tipText:"Utilisez le menu à gauche."},
+    de:{siteTitle:"Webseite",langLabel:"Sprache",navHome:"Startseite",navAbout:"Über diese Website",navContact:"Kontakt",navWeeks:"Wochen",title:"Über diese Website",goalTitle:"Ziel",goalText:"Diese Website umfasst Woche 1 bis 10.",contextTitle:"Projektkontext",contextText:"Bahnhofsinformationen in mobiler Form.",tipText:"Nutzen Sie das Menü links."}
+  };
+
+  function setLinks(lang){
+    document.querySelectorAll("a[data-page-link]").forEach(a=>{
+      const u=new URL(a.href,location.href);
+      u.searchParams.set("lang",lang);
+      a.href=u.pathname+"?"+u.searchParams;
+    });
+  }
+
+  function applyLang(lang){
+    document.documentElement.lang=lang;
+    document.querySelectorAll(".lang-switch button").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
+    document.querySelectorAll("[data-i18n]").forEach(e=>e.textContent=I18N[lang][e.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-html]").forEach(e=>e.innerHTML=I18N[lang][e.dataset.i18nHtml]);
+    setLinks(lang);
+    localStorage.setItem("siteLang",lang);
+  }
+
+  const startLang=new URLSearchParams(location.search).get("lang")||localStorage.siteLang||"nl";
+  applyLang(startLang);
+  document.querySelectorAll(".lang-switch button").forEach(b=>b.onclick=()=>applyLang(b.dataset.lang));
+</script>
+
+</body>
+</html>

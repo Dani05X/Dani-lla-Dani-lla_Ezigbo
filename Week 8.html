@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 8 – Afronding</title>
+
+  <link rel="icon" type="image/png" href="assets/Favicon/lily.png" />
+  <link href="./dist/output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <style>
+    /* ===========================================
+       ✅ WEEK 8: NAV DROPDOWN FIX (zoals Week 3)
+       - voorkomt afkappen van Week 8/9/10
+       - hover systeem identiek (oranje)
+       =========================================== */
+
+    .panel.panel-nav,
+    nav.panel.panel-nav,
+    .panel-nav{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    .panel-nav ul,
+    .panel-nav li{
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    .dropdown{ position:relative; }
+    .dropdown-btn{
+      background:none;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      padding:0;
+    }
+
+    .dropdown-content{
+      display:none;
+      padding-left:16px;
+      margin-top:6px;
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    .dropdown.open .dropdown-content{ display:block; }
+
+    .dropdown-content a{
+      display:inline-block;
+      padding:4px 6px;
+      border-radius:8px;
+      transition:.18s ease;
+      text-decoration:none;
+      color:#000;
+      font-weight:600;
+    }
+    .dropdown-content a:hover{
+      color:#F79A6A;
+      background:rgba(247,154,106,0.10);
+      text-decoration:none;
+    }
+
+    /* =========================
+       ✅ HEADER + TAAL (zoals Week 3)
+    ========================= */
+    .header-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:18px; }
+    .header-left{ min-width:0; }
+    .header-subline{ margin-top:10px; }
+
+    .lang-area{
+      display:flex; flex-direction:column; align-items:flex-end; gap:6px; padding-top:2px;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+    .lang-label{ font-size:12px; letter-spacing:0.3px; font-weight:800; color:#777; text-transform:uppercase; }
+    .lang-switch{ display:flex; gap:8px; padding:0; background:transparent; border:none; }
+    .lang-switch button{
+      background:none; border:none; cursor:pointer; font-weight:900; font-size:13px; color:#777;
+      padding:4px 6px; border-radius:8px; transition:0.2s ease;
+    }
+    .lang-switch button:hover{ color:#F79A6A; background:rgba(247,154,106,0.10); }
+    .lang-switch button.active{ color:#F79A6A; text-decoration:underline; background:transparent; }
+
+    /* =========================
+       ✅ BASE / LAYOUT (zoals jouw weken)
+    ========================= */
+    body{ font-family:"Inter", Arial, sans-serif; color:#000; line-height:1.75; font-size:17px; }
+    h1,h2,h3{ font-weight:700; color:#000; letter-spacing:-0.2px; }
+    h2{ font-size:28px; margin-bottom:6px; }
+    h3{ font-size:21px; margin:26px 0 8px; }
+
+    .box{
+      max-width:1250px; margin:50px auto; display:grid; grid-gap:40px;
+      grid-template-columns:330px minmax(0,1fr); align-items:flex-start;
+    }
+    .panel{ background:#fff; border-radius:14px; padding:48px 56px; box-shadow:0 5px 18px rgba(0,0,0,0.07); }
+    .panel-nav{ padding:28px 32px; align-self:flex-start; }
+
+    .site-header h1{ font-size:40px; font-weight:800; margin:0; letter-spacing:-0.5px; }
+
+    .page-breadcrumb{ font-size:13px; color:#777; margin:-2px 0 8px; }
+    .week-meta{ font-size:14px; color:#555; margin-bottom:20px; }
+    .pill{
+      display:inline-flex; padding:4px 10px; border-radius:999px;
+      background:#fff7f1; color:#b0602f; font-size:12px; font-weight:600; margin-right:8px;
+    }
+    .section{ margin-bottom:28px; }
+
+    /* ✅ KERNPUNTEN-KADER (zoals jouw andere weken) */
+    .week-summary-card{
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 16px;
+      background: #fffaf6;
+      padding: 18px 18px 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+    .week-summary-title{
+      font-weight: 900;
+      font-size: 16px;
+      color: #111;
+      margin-bottom: 4px;
+    }
+    .week-summary-sub{
+      font-weight: 800;
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 10px;
+    }
+    .week-summary-list{
+      margin: 0;
+      padding-left: 18px;
+      color: #333;
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+    .week-summary-list li{ margin: 8px 0; }
+
+    /* ✅ NAV KNOPPEN: uit elkaar zoals op jouw foto */
+    .week-nav-bar{
+      border-top:1px solid #eee;
+      margin-top:48px;
+      padding-top:28px;
+      display:flex;
+      justify-content:space-between;  /* ✅ links/rechts ver uit elkaar */
+      align-items:center;
+      gap:24px;
+      width:100%;
+    }
+
+    .week-nav-link{
+      padding:10px 18px;             /* ✅ formaat zoals de screenshot */
+      background:#fff7f1;
+      border-radius:999px;
+      border:1px solid #ffb98f33;
+      text-decoration:none;
+      font-weight:700;
+      color:#000;
+      transition:0.18s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+    }
+
+    /* ✅ dwingt uiterste uitlijning af (exact gevoel als screenshot) */
+    .week-nav-bar .week-nav-link:first-child{ margin-right:auto; }
+    .week-nav-bar .week-nav-link:last-child{ margin-left:auto; }
+
+    .week-nav-link:hover{
+      background:#ffb98f;
+      color:#fff;
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width:1050px){
+      .box{ grid-template-columns:1fr; }
+      .panel{ padding:34px 22px; }
+      .panel-nav{ padding:22px 22px; }
+    }
+    @media (max-width:700px){
+      .week-nav-bar{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .week-nav-bar .week-nav-link:first-child,
+      .week-nav-bar .week-nav-link:last-child{
+        margin:0;
+      }
+      .week-nav-link{ text-align:center; width:100%; }
+    }
+  </style>
+</head>
+
+<body class="week-page week8">
+<div class="box">
+
+  <!-- ✅ HEADER met taalkeuze (zoals Week 3) -->
+  <header class="panel site-header">
+    <div class="header-top">
+      <div class="header-left">
+        <h1 data-i18n="siteTitle">Webpagina</h1>
+        <p class="page-breadcrumb header-subline" data-i18n="siteSubline">Daniëlla Ezigbo · Prototyping Tools 1</p>
+      </div>
+
+      <div class="lang-area" aria-label="Taalkeuze">
+        <div class="lang-label" data-i18n="langLabel">Taalkeuze</div>
+        <div class="lang-switch">
+          <button type="button" data-lang="nl" aria-label="Nederlands">NL</button>
+          <button type="button" data-lang="fr" aria-label="Français">FR</button>
+          <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ✅ NAV (hover + dropdown identiek aan Week 3) -->
+  <nav class="panel panel-nav">
+    <ul>
+      <li><a href="index.html" data-i18n="navHome">Homepage</a></li>
+      <li><a href="page.html" data-i18n="navAbout">Over deze website</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-btn" type="button" aria-expanded="false" data-i18n="navWeeks">Weken</button>
+        <ul class="dropdown-content" aria-label="Weeknavigatie">
+          <li><a href="Week 1.html" data-i18n="week1">Week 1</a></li>
+          <li><a href="Week 2.html" data-i18n="week2">Week 2</a></li>
+          <li><a href="Week 3.html" data-i18n="week3">Week 3</a></li>
+          <li><a href="Week 4.html" data-i18n="week4">Week 4</a></li>
+          <li><a href="Week 5.html" data-i18n="week5">Week 5</a></li>
+          <li><a href="Week 6.html" data-i18n="week6">Week 6</a></li>
+          <li><a href="Week 7.html" data-i18n="week7">Week 7</a></li>
+          <li><a href="Week 8.html"><strong data-i18n="week8">Week 8</strong></a></li>
+          <li><a href="Week 9.html" data-i18n="week9">Week 9</a></li>
+          <li><a href="Week 10.html" data-i18n="week10">Week 10</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ✅ MAIN -->
+  <main class="panel">
+    <h2 data-i18n="pageTitle">Week 8 – Afronding</h2>
+    <p class="page-breadcrumb" data-i18n="breadcrumb">Ontwerp &gt; Prototyping &gt; Week 8</p>
+
+    <p class="week-meta">
+      <span class="pill" data-i18n="pill">Week 8</span>
+      <span data-i18n="metaText">Deze week stond in het teken van afronding en kwaliteitscontrole, met aandacht voor consistentie en presentatie.</span>
+    </p>
+
+    <!-- ✅ KERNPUNTEN-KADER -->
+    <section class="section week-summary-card">
+      <div class="week-summary-title" data-i18n="summaryTitle">Kernpunten van deze week</div>
+      <div class="week-summary-sub" data-i18n="summarySub">Van afronding naar een gecontroleerd en presenteerbaar eindresultaat</div>
+      <ul class="week-summary-list">
+        <li data-i18n-html="sum1">De nadruk lag op het <strong>finaliseren van het prototype</strong> en het uitvoeren van een grondige <strong>kwaliteitscontrole</strong>.</li>
+        <li data-i18n-html="sum2">Alle schermen zijn nagekeken op <strong>consistentie</strong> in typografie, uitlijning, witruimte en kleurgebruik.</li>
+        <li data-i18n-html="sum3">De website en weekstructuur zijn gecontroleerd op <strong>duidelijkheid</strong>, <strong>leesbaarheid</strong> en <strong>presentatiewaardigheid</strong>.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="sec1Title">Doel en verwachtingen</h3>
+      <p data-i18n-html="sec1P1">
+        In week 8 lag de focus op het <strong>afronden van het project</strong> en het verbeteren van de <strong>algemene kwaliteit</strong>.
+        Het doel was om het prototype als één geheel te laten functioneren: <strong>inhoudelijk samenhangend</strong>, <strong>visueel consistent</strong> en <strong>correct gepresenteerd</strong>.
+      </p>
+      <p data-i18n-html="sec1P2">
+        Er werden <strong>geen nieuwe kernschermen</strong> toegevoegd. De werkzaamheden richtten zich op <strong>controle</strong>, <strong>correcties</strong> en het <strong>versterken van de eindpresentatie</strong>.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="sec2Title">Aanpak</h3>
+      <p data-i18n-html="sec2P1">
+        Het volledige ontwerp is opnieuw nagekeken op <strong>consistentie</strong> in typografie, uitlijning, witruimte en kleurgebruik.
+        Daarnaast zijn <strong>kleine afwijkingen</strong> en <strong>onduidelijkheden</strong> gecorrigeerd, zodat de interface rustiger en uniformer oogt.
+      </p>
+      <p data-i18n-html="sec2P2">
+        Tevens is gecontroleerd of de <strong>structuur van de website</strong> logisch blijft en of de <strong>inhoud per week</strong> duidelijk en overzichtelijk is opgesteld.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3 data-i18n="sec3Title">Resultaat</h3>
+      <p data-i18n-html="sec3P1">
+        Na deze afrondingsfase vormt het prototype een <strong>coherent</strong> en <strong>consistent geheel</strong>.
+        De presentatie is <strong>overzichtelijker</strong> en de uitwerking sluit beter aan bij de beoogde <strong>eindkwaliteit</strong>.
+      </p>
+      <p data-i18n-html="sec3P2">
+        Het project is daarmee voorbereid voor <strong>evaluatie</strong> en verdere toelichting, met een <strong>duidelijke structuur</strong> en een <strong>verzorgde afwerking</strong>.
+      </p>
+
+      <!-- ✅ NAV: afstand zoals jouw foto -->
+      <div class="week-nav-bar">
+        <a href="Week 7.html" class="week-nav-link" data-i18n="prevLink">← Terug naar Week 7</a>
+        <a href="Week 9.html" class="week-nav-link" data-i18n="nextLink">Ga verder naar Week 9 →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="panel">
+    <span data-i18n="footer">© 2025 Daniëlla Ezigbo – Prototyping Tools 1</span>
+  </footer>
+
+</div>
+
+<script>
+  /* ✅ Dropdown "Weken" (stabiel + exact zoals Week 3) */
+  const dropdown = document.querySelector(".dropdown");
+  const dropdownBtn = dropdown?.querySelector(".dropdown-btn");
+
+  if (dropdown && dropdownBtn) {
+    dropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle("open");
+      dropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    document.addEventListener("click", () => {
+      dropdown.classList.remove("open");
+      dropdownBtn.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        dropdown.classList.remove("open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+</script>
+
+<script>
+  /* ✅ TAAL (NL/FR/DE) – vertaalt effectief de pagina (zoals Week 3)
+     ✅ ondersteunt data-i18n én data-i18n-html (nodig voor <strong>)
+  */
+  const I18N = {
+    nl: {
+      siteTitle: "Webpagina",
+      siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+      langLabel: "Taalkeuze",
+      navHome: "Homepage",
+      navAbout: "Over deze website",
+      navWeeks: "Weken",
+      week1:"Week 1", week2:"Week 2", week3:"Week 3", week4:"Week 4", week5:"Week 5",
+      week6:"Week 6", week7:"Week 7", week8:"Week 8", week9:"Week 9", week10:"Week 10",
+
+      pageTitle: "Week 8 – Afronding",
+      breadcrumb: "Ontwerp > Prototyping > Week 8",
+      pill: "Week 8",
+      metaText: "Deze week stond in het teken van afronding en kwaliteitscontrole, met aandacht voor consistentie en presentatie.",
+
+      summaryTitle: "Kernpunten van deze week",
+      summarySub: "Van afronding naar een gecontroleerd en presenteerbaar eindresultaat",
+      sum1: "De nadruk lag op het <strong>finaliseren van het prototype</strong> en het uitvoeren van een grondige <strong>kwaliteitscontrole</strong>.",
+      sum2: "Alle schermen zijn nagekeken op <strong>consistentie</strong> in typografie, uitlijning, witruimte en kleurgebruik.",
+      sum3: "De website en weekstructuur zijn gecontroleerd op <strong>duidelijkheid</strong>, <strong>leesbaarheid</strong> en <strong>presentatiewaardigheid</strong>.",
+
+      sec1Title: "Doel en verwachtingen",
+      sec1P1:
+        "In week 8 lag de focus op het <strong>afronden van het project</strong> en het verbeteren van de <strong>algemene kwaliteit</strong>. Het doel was om het prototype als één geheel te laten functioneren: <strong>inhoudelijk samenhangend</strong>, <strong>visueel consistent</strong> en <strong>correct gepresenteerd</strong>.",
+      sec1P2:
+        "Er werden <strong>geen nieuwe kernschermen</strong> toegevoegd. De werkzaamheden richtten zich op <strong>controle</strong>, <strong>correcties</strong> en het <strong>versterken van de eindpresentatie</strong>.",
+
+      sec2Title: "Aanpak",
+      sec2P1:
+        "Het volledige ontwerp is opnieuw nagekeken op <strong>consistentie</strong> in typografie, uitlijning, witruimte en kleurgebruik. Daarnaast zijn <strong>kleine afwijkingen</strong> en <strong>onduidelijkheden</strong> gecorrigeerd, zodat de interface rustiger en uniformer oogt.",
+      sec2P2:
+        "Tevens is gecontroleerd of de <strong>structuur van de website</strong> logisch blijft en of de <strong>inhoud per week</strong> duidelijk en overzichtelijk is opgesteld.",
+
+      sec3Title: "Resultaat",
+      sec3P1:
+        "Na deze afrondingsfase vormt het prototype een <strong>coherent</strong> en <strong>consistent geheel</strong>. De presentatie is <strong>overzichtelijker</strong> en de uitwerking sluit beter aan bij de beoogde <strong>eindkwaliteit</strong>.",
+      sec3P2:
+        "Het project is daarmee voorbereid voor <strong>evaluatie</strong> en verdere toelichting, met een <strong>duidelijke structuur</strong> en een <strong>verzorgde afwerking</strong>.",
+
+      prevLink: "← Terug naar Week 7",
+      nextLink: "Ga verder naar Week 9 →",
+      footer: "© 2025 Daniëlla Ezigbo – Prototyping Tools 1"
+    },
+
+    fr: {
+      siteTitle: "Site web",
+      siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+      langLabel: "Langue",
+      navHome: "Accueil",
+      navAbout: "À propos de ce site",
+      navWeeks: "Semaines",
+      week1:"Semaine 1", week2:"Semaine 2", week3:"Semaine 3", week4:"Semaine 4", week5:"Semaine 5",
+      week6:"Semaine 6", week7:"Semaine 7", week8:"Semaine 8", week9:"Semaine 9", week10:"Semaine 10",
+
+      pageTitle: "Semaine 8 – Finalisation",
+      breadcrumb: "Conception > Prototypage > Semaine 8",
+      pill: "Semaine 8",
+      metaText: "Cette semaine a été consacrée à la finalisation et au contrôle qualité, avec une attention portée à la cohérence et à la présentation.",
+
+      summaryTitle: "Points clés de la semaine",
+      summarySub: "De la finalisation à un résultat vérifié et présentable",
+      sum1: "L’accent a été mis sur la <strong>finalisation du prototype</strong> et sur un <strong>contrôle qualité approfondi</strong>.",
+      sum2: "Tous les écrans ont été vérifiés afin d’assurer la <strong>cohérence</strong> de la typographie, de l’alignement, des marges et des couleurs.",
+      sum3: "La structure du site et des semaines a été contrôlée afin de garantir <strong>clarté</strong>, <strong>lisibilité</strong> et <strong>qualité de présentation</strong>.",
+
+      sec1Title: "Objectif et attentes",
+      sec1P1:
+        "En semaine 8, l’objectif principal était la <strong>finalisation du projet</strong> et l’amélioration de la <strong>qualité globale</strong>. Le prototype devait fonctionner comme un ensemble cohérent : <strong>contenu structuré</strong>, <strong>cohérence visuelle</strong> et <strong>présentation correcte</strong>.",
+      sec1P2:
+        "Aucun <strong>nouvel écran clé</strong> n’a été ajouté. Le travail s’est concentré sur la <strong>vérification</strong>, les <strong>corrections</strong> et le <strong>renforcement de la présentation finale</strong>.",
+
+      sec2Title: "Approche",
+      sec2P1:
+        "L’ensemble du design a été revu afin de vérifier la <strong>cohérence</strong> de la typographie, de l’alignement, des marges et des couleurs. De <strong>petites incohérences</strong> et <strong>ambiguïtés</strong> ont été corrigées pour obtenir une interface plus uniforme.",
+      sec2P2:
+        "La <strong>structure du site</strong> a également été vérifiée afin de garantir une navigation logique et une présentation claire du <strong>contenu par semaine</strong>.",
+
+      sec3Title: "Résultat",
+      sec3P1:
+        "Après cette phase, le prototype constitue un ensemble <strong>cohérent</strong> et <strong>consistant</strong>. La présentation est <strong>plus claire</strong> et la finition correspond mieux au <strong>niveau de qualité attendu</strong>.",
+      sec3P2:
+        "Le projet est ainsi prêt pour l’<strong>évaluation</strong> et une explication complémentaire, avec une <strong>structure nette</strong> et une <strong>finition soignée</strong>.",
+
+      prevLink: "← Retour à la semaine 7",
+      nextLink: "Continuer vers la semaine 9 →",
+      footer: "© 2025 Daniëlla Ezigbo – Prototyping Tools 1"
+    },
+
+    de: {
+      siteTitle: "Webseite",
+      siteSubline: "Daniëlla Ezigbo · Prototyping Tools 1",
+      langLabel: "Sprache",
+      navHome: "Startseite",
+      navAbout: "Über diese Website",
+      navWeeks: "Wochen",
+      week1:"Woche 1", week2:"Woche 2", week3:"Woche 3", week4:"Woche 4", week5:"Woche 5",
+      week6:"Woche 6", week7:"Woche 7", week8:"Woche 8", week9:"Woche 9", week10:"Woche 10",
+
+      pageTitle: "Woche 8 – Abschluss",
+      breadcrumb: "Design > Prototyping > Woche 8",
+      pill: "Woche 8",
+      metaText: "Diese Woche stand im Zeichen des Abschlusses und der Qualitätskontrolle, mit Fokus auf Konsistenz und Präsentation.",
+
+      summaryTitle: "Kernpunkte dieser Woche",
+      summarySub: "Vom Abschluss zu einem geprüften und präsentationsreifen Ergebnis",
+      sum1: "Der Schwerpunkt lag auf der <strong>Finalisierung des Prototyps</strong> und einer <strong>gründlichen Qualitätskontrolle</strong>.",
+      sum2: "Alle Screens wurden überprüft, um <strong>Konsistenz</strong> bei Typografie, Ausrichtung, Weißraum und Farbverwendung sicherzustellen.",
+      sum3: "Die Website- und Wochenstruktur wurde kontrolliert, um <strong>Klarheit</strong>, <strong>Lesbarkeit</strong> und <strong>Präsentationsqualität</strong> zu gewährleisten.",
+
+      sec1Title: "Ziel und Erwartungen",
+      sec1P1:
+        "In Woche 8 lag der Schwerpunkt auf dem <strong>Abschluss des Projekts</strong> und der Verbesserung der <strong>Gesamtqualität</strong>. Ziel war, dass der Prototyp als geschlossenes Ganzes funktioniert: <strong>inhaltlich zusammenhängend</strong>, <strong>visuell konsistent</strong> und <strong>korrekt präsentiert</strong>.",
+      sec1P2:
+        "Es wurden <strong>keine neuen Kernscreens</strong> hinzugefügt. Die Arbeiten konzentrierten sich auf <strong>Kontrolle</strong>, <strong>Korrekturen</strong> und die <strong>Stärkung der finalen Präsentation</strong>.",
+
+      sec2Title: "Vorgehensweise",
+      sec2P1:
+        "Das gesamte Design wurde erneut geprüft, insbesondere hinsichtlich <strong>Konsistenz</strong> bei Typografie, Ausrichtung, Weißraum und Farbverwendung. <strong>Kleine Abweichungen</strong> und <strong>Unklarheiten</strong> wurden korrigiert, damit die Oberfläche ruhiger und einheitlicher wirkt.",
+      sec2P2:
+        "Zusätzlich wurde geprüft, ob die <strong>Website-Struktur</strong> logisch bleibt und ob der <strong>Inhalt pro Woche</strong> klar und übersichtlich dargestellt ist.",
+
+      sec3Title: "Ergebnis",
+      sec3P1:
+        "Nach dieser Abschlussphase bildet der Prototyp ein <strong>kohärentes</strong> und <strong>konsistentes Gesamtbild</strong>. Die Präsentation ist <strong>übersichtlicher</strong> und die Ausarbeitung entspricht besser der angestrebten <strong>Endqualität</strong>.",
+      sec3P2:
+        "Damit ist das Projekt für die <strong>Bewertung</strong> und weitere Erläuterungen vorbereitet, mit <strong>klarer Struktur</strong> und <strong>sorgfältiger Ausarbeitung</strong>.",
+
+      prevLink: "← Zurück zu Woche 7",
+      nextLink: "Weiter zu Woche 9 →",
+      footer: "© 2025 Daniëlla Ezigbo – Prototyping Tools 1"
+    }
+  };
+
+  function getLang(){ return localStorage.getItem("siteLang") || "nl"; }
+
+  function applyLang(lang){
+    const dict = I18N[lang] || I18N.nl;
+    document.documentElement.setAttribute("lang", lang);
+
+    document.querySelectorAll(".lang-switch button").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const k = el.getAttribute("data-i18n");
+      if (dict[k] != null) el.textContent = dict[k];
+    });
+
+    document.querySelectorAll("[data-i18n-html]").forEach(el => {
+      const k = el.getAttribute("data-i18n-html");
+      if (dict[k] != null) el.innerHTML = dict[k];
+    });
+  }
+
+  function setLang(lang){
+    localStorage.setItem("siteLang", lang);
+    applyLang(lang);
+  }
+
+  applyLang(getLang());
+
+  /* ✅ FIX: actieve taalknop visueel correct bij eerste load */
+  document.querySelectorAll(".lang-switch button").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === getLang());
+    btn.addEventListener("click", () => setLang(btn.dataset.lang));
+  });
+</script>
+
+</body>
+</html>
+```0
